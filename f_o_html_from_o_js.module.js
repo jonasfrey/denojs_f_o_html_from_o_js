@@ -14,7 +14,7 @@ var f_o_html_from_o_js = function(
     var o_js_outer = o_js;
 
     if(typeof o_js.f_o_js  == "function"){
-        o_js = o_js.f_o_js();
+        o_js = o_js.f_o_js(o_js);
     }
 
     if(!f_b_is_js_object(o_js)){
