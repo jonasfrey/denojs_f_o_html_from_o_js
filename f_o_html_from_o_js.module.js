@@ -32,7 +32,7 @@ var f_o_html_from_o_js = function(
             continue
         }
 
-        var value = o_js[s_prop_name];
+        let value = o_js[s_prop_name];
         
         if(Array.isArray(value)){
             for(var item of value){
