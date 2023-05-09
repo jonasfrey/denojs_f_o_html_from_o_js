@@ -1,14 +1,37 @@
-<!-- {"s_msg":"this file was automatically generated","s_by":"f_generate_markdown.module.js","s_ts_created":"Tue May 09 2023 14:53:03 GMT+0200 (Central European Summer Time)","n_ts_created":1683636783420} -->
-# usage
-## import library
-```javascript
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>test</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+
+    </head>
+    <body>
+
+        <div id="browser_notifier">
+        </div>
+
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script type="module" async defer>
+
+//./readme.md:start
+//md: # usage 
+//md: ## import library 
 import {
   f_o_html_from_o_js 
 // }  from "https://deno.land/x/f_o_html_from_o_js@[version]/mod.js"
 }  from "./client.module.js"
-```
-## most simple example
-```javascript
+//md: ## most simple example 
 document.body.appendChild(
   f_o_html_from_o_js(
     {
@@ -20,9 +43,7 @@ document.body.appendChild(
     }
   )
 );
-```
-## we now can add child objects and render arrays like this
-```javascript
+//md: ## we now can add child objects and render arrays like this
 document.body.appendChild(
   f_o_html_from_o_js(
     {
@@ -43,22 +64,21 @@ document.body.appendChild(
   )
 );
 
-```
-## re-rendering of objects/'components'
-we need to add the `f_o_js` function which returns a javascript object
-it will get called on every ._f_render() call
-```javascript
+//md: ## re-rendering of objects/'components'  
+//md: we need to add the `f_o_js` function which returns a javascript object
+//md: it will get called on every ._f_render() call
 var a_s_animal = ['luchs', 'pferd', 'schildkroete']
 var o_js__a_s_animal = {
   f_o_js: function(){
     return {
       a_o: [
         ...a_s_animal.map(function(
-          n_idx, 
-          s
+          s,
+          n_idx 
         ){
           return {
-            s_tag: `animal number ${n_idx} is called: '${s}'`
+            s_tag:'option',
+            innerText: `animal number ${n_idx} is called: '${s}'`
           }
         })
       ]
@@ -88,9 +108,7 @@ a_s_animal.push('whale')
 a_s_animal.push('bird')
 o_js__a_s_animal._f_render();
 
-```
-## more complex object
-```javascript
+//md: ## more complex object
 var o = {
     id: "main",
     a_o: [
@@ -151,8 +169,19 @@ var o = {
 }
 
 document.body.appendChild(
-  f_o_html_from_o_js(o_js)
+  f_o_html_from_o_js(o)
 )
 
 
-```
+//./readme.md:end
+
+        </script>
+
+<main>
+
+
+
+  </main>
+
+    </body>
+</html>

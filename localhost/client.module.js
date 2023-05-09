@@ -1,5 +1,4 @@
 
-// import { f_generate_markdown } from "https://deno.land/x/f_generate_markdown@0.7/mod.js";
 
 var o_s_prop_name_s_attribute_name = {
     "s_inner_text": "innerText",
@@ -53,8 +52,17 @@ var f_o_html_from_o_js = function(
                 } 
             }
             if(typeof value != 'function'){
-                o_html[s_prop_name] = value;
-                o_html.setAttribute(s_prop_name, value);
+                // some attributes such as 'datalist' do only have a getter
+                try {
+                    o_html[s_prop_name] = value;
+                } catch (error) {
+                    console.warn(error)
+                }
+                try {
+                    o_html.setAttribute(s_prop_name, value);
+                } catch (error) {
+                    console.warn(error)
+                }
             }
         }
         // o_html.addEventListener(s_prop_name, value);
@@ -73,4 +81,6 @@ var f_o_html_from_o_js = function(
 }
 
 
-export {f_o_html_from_o_js}
+export {
+    f_o_html_from_o_js
+}
