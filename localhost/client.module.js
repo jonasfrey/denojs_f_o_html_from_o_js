@@ -72,8 +72,10 @@ var f_o_html_from_o_js = function(
     var _f_render = function(){
         var o_html_old = o_js._o_html;
         o_js._o_html = f_o_html_from_o_js(this);
-        if(o_html_old.parentElement){
+        if(o_js._o_html instanceof HTMLElement){
+            if(o_html_old.parentElement){
             o_html_old.parentElement.replaceChild(o_js._o_html, o_html_old);
+            }
         }
     }
     o_js._f_render = _f_render;
