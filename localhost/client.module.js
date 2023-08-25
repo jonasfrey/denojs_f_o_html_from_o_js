@@ -1,4 +1,12 @@
-
+let document = window.document;
+if( "Deno" in window){
+    let o_mod_deno_dom = await import("https://deno.land/x/deno_dom/deno-dom-wasm.ts")
+    // console.log(o_mod_deno_dom)
+    document = new o_mod_deno_dom.Document()
+    // console.log(document)
+    let el = document.createElement("div");
+    // console.log(el)
+}
 
 var o_s_prop_name_s_attribute_name = {
     "s_inner_text": "innerText",
