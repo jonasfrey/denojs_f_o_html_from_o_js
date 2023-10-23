@@ -48,7 +48,7 @@ var f_o_html_from_o_js = function(
 
             if(typeof value == "function"){
                 o_html[s_prop_name] = function(){
-                    value.call(this, o_js);
+                    value.call(this, ...arguments, o_js);
                 } 
             }
             if(typeof value != 'function'){

@@ -171,6 +171,42 @@ var o = {
 document.body.appendChild(
   f_o_html_from_o_js(o)
 )
+let a_s_name = ['hans', 'juerg', 'sabine', 'sandra']
+let o_js__a_s_name = null;
+o_js__a_s_name = {
+  f_o_js: function(){
+    return {
+        a_o:[
+          ...a_s_name.map((s, n_idx)=>{
+            return {
+              innerText: s,
+              onclick: function(e){
+                console.log('event e')
+                console.log(e)
+                a_s_name[n_idx] = a_s_name[n_idx] + 'a';
+                o_js__a_s_name?._f_render();
+              }
+            }
+          })
+        ]
+      }
+    
+  }
+}
+let o_js_everything = {
+
+  f_o_js: function(){
+    return {
+      a_o: [
+        o_js__a_s_name
+      ]
+    }
+  }
+}
+
+document.body.appendChild(
+  f_o_html_from_o_js(o_js_everything)
+)
 
 
 //./readme.md:end
