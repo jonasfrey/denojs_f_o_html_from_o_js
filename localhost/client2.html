@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>test</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+
+    </head>
+    <body>
+
+        <div id="browser_notifier">
+        </div>
+
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script type="module" async defer>
+
+//./readme.md:start
+//md: # usage 
+//md: ## import library 
+import {
+  f_o_html_from_o_js 
+// }  from "https://deno.land/x/f_o_html_from_o_js@[version]/mod.js"
+}  from "./client.module.js"
+//md: ## most simple example 
+let s_text = 'hello'
+window.o_js_text = {
+  f_o_js:function(){
+    return {
+      s_tag: 'label',
+      innerText: s_text
+    }
+  }
+}
+let o_js = {
+  a_o: [
+    o_js_text,
+    o_js_text,
+    o_js_text,
+  ]
+}
+let o_html = f_o_html_from_o_js(o_js);
+document.body.appendChild(o_html)
+window.onclick = function(o_e){
+  s_text =`${Math.random()} element replaced, and children elements all rendered!`
+  o_js_text?._f_render()
+}
+window.oncontextmenu  = function(o_e){
+  o_e.preventDefault();
+  s_text = `${Math.random()} element updated and not replaced `
+  o_js_text?._f_update()
+}
+// what happens now
+
+// o_js => {
+//   _a_o_html: [<div>],
+//   children: [
+//     {
+//       f_o_js: function(){...},
+//       _a_o_html: [<label>,<label>,<label>],
+//       _f_render: function(){...}
+//     },
+//     {
+//       f_o_js: function(){...},
+//       _a_o_html: [<label>,<label>,<label>],
+//       _f_render: function(){...}
+//     },
+//     {
+//       f_o_js: function(){...},
+//       _a_o_html: [<label>,<label>,<label>],
+//       _f_render: function(){...}
+//     }
+//   ], 
+//   _f_render: function(){...}
+// }
+
+//./readme.md:end
+
+        </script>
+
+<main>
+
+
+
+  </main>
+
+    </body>
+</html>
