@@ -1,9 +1,11 @@
-let f_o_html_element__from_s_tag = async function(s_tag){
+let o_DOMParser = null; 
+if("Deno" in window){
+    o_DOMParser = (await import("https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts")).DOMParser;
+}
+let f_o_html_element__from_s_tag = function(s_tag){
     
     let o_doc;
     if("Deno" in window){
-
-        let o_DOMParser = (await import("https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts")).DOMParser;
         o_doc = new o_DOMParser().parseFromString(
             '<div></div>',
             'text/html'
@@ -71,12 +73,12 @@ let f_update_o_html_from_o_jsh = function(
         }
     }
 }
-let f_o_html__from_o_jsh = async function(
+let f_o_html__from_o_jsh = function(
     o_jsh, 
     o_js
 ){
     var s_tag = (o_jsh.s_tag ? o_jsh.s_tag : 'div'); 
-    let o_html = await f_o_html_element__from_s_tag(s_tag);
+    let o_html = f_o_html_element__from_s_tag(s_tag);
     f_update_o_html_from_o_jsh(
         o_html, 
         o_jsh, 
@@ -86,7 +88,7 @@ let f_o_html__from_o_jsh = async function(
 }
 
 
-var f_o_html__and_make_renderable = async function(
+var f_o_html__and_make_renderable = function(
     o_js, 
 ){
     // if(!o_js._s_uuid){
@@ -108,7 +110,7 @@ var f_o_html__and_make_renderable = async function(
         // retrun o_js._o_html.cloneNod(true)// not working because event listeners are not cloned...:( 
     }
     // we create a new element from the o_jsh information
-    o_js._o_html = await f_o_html__from_o_jsh(
+    o_js._o_html = f_o_html__from_o_jsh(
         o_js.o_jsh, 
         o_js
     );
@@ -126,7 +128,6 @@ var f_o_html__and_make_renderable = async function(
                 // debugger
                 // o._b_f_render_called = o_js._b_f_render_called
                 let o_html = f_o_html__and_make_renderable(o);
-
                 o_js._o_html.appendChild(
                     o_html
                 )//.cloneNode(true))
