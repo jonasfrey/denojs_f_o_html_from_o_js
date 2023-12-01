@@ -1,111 +1,42 @@
 
-
-var o_s_prop_name_s_attribute_name = {
-    "s_inner_text": "innerText",
-}
 let f_b_is_js_object = function(value){
     return typeof value === 'object' && value !== null;
 }
-let f_update_o_js = function(
+let f_b_allowed_propery_name_on_o_jsh = function(
+    s_prop_name
+){
+    if(s_prop_name.indexOf("_") == 0){
+        //properties starting with _ are reserved for special cases like 
+        //_f_render
+        //_f_update
+        return false
+    }
+    return true;
+}
+let f_update_o_html_from_o_jsh = function(
+    o_html, 
+    o_jsh, 
     o_js
 ){
-    let o_js_rendered = o_js.f_o_js(o_js);
-    for(let o_html of o_js._a_o_html){
-
-        var a_s_prop_name = Object.keys(o_js_rendered);
-        for(var s_prop_name of a_s_prop_name){
-            if(s_prop_name.indexOf("_") == 0){
-                continue
-            }
-    
-            let value = o_js_rendered[s_prop_name];
-            
-            if(
-                !Array.isArray(value) 
-                    && !f_b_is_js_object(value)
-            ){
-    
-                if(typeof value == "function"){
-                    o_html[s_prop_name] = function(){
-                        value.call(this, ...arguments, o_js);
-                    } 
-                }
-                if(typeof value != 'function'){
-                    // some attributes such as 'datalist' do only have a getter
-                    try {
-                        o_html[s_prop_name] = value;
-                    } catch (error) {
-                        console.warn(error)
-                    }
-                    try {
-                        o_html.setAttribute(s_prop_name, value);
-                    } catch (error) {
-                        console.warn(error)
-                    }
-                }
-            }
-            // o_html.addEventListener(s_prop_name, value);
-        }
-    }
-}
-
-var f_o_html_from_o_js = function(
-    o_js, 
-    b_init = true
-){
-    // console.log(o_js)
-    var o_js_outer = o_js;
-
-    if(typeof o_js.f_o_js  == "function"){
-        o_js = o_js.f_o_js(o_js);
-        o_js._a_o_html = o_js_outer._a_o_html
-    }
-
-    if(!f_b_is_js_object(o_js)){
-        // o_js has to be object, 
-        return null
-    }
-    if(o_js.b_render === false){
-        return null
-    }
-    var s_tag = (o_js.s_tag ? o_js.s_tag : 'div'); 
-    var o_html = document.createElement(s_tag);
-    if(!o_js._a_o_html){
-        o_js._a_o_html = []
-    }
-    if(b_init){
-        o_js._a_o_html.push(o_html)
-    }
-    let _a_o_html = [o_html];
-    if(b_init){
-        _a_o_html = o_js._a_o_html
-    }
-
-    var a_s_prop_name = Object.keys(o_js);
-    for(var s_prop_name of a_s_prop_name){
-        if(s_prop_name.indexOf("_") == 0){
+    //update does not go into arrays
+    for(var s_prop_name of Object.keys(o_jsh)){
+        if(!f_b_allowed_propery_name_on_o_jsh(s_prop_name)){
             continue
         }
-
-        let value = o_js[s_prop_name];
+        let value = o_jsh[s_prop_name];
         
-        if(Array.isArray(value)){
-            for(var item of value){
-                var o_html_child = f_o_html_from_o_js(item);
-                if(o_html_child !== null){
-                    o_html.appendChild(o_html_child)
-                }
-            }
-        }
         if(
             !Array.isArray(value) 
                 && !f_b_is_js_object(value)
         ){
 
             if(typeof value == "function"){
-                o_html[s_prop_name] = function(){
+                let f_event_handler = function(){
                     value.call(this, ...arguments, o_js);
-                } 
+                }
+
+                o_html[s_prop_name] = f_event_handler
+               
             }
             if(typeof value != 'function'){
                 // some attributes such as 'datalist' do only have a getter
@@ -121,35 +52,99 @@ var f_o_html_from_o_js = function(
                 }
             }
         }
-        // o_html.addEventListener(s_prop_name, value);
-
     }
+}
+let f_o_html__from_o_jsh = function(
+    o_jsh, 
+    o_js
+){
+    var s_tag = (o_jsh.s_tag ? o_jsh.s_tag : 'div'); 
+    let o_html = document.createElement(s_tag);
+    f_update_o_html_from_o_jsh(
+        o_html, 
+        o_jsh, 
+        o_js
+    );
+    return o_html
+}
 
-    
 
-    var _f_render = function(){
-        
-        let o_html_rendered = f_o_html_from_o_js(this, false);
-        for(let n_idx in o_js._a_o_html){
-            let o_html = o_js._a_o_html[n_idx]
-            let o_html_rendered_clone = o_html_rendered.cloneNode(true)
-            o_html.parentElement.replaceChild(o_html_rendered_clone, o_html);
-            o_js._a_o_html[n_idx] = o_html_rendered_clone
+var f_o_html__and_make_renderable = function(
+    o_js, 
+){
+    // if(!o_js._s_uuid){
+    //     o_js._s_uuid = crypto.randomUUID();
+    // }
+    // console.log('run')
+    if(!o_js?._b_f_render_called){
+        o_js._a_o_html = [];
+        // console.log('needs rendering!')
+        if(typeof o_js.f_o_jsh != 'function'){
+            // static objects can be rendered/converted to html once without having any function    
+            o_js.o_jsh = o_js;
+        }else{
+            o_js.o_jsh = o_js.f_o_jsh();
         }
+        // we could create the o_html element here and then clone it ,but because
+        // cloneNode(true) does not deep copy functions added with o_html.onclick =...
+        // we anyways have to create a new element for each reference
+        // retrun o_js._o_html.cloneNod(true)// not working because event listeners are not cloned...:( 
+    }
+    // we create a new element from the o_jsh information
+    o_js._o_html = f_o_html__from_o_jsh(
+        o_js.o_jsh, 
+        o_js
+    );
+    // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
+    o_js._a_o_html.push(o_js._o_html)
+
+    for(let s_prop in o_js.o_jsh){
+        let v = o_js.o_jsh[s_prop];
+        if(!f_b_allowed_propery_name_on_o_jsh(s_prop)){
+            continue
+        }
+
+        if(Array.isArray(v)){
+            for(let o of v){
+                // debugger
+                // o._b_f_render_called = o_js._b_f_render_called
+                let o_html = f_o_html__and_make_renderable(o);
+
+                o_js._o_html.appendChild(
+                    o_html
+                )//.cloneNode(true))
+            }
+        }
+    }
+    o_js._b_f_render_called = true;
+
+    o_js._f_render = function(){
+        this._b_f_render_called = false;
+        let a_o_html_old = this._a_o_html;
+        for(let o_html_old of a_o_html_old){
+            let o_html = f_o_html__and_make_renderable(this)
+            o_html_old.parentElement.replaceChild(
+                o_html,
+                o_html_old, 
+            )
+        }
+    }
+    o_js._f_update = function(){
         // console.log(o_js)
+        o_js.o_jsh = o_js.f_o_jsh();
+        for(let o_html of o_js._a_o_html){
+            f_update_o_html_from_o_jsh(
+                o_html,
+                o_js.o_jsh,
+                o_js
+            )
+        }
     }
-    let _f_update = function(){
-        f_update_o_js(this);
-    }
-
-    o_js_outer._f_render = _f_render;
-    o_js_outer._f_update = _f_update;
-    o_js_outer._a_o_html = o_js._a_o_html;
-
-    return o_html;
+    
+    return o_js._o_html
 }
 
 
 export {
-    f_o_html_from_o_js
+    f_o_html__and_make_renderable
 }

@@ -26,62 +26,166 @@
 
 //./readme.md:start
 //md: # usage 
-//md: ## import library 
+//md: ## import library
 import {
-  f_o_html_from_o_js 
-// }  from "https://deno.land/x/f_o_html_from_o_js@[version]/mod.js"
+  f_o_html__and_make_renderable 
 }  from "./client.module.js"
-//md: ## most simple example 
-let s_text = 'hello'
-window.o_js_text = {
-  f_o_js:function(){
+//md: ## most o_js example 
+let s_text = `right click to re-render, i was rendered on ${new Date().getTime()}`
+
+let o_js__updatable = {
+  f_o_jsh: function(){
     return {
-      s_tag: 'label',
-      innerText: s_text
+      innerText: `i was updated on ${new Date().toString()}  ${new Date().getTime()}, and not replaced in the DOM `
     }
   }
 }
+
+//meta object, this will contain _f_render to render (render children) and
+// _f_update (update only current o_html)
+window.o_js_demo = {  
+  f_o_jsh:function(){
+    return { 
+      // this function returns a 'o_jsh' an object representing an xml html element
+      // but as a javascript object 
+      // all the connected o_html elements will updated (the function f_o_jsh will be called)
+      // and then all the properties on o_html will get updated
+      // the jsh can contain arrays with other jsh children elements
+      // if we call _f_render all those will also get updated and replaced in the DOM, 
+      // this has to be done since we cannot know if there were some children removed in an array
+      // because often times the children elements are dynamically calculated using an array like this
+      a_o: [
+        {
+          // we can access all variables from the scope
+          // so this html element will get rendered with the variable value at the time 
+          // of rendering
+          s_tag: "h1",
+          innerText: s_text
+        },
+        ...new Array(parseInt(Math.random()*10)).fill(0).map(
+          o=>{
+            return { 
+              style: `background: rgba(${new Array(3).fill(0).map(o=>parseInt(Math.random()*255)).join(',')}, 0.5)`,
+              innerText: `some random number ${Math.random()}`
+            }
+          }
+        ),
+        // if we have objects\ that we want to be able to update without having to replace them in the dom
+        // we have to use a reference to a variable already existing
+        o_js__updatable, 
+        // now we can have another element with for example a click listener
+        {
+          innerText: "click me to update the element above me!", 
+          onclick: function(){
+            console.log('clicked')
+            // now we can reference the object and update it
+            o_js__updatable._f_update();
+          }
+        }
+      ],
+    }
+  }
+}
+
 let o_js = {
-  a_o: [
-    o_js_text,
-    o_js_text,
-    o_js_text,
-  ]
+  f_o_jsh: ()=>{
+    return {
+      a_o: [
+        // finally we add the object reference in multiple places !
+        o_js_demo,
+        {innerText: "asdf"},
+        o_js_demo,
+        {innerText: "asdf"},
+      ]
+    }
+  }
 }
-let o_html = f_o_html_from_o_js(o_js);
+
+// we have to call this function only one time
+let o_html = f_o_html__and_make_renderable(o_js);
+// the resulting html element can be placed in the DOM
 document.body.appendChild(o_html)
-window.onclick = function(o_e){
-  s_text =`${Math.random()} element replaced, and children elements all rendered!`
-  o_js_text?._f_render()
-}
+
+// we can also have 'external' functions that are updating or rendering 
+// by using the reference to the 'o_js' objects, 
 window.oncontextmenu  = function(o_e){
   o_e.preventDefault();
-  s_text = `${Math.random()} element updated and not replaced `
-  o_js_text?._f_update()
+  console.log('render was called')
+  s_text = `element was rendered on ${new Date().toString()} ${new Date().getTime()}`
+  o_js_demo?._f_render()
 }
-// what happens now
 
-// o_js => {
-//   _a_o_html: [<div>],
-//   children: [
-//     {
-//       f_o_js: function(){...},
-//       _a_o_html: [<label>,<label>,<label>],
-//       _f_render: function(){...}
-//     },
-//     {
-//       f_o_js: function(){...},
-//       _a_o_html: [<label>,<label>,<label>],
-//       _f_render: function(){...}
-//     },
-//     {
-//       f_o_js: function(){...},
-//       _a_o_html: [<label>,<label>,<label>],
-//       _f_render: function(){...}
-//     }
-//   ], 
-//   _f_render: function(){...}
-// }
+
+// now some examples will follow
+
+import {
+  f_o_js__draggable_window
+} from "./examples/f_o_js__draggable_window.module.js"
+import { 
+  o_variables, 
+  f_s_css_from_o_variables,
+  f_add_css,
+} from "https://deno.land/x/f_add_css@0.7/mod.js"
+
+f_add_css(
+  f_s_css_from_o_variables(
+    o_variables
+  )
+)
+f_add_css(
+  `.draggable_window{
+    background:black;
+  }`
+)
+
+f_add_css('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+// of course we can have custom stuff inside the window
+let v = 'type something'
+let o_js__custom = {
+  f_o_jsh: function(){
+    let o_js__text = {
+      f_o_jsh: function(){
+        return{
+            innerText: v
+          }
+        
+      }
+    }
+    return {
+        a_o: [
+          {
+            s_tag: "input", 
+            oninput: function(o_e, o_js){
+              v = o_e.target.value; 
+              console.log(v)
+              o_js__text._f_render()
+            }, 
+            value: v
+          },
+          o_js__text
+        ]
+    }
+  }
+}
+let o_js__examples = {
+  f_o_jsh: function(){
+    return {
+      a_o: [
+        f_o_js__draggable_window(
+          [
+            {
+              innerText: 'drag ME!'
+            }, 
+            o_js__custom
+          ]
+        )
+      ]
+    }
+  }
+}
+let o_html_examples = f_o_html__and_make_renderable(o_js__examples);
+document.body.appendChild(o_html_examples)
 
 //./readme.md:end
 
