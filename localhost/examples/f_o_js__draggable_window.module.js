@@ -12,7 +12,7 @@ let f_o_trn__relative_to_o_html = function(
     )
 }
 
-let f_o_js__draggable_window = function(
+let f_o_js__overlay_window = function(
     a_o_js = []
 ){
 
@@ -28,7 +28,7 @@ let f_o_js__draggable_window = function(
     let b_mousedown_scale = false;
     let b_display = true;
     let b_added_event_listener = false;
-    let o_js__draggable_window = null;
+    let o_js__overlay_window = null;
     let f_add_mousemove_if_not_already = function(
         o_js
     ){
@@ -46,7 +46,7 @@ let f_o_js__draggable_window = function(
                         )
                 }
                 if(b_mousedown_scale){
-                    let o_br = o_js__draggable_window._o_html.getBoundingClientRect();
+                    let o_br = o_js__overlay_window._o_html.getBoundingClientRect();
                     o_scl_last = new O_vec2(o_br.width, o_br.height)
                     // console.log(o_scl_last)
                     // console.log(o_trn_mousedown_scl.sub(
@@ -65,7 +65,7 @@ let f_o_js__draggable_window = function(
                 if(b_mousedown_drag || b_mousedown_scale){
                     document.body.style.userSelect = 'none';
                     console.log(o_js)
-                    o_js__draggable_window._f_update();
+                    o_js__overlay_window._f_update();
                 }else{
                     document.body.style.userSelect = '';
                 }
@@ -80,10 +80,10 @@ let f_o_js__draggable_window = function(
             b_added_event_listener = true;
         }
     }
-    o_js__draggable_window = {
+    o_js__overlay_window = {
         f_o_jsh: function(){
             return {
-                class: "draggable_window",
+                class: "overlay_window",
                 style: [
                     // `background-color: red`, 
                     // `border:2px solid blue`,
@@ -130,7 +130,7 @@ let f_o_js__draggable_window = function(
                         class: `clickable`, 
                         onclick: function(o_e){
                             b_display = !b_display;
-                            o_js__draggable_window._f_render()
+                            o_js__overlay_window._f_render()
                         },
                     },
                     {
@@ -168,8 +168,8 @@ let f_o_js__draggable_window = function(
             } 
         }
     }
-    return o_js__draggable_window
+    return o_js__overlay_window
 }
 export {
-    f_o_js__draggable_window
+    f_o_js__overlay_window
 }

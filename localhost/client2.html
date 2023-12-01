@@ -119,8 +119,8 @@ window.oncontextmenu  = function(o_e){
 // now some examples will follow
 
 import {
-  f_o_js__draggable_window
-} from "./examples/f_o_js__draggable_window.module.js"
+  f_o_js__overlay_window
+} from "./examples/f_o_js__overlay_window.module.js"
 import { 
   o_variables, 
   f_s_css_from_o_variables,
@@ -133,7 +133,7 @@ f_add_css(
   )
 )
 f_add_css(
-  `.draggable_window{
+  `.overlay_window{
     background:black;
   }`
 )
@@ -172,7 +172,7 @@ let o_js__examples = {
   f_o_jsh: function(){
     return {
       a_o: [
-        f_o_js__draggable_window(
+        f_o_js__overlay_window(
           [
             {
               innerText: 'drag ME!'

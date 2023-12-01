@@ -1,14 +1,12 @@
-<!-- {"s_msg":"this file was automatically generated","s_by":"f_generate_markdown.module.js","s_ts_created":"Fri Dec 01 2023 13:42:57 GMT+0100 (Central European Standard Time)","n_ts_created":1701434577070} -->
-# usage
-## import library
-```javascript
+
+//./readme.md:start
+//md: # usage 
+//md: ## import library 
 import {
     f_o_html__and_make_renderable 
   // }  from "https://deno.land/x/f_o_html__and_make_renderable@[version]/mod.js"
   }  from "./client.module.js"
-```
-## most simple example
-```javascript
+  //md: ## most simple example 
   document.body.appendChild(
     f_o_html__and_make_renderable(
       {
@@ -20,9 +18,7 @@ import {
       }
     )
   );
-```
-## we now can add child objects and render arrays like this
-```javascript
+  //md: ## we now can add child objects and render arrays like this
   document.body.appendChild(
     f_o_html__and_make_renderable(
       {
@@ -43,11 +39,9 @@ import {
     )
   );
   
-```
-## re-rendering of objects/'components'
-we need to add the `f_o_js` function which returns a javascript object
-it will get called on every ._f_render() call
-```javascript
+  //md: ## re-rendering of objects/'components'  
+  //md: we need to add the `f_o_js` function which returns a javascript object
+  //md: it will get called on every ._f_render() call
   var a_s_animal = ['luchs', 'pferd', 'schildkroete']
   var o_js__a_s_animal = {
     f_o_js: function(){
@@ -89,9 +83,7 @@ it will get called on every ._f_render() call
   a_s_animal.push('bird')
   o_js__a_s_animal._f_render();
   
-```
-## more complex object
-```javascript
+  //md: ## more complex object
   var o = {
       id: "main",
       a_o: [
@@ -191,4 +183,4 @@ it will get called on every ._f_render() call
     f_o_html__and_make_renderable(o_js_everything)
   )
   
-```
+  //./readme.md:end
