@@ -119,8 +119,10 @@ window.oncontextmenu  = function(o_e){
 // now some examples will follow
 
 import {
-  f_o_js__overlay_window
-} from "./examples/f_o_js__overlay_window.module.js"
+  f_o_js__overlay_window, 
+  f_o_jsh__select
+} from "./examples/mod.js"
+
 import { 
   o_variables, 
   f_s_css_from_o_variables,
@@ -168,6 +170,15 @@ let o_js__custom = {
     }
   }
 }
+let a_o_test = [
+    {n_id: 1, s_name:'hello'},
+    {n_id: 2, s_name:'world'},
+    {n_id: 3, s_name:'!'},
+]
+let o_state_example = {
+  a_o_test: a_o_test,
+  o_test: a_o_test[0]
+}
 let o_js__examples = {
   f_o_jsh: function(){
     return {
@@ -179,7 +190,33 @@ let o_js__examples = {
             }, 
             o_js__custom
           ]
-        )
+        ), 
+        {
+          f_o_jsh: function(){
+            let o = f_o_jsh__select(
+              o_state_example, 
+              'o_test', 
+              o_state_example.a_o_test, 
+              (o)=>{return `${o.n_id}:${o.s_name}`}
+            )
+            let f_oninput_original = o.oninput;
+            return Object.assign(
+              o, 
+              {
+                oninput: function(){
+                  console.log(`value has changed`)
+                  console.log(`value before`, o_state_example.o_test)
+                  f_oninput_original(...arguments);
+                  console.log(`value after`, o_state_example.o_test)
+
+                },
+                onmousedown: function(){
+                  console.log(`mousedown on select was triggered !`)
+                }
+              }
+            )
+          }
+        }
       ]
     }
   }
