@@ -1,17 +1,9 @@
 import {
     O_vec2
 } from "https://deno.land/x/vector@0.8/mod.js"
-
-let f_o_trn__relative_to_o_html = function(
-    o_e
-){
-    const o_brect  = o_e.target.getBoundingClientRect();
-    return new O_vec2(
-        o_e.clientX - o_brect.left, 
-        o_e.clientY - o_brect.top
-    )
-}
-
+import {
+    f_o_trn__relative_to_o_html
+} from "./functions.module.js"
 let f_o_js__overlay_window = function(
     a_o_js = []
 ){
@@ -106,7 +98,10 @@ let f_o_js__overlay_window = function(
                         ].join(`;`),
                         class: `clickable`, 
                         onmousedown: function(o_e, o_js){
-                            o_trn_mousedown_relative = f_o_trn__relative_to_o_html(o_e);
+                            o_trn_mousedown_relative = f_o_trn__relative_to_o_html(
+                                new O_vec2(o_e.clientX, o_e.clientY),
+                                o_e.target
+                            );
                             // console.log(o_trn_mousedown_relative.toString())
                             f_add_mousemove_if_not_already(o_js)
                             if(!b_mousedown_scale){
