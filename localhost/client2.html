@@ -135,8 +135,7 @@ let o_js = {
         {innerText: "asdf"},
         o_js_demo,
         {innerText: "asdf"},
-
-
+        
       ]
     }
   }
@@ -146,6 +145,83 @@ let o_js = {
 let o_html = await f_o_html__and_make_renderable(o_js);
 // the resulting html element can be placed in the DOM
 document.body.appendChild(o_html)
+
+
+
+// initializing variables beforehand is very convoluted
+// thereofre we can use a function that adds the reference to an object
+// and gets it if ever needed again
+let o_o_js = {};
+let s_name = 'Hans'
+let f_o_js__from_s_name = function(s_name, o){
+  if(o_o_js[s_name]){
+    return o_o_js[s_name]
+  }else{
+    o_o_js[s_name] = o;
+  }
+  return o
+}
+document.body.appendChild(
+  await f_o_html__and_make_renderable(
+    {
+      style: 'display:flex;',
+      a_o: [
+        f_o_js__from_s_name(
+          'o_js_input', 
+          {
+            f_o_jsh: ()=>{
+              return {
+                style: "flex: 1 1 auto",
+                s_tag: "input", 
+                value: s_name, 
+                oninput: function(o_e){
+                  s_name = o_e.target.value
+                  o_o_js?.o_js_button?._f_render();
+                }
+              }
+            }
+          }
+        ), 
+        f_o_js__from_s_name(
+          'o_js_button', 
+          {
+            f_o_jsh: ()=>{
+              return {
+                style: "flex: 1 1 auto",
+                s_tag: "button", 
+                innerText: `the current name is ${s_name}, click to get a random one`,
+                onclick: function(o_e){
+                  let n_len = parseInt(Math.random()*10);
+                  s_name = new Array(n_len)
+                    .fill(0)
+                    .map((n, n_idx)=>{
+                      let a_s_vowel = ['a','e','i','o','u','y'];
+                      let a_s_consonant = new Array(26)
+                          .fill(0)
+                          .map((v,n_idx)=>{return String.fromCharCode(n_idx+64+32+1)})
+                          .filter(s=>!a_s_vowel.includes(s))
+
+                      let s_char = (n_idx%2==0)
+                        ? a_s_vowel[parseInt(Math.random()*a_s_vowel.length)]
+                        : a_s_consonant[parseInt(Math.random()*a_s_consonant.length)]
+                      if(n_idx == 0){
+                        s_char = s_char.toUpperCase()
+                      }  
+                      
+                      return s_char
+                  }).join('')
+                  o_o_js?.o_js_input._f_render()
+                  o_o_js?.o_js_button._f_render()
+                } 
+              }
+            }
+          }
+        ),
+        f_o_js__from_s_name('o_js_button')
+      ]
+    }
+  )
+)
 
 // we can also have 'external' functions that are updating or rendering 
 // by using the reference to the 'o_js' objects, 
