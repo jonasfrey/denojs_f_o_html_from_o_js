@@ -88,78 +88,87 @@ let f_o_html__from_o_jsh = function(
 }
 
 
-var f_o_html__and_make_renderable = function(
+var f_o_html__and_make_renderable = async function(
     o_js, 
 ){
-    // if(!o_js._s_uuid){
-    //     o_js._s_uuid = crypto.randomUUID();
-    // }
-    // console.log('run')
-    if(!o_js?._b_f_render_called){
-        o_js._a_o_html = [];
-        // console.log('needs rendering!')
-        if(typeof o_js.f_o_jsh != 'function'){
-            // static objects can be rendered/converted to html once without having any function    
-            o_js.o_jsh = o_js;
-        }else{
-            o_js.o_jsh = o_js.f_o_jsh();
-        }
-        // we could create the o_html element here and then clone it ,but because
-        // cloneNode(true) does not deep copy functions added with o_html.onclick =...
-        // we anyways have to create a new element for each reference
-        // retrun o_js._o_html.cloneNod(true)// not working because event listeners are not cloned...:( 
-    }
-    // we create a new element from the o_jsh information
-    o_js._o_html = f_o_html__from_o_jsh(
-        o_js.o_jsh, 
-        o_js
-    );
-    // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
-    o_js._a_o_html.push(o_js._o_html)
 
-    for(let s_prop in o_js.o_jsh){
-        let v = o_js.o_jsh[s_prop];
-        if(!f_b_allowed_propery_name_on_o_jsh(s_prop)){
-            continue
-        }
-
-        if(Array.isArray(v)){
-            for(let o of v){
-                // debugger
-                // o._b_f_render_called = o_js._b_f_render_called
-                let o_html = f_o_html__and_make_renderable(o);
-                o_js._o_html.appendChild(
-                    o_html
-                )//.cloneNode(true))
+    return new Promise(
+        async (f_res)=>{
+            // if(!o_js._s_uuid){
+            //     o_js._s_uuid = crypto.randomUUID();
+            // }
+            // console.log('run')
+            if(!o_js?._b_f_render_called){
+                o_js._a_o_html = [];
+                // console.log('needs rendering!')
+                if(typeof o_js.f_o_jsh != 'function'){
+                    // static objects can be rendered/converted to html once without having any function    
+                    o_js.o_jsh = o_js;
+                }else{
+                    o_js.o_jsh = await o_js.f_o_jsh();
+                }
+                // we could create the o_html element here and then clone it ,but because
+                // cloneNode(true) does not deep copy functions added with o_html.onclick =...
+                // we anyways have to create a new element for each reference
+                // retrun o_js._o_html.cloneNod(true)// not working because event listeners are not cloned...:( 
             }
-        }
-    }
-    o_js._b_f_render_called = true;
-
-    o_js._f_render = function(){
-        this._b_f_render_called = false;
-        let a_o_html_old = this._a_o_html;
-        for(let o_html_old of a_o_html_old){
-            let o_html = f_o_html__and_make_renderable(this)
-            o_html_old.parentElement.replaceChild(
-                o_html,
-                o_html_old, 
-            )
-        }
-    }
-    o_js._f_update = function(){
-        // console.log(o_js)
-        o_js.o_jsh = o_js.f_o_jsh();
-        for(let o_html of o_js._a_o_html){
-            f_update_o_html_from_o_jsh(
-                o_html,
-                o_js.o_jsh,
+            // we create a new element from the o_jsh information
+            o_js._o_html = f_o_html__from_o_jsh(
+                o_js.o_jsh, 
                 o_js
-            )
+            );
+            // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
+            o_js._a_o_html.push(o_js._o_html)
+        
+            for(let s_prop in o_js.o_jsh){
+                let v = o_js.o_jsh[s_prop];
+                if(!f_b_allowed_propery_name_on_o_jsh(s_prop)){
+                    continue
+                }
+        
+                if(Array.isArray(v)){
+                    for(let o of v){
+                        // debugger
+                        // o._b_f_render_called = o_js._b_f_render_called
+                        f_o_html__and_make_renderable(o).then(
+                            (o_html)=>{
+                                o_js._o_html.appendChild(
+                                    o_html
+                                )//.cloneNode(true))
+                            }
+                        );
+                    }
+                }
+            }
+            o_js._b_f_render_called = true;
+        
+            o_js._f_render = function(){
+                this._b_f_render_called = false;
+                let a_o_html_old = this._a_o_html;
+                for(let o_html_old of a_o_html_old){
+                    f_o_html__and_make_renderable(this).then(o_html=>{
+                        o_html_old.parentElement.replaceChild(
+                            o_html,
+                            o_html_old, 
+                        )
+                    })
+                }
+            }
+            o_js._f_update = function(){
+                // console.log(o_js)
+                o_js.o_jsh = o_js.f_o_jsh();
+                for(let o_html of o_js._a_o_html){
+                    f_update_o_html_from_o_jsh(
+                        o_html,
+                        o_js.o_jsh,
+                        o_js
+                    )
+                }
+            }
+            
+            return f_res(o_js._o_html)
         }
-    }
-    
-    return o_js._o_html
+    )
 }
 
 

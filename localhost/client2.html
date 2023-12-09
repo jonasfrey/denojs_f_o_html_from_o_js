@@ -87,22 +87,65 @@ window.o_js_demo = {
   }
 }
 
+let o_js_with_async_jsh = {
+  f_o_jsh: async function (){
+    return new Promise(
+      (f_res)
+    )
+    return {
+      
+    }
+  }
+}
+
 let o_js = {
   f_o_jsh: ()=>{
     return {
       a_o: [
+        [
+          "https://images.unsplash.com/photo-1542014740373-51ad6425eb7c?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
+          "https://unsplash.com/photos/UzwQJkLB_kU/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8YmFkJTIwYXBwbGV8ZW58MHx8fHwxNzAyMDgwOTM4fDA&force=true", 
+          "https://unsplash.com/photos/_5TGspSCIdw/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NHx8YmFkJTIwYXBwbGV8ZW58MHx8fHwxNzAyMDgwOTM4fDA&force=true",
+          "https://unsplash.com/photos/nsViCTRZui4/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTN8fGJhZCUyMGFwcGxlfGVufDB8fHx8MTcwMjA4MDkzOHww&force=true",
+
+        ].map(s=>{
+          return {
+            f_o_jsh: async function(){ 
+              // of course the rendering can happen asynchronously!
+              return new Promise(
+                (f_res)=>{
+                  let o_img = new Image();
+
+                  o_img.onload = function(){
+                    return f_res({
+                      style: [
+                        `width: ${o_img.width}px`,
+                        `height: ${o_img.height}px`,
+                      ], 
+                      s_tag: "img", 
+                      src: s
+                    })
+                  }
+                  o_img.src = s
+                }
+              )
+            }
+          }
+        }),
         // finally we add the object reference in multiple places !
         o_js_demo,
         {innerText: "asdf"},
         o_js_demo,
         {innerText: "asdf"},
+
+
       ]
     }
   }
 }
 
 // we have to call this function only one time
-let o_html = f_o_html__and_make_renderable(o_js);
+let o_html = await f_o_html__and_make_renderable(o_js);
 // the resulting html element can be placed in the DOM
 document.body.appendChild(o_html)
 
@@ -223,7 +266,7 @@ let o_js__examples = {
     }
   }
 }
-let o_html_examples = f_o_html__and_make_renderable(o_js__examples);
+let o_html_examples = await f_o_html__and_make_renderable(o_js__examples);
 document.body.appendChild(o_html_examples)
 
 //./readme.md:end
