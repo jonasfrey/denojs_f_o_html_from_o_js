@@ -115,13 +115,11 @@ let o_js = {
               return new Promise(
                 (f_res)=>{
                   let o_img = new Image();
-
                   o_img.onload = function(){
                     return f_res({
                       style: [
-                        `width: ${o_img.width}px`,
-                        `height: ${o_img.height}px`,
-                      ], 
+                        `aspect-ratio:${o_img.width/o_img.height}/1`,
+                      ].join(';'), 
                       s_tag: "img", 
                       src: s
                     })
