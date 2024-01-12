@@ -40,11 +40,11 @@ import {
   );
   
   //md: ## re-rendering of objects/'components'  
-  //md: we need to add the `f_o_js` function which returns a javascript object
+  //md: we need to add the `f_o_jsh` function which returns a javascript object
   //md: it will get called on every ._f_render() call
   var a_s_animal = ['luchs', 'pferd', 'schildkroete']
   var o_js__a_s_animal = {
-    f_o_js: function(){
+    f_o_jsh: function(){
       return {
         a_o: [
           ...a_s_animal.map(function(

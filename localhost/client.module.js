@@ -120,6 +120,7 @@ var f_o_html__and_make_renderable = async function(
             // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
             o_js._a_o_html.push(o_js._o_html)
         
+            let a_o_promise = []
             for(let s_prop in o_js.o_jsh){
                 let v = o_js.o_jsh[s_prop];
                 if(!f_b_allowed_propery_name_on_o_jsh(s_prop)){
@@ -130,29 +131,56 @@ var f_o_html__and_make_renderable = async function(
                     for(let o of v){
                         // debugger
                         // o._b_f_render_called = o_js._b_f_render_called
-                        f_o_html__and_make_renderable(o).then(
-                            (o_html)=>{
-                                o_js._o_html.appendChild(
-                                    o_html
-                                )//.cloneNode(true))
-                            }
-                        );
+                        a_o_promise.push(
+                            f_o_html__and_make_renderable(o)
+                        )
+                        // let o_html_child = await f_o_html__and_make_renderable(o);
+                        // o_js._o_html.appendChild(
+                        //     o_html_child
+                        // )//.cloneNode(true))
+
+                        // f_o_html__and_make_renderable(o).then(
+                        //     (o_html)=>{
+                        //         o_js._o_html.appendChild(
+                        //             o_html
+                        //         )//.cloneNode(true))
+                        //     }
+                        // );
                     }
                 }
             }
+            let a_v_resolved = await Promise.all(a_o_promise);
+            for(let v of a_v_resolved){
+                // console.log(v)
+                o_js._o_html.appendChild(
+                    v
+                )
+            }
             o_js._b_f_render_called = true;
         
-            o_js._f_render = function(){
-                this._b_f_render_called = false;
-                let a_o_html_old = this._a_o_html;
-                for(let o_html_old of a_o_html_old){
-                    f_o_html__and_make_renderable(this).then(o_html=>{
-                        o_html_old.parentElement.replaceChild(
-                            o_html,
-                            o_html_old, 
-                        )
+            o_js._f_render = async function(){
+                
+                let o_self = o_js;//this;
+                o_self._b_f_render_called = false;
+                let a_o_html_old = o_self._a_o_html;
+                return Promise.all(
+                    a_o_html_old.map(o_html_old=>{
+                        return f_o_html__and_make_renderable(o_self).then(o_html=>{
+                            o_html_old.parentElement.replaceChild(
+                                o_html,
+                                o_html_old, 
+                            )
+                        })
                     })
-                }
+                )
+                // for(let o_html_old of a_o_html_old){
+                //     f_o_html__and_make_renderable(this).then(o_html=>{
+                //         o_html_old.parentElement.replaceChild(
+                //             o_html,
+                //             o_html_old, 
+                //         )
+                //     })
+                // }
             }
             o_js._f_update = function(){
                 // console.log(o_js)
@@ -172,6 +200,21 @@ var f_o_html__and_make_renderable = async function(
 }
 
 
-export {
-    f_o_html__and_make_renderable
+let f_o_js_from_params = function(o_o_js, s_name, o){
+    if(!o_o_js[s_name]){
+        o_o_js[s_name] = o
+    }else{
+        return o_o_js[s_name]
+    }
+    return o
 }
+
+export {
+    f_o_html__and_make_renderable, 
+    f_o_js_from_params
+}
+
+export * from './examples/color_picker/mod.js'
+export * from './examples/notifire/mod.js'
+export * from './examples/overlay_window/mod.js'
+export * from './examples/select/mod.js'

@@ -8,21 +8,13 @@ import {
 import {
     f_o_trn__relative_to_o_html, 
     f_o_trn__relative_to_o_html__nor
-} from "./functions.module.js"
+} from "../functions.module.js"
 
 let f_o_js__color_picker = function(
     a_o_js = []
 ){
     
-    let o_o_js = {};
-    let f_o_js_from_s_name = function(s_name, o){
-        if(!o_o_js[s_name]){
-            o_o_js[s_name] = o
-        }else{
-            return o_o_js[s_name]
-        }
-        return o
-    }
+
 
     // let o_js__color_picker = null;
     // let o ={ o_state: {}};
@@ -37,10 +29,6 @@ let f_o_js__color_picker = function(
     //     return c.z + c.y * (rgb-0.5)*(1.0-abs(2.0*c.z-1.0));
     // }
     // `;
-
-
-
-
 
     // let s_id_canvas = `color_picker_canvas`
     // o_js__color_picker = {
