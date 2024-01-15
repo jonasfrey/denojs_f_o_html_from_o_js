@@ -182,9 +182,9 @@ var f_o_html__and_make_renderable = async function(
                 //     })
                 // }
             }
-            o_js._f_update = function(){
+            o_js._f_update = async function(){
                 // console.log(o_js)
-                o_js.o_jsh = o_js.f_o_jsh();
+                o_js.o_jsh = await o_js.f_o_jsh();
                 for(let o_html of o_js._a_o_html){
                     f_update_o_html_from_o_jsh(
                         o_html,
