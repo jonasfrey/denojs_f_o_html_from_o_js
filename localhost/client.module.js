@@ -214,7 +214,3 @@ export {
     f_o_js_from_params
 }
 
-export * from './examples/color_picker/mod.js'
-export * from './examples/notifire/mod.js'
-export * from './examples/overlay_window/mod.js'
-export * from './examples/select/mod.js'
