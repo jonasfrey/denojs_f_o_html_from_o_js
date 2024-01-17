@@ -10,7 +10,7 @@ import {
 
 let s_class = 'overlay_window';
 let s_uuid_mod_scope = crypto.randomUUID();
-let f_o_js__overlay_window = function(
+let f_o_js = function(
     a_o_js = [], 
     o_state = {}
 ){
@@ -168,6 +168,6 @@ let s_css = `
 }
 `
 export {
-    f_o_js__overlay_window, 
+    f_o_js, 
     s_css
 }

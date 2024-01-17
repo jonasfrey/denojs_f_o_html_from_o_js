@@ -24,7 +24,13 @@ let f_o_trn__relative_to_o_html__nor = function(
     return o_trn_mouse.sub(o_trn).div(o_scl); 
     
 }
+let f_s_selector_css_from_s_uuid = function(s_uuid){
+    // since a uuid does not always start with a char but a number 
+    // it wont be a valid css selector
+    return `mod_${s_uuid}`
+}
 export {
     f_o_trn__relative_to_o_html, 
-    f_o_trn__relative_to_o_html__nor
+    f_o_trn__relative_to_o_html__nor, 
+    f_s_selector_css_from_s_uuid
 }

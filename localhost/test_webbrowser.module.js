@@ -12,11 +12,9 @@ import {
 //md: 
 //./readme.md:end
 
+
 import {
     f_o_html__and_make_renderable,
-    f_o_js__overlay_window,
-    f_o_js__notifire, 
-    f_throw_notification,
     f_o_js_from_params
 }
 from './client.module.js'
@@ -374,6 +372,9 @@ let a_o_test = [
     f_o_test(
         "notifire", 
         async ()=>{
+            let o_mod_notifire = await import( './jsh_modules/notifire/mod.js');
+
+
             let o_state = {
                 s: "this is an example state string in a scope", 
                 o_dedicated_to_mod: {}
@@ -381,7 +382,7 @@ let a_o_test = [
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
-                        f_o_js__notifire( // this will add the variables to the state
+                        o_mod_notifire.f_o_js( // this will add the variables to the state
                             [], 
                             o_state.o_dedicated_to_mod
                         ), 
@@ -390,28 +391,57 @@ let a_o_test = [
             )
             document.body.appendChild(o);
             console.log(o_state.o_dedicated_to_mod)
-            // o_state.o_dedicated_to_mod.a_s_notification.push('xxx');
-            // o_state.o_dedicated_to_mod.o_js__notifire._f_render();
+            // throw a notification with the helper function
+            await o_mod_notifire.f_throw_notification('Hello World !'),
+            await o_mod_notifire.f_throw_notification('Im living !', 'info'),
+            await o_mod_notifire.f_throw_notification('Well done !', 'success'),
+            await o_mod_notifire.f_throw_notification('Watch out !', 'warning'),
+            await o_mod_notifire.f_throw_notification('OH NO :(  !', 'error'),
+            await o_mod_notifire.f_throw_notification(`Lorem Ipsum is simply dummy text of the printing and typesetting`);
+            await o_mod_notifire.f_throw_notification(
+                'Check', 
+                'info', 
+                'left', 
+                'top'
+            );
+            await o_mod_notifire.f_throw_notification(
+                'me', 
+                'error', 
+                'right', 
+                'top'
+            );
+            await o_mod_notifire.f_throw_notification(
+                'out', 
+                'success', 
+                'right', 
+                'bottom'
+            );
+            await o_mod_notifire.f_throw_notification(
+                'Mate!', 
+                'warning', 
+                'left', 
+                'bottom'
+            );
+            await o_mod_notifire.f_throw_notification(
+                'Hurray!', 
+                'warning', 
+                'center', 
+                'bottom'
+            );
 
-            // o_state.o_dedicated_to_mod.a_s_notification.push('2');
-            // o_state.o_dedicated_to_mod.o_js__notifire._f_render();
 
-            // o_state.o_dedicated_to_mod.a_s_notification.push('3');
-            // o_state.o_dedicated_to_mod.o_js__notifire._f_render();
-            f_throw_notification('lol')
-            f_throw_notification('2')
-            f_throw_notification('3')
-            f_throw_notification('3')
-            f_throw_notification('3')
-            f_throw_notification('3')
-            f_throw_notification('3')
-            await o_state.o_dedicated_to_mod.o_js__a_s_not._f_render()
-            window.setTimeout(()=>{
-                f_throw_notification('!@#4')
-            },100)
             window.onmousedown = ()=>{
                 // o_state.o_dedicated_to_mod.a_s_not.push('asdf !')
-                o_state.o_dedicated_to_mod.o_js__a_s_not._f_render()
+                o_state.o_dedicated_to_mod.a_o_notification.push(
+                    new o_mod_notifire.O_notification(
+                        `It is:  ${new Date().toString()}`, 
+                        ['error', 'info', 'success', 'warning'][parseInt(Math.random()*4)],
+                        ['left', 'right', 'center'][parseInt(Math.random()*3)],
+                        ['bottom', 'top'][parseInt(Math.random()*2)],
+                        ...new Array(2).fill(Math.random()*5000),
+                    )
+                )
+                o_state.o_dedicated_to_mod.o_js._f_render()
             }
         }
     ), 

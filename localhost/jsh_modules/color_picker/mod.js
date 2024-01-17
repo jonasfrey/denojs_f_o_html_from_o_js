@@ -10,7 +10,7 @@ import {
     f_o_trn__relative_to_o_html__nor
 } from "../functions.module.js"
 
-let f_o_js__color_picker = function(
+let f_o_js = function(
     a_o_js = []
 ){
     
@@ -275,5 +275,5 @@ let f_o_js__color_picker = function(
     )
 }
 export {
-    f_o_js__color_picker
+    f_o_js
 }
