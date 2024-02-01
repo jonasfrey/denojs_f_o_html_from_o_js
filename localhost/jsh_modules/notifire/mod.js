@@ -201,7 +201,7 @@ let s_css = `
     margin: 0.5rem;
 }
 .bar{
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     height:  5px;
