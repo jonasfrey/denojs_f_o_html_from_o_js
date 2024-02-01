@@ -338,6 +338,8 @@ let a_o_test = [
     f_o_test(
         "overlay_window", 
         async ()=>{
+            let o_module = await import( './jsh_modules/overlay_window/mod.js');
+
             let o_state = {
                 s: "this is an example state string in a scope", 
                 o_dedicated_to_overlay: {}
@@ -345,7 +347,7 @@ let a_o_test = [
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
-                        f_o_js__overlay_window( // this will add the variables to the state
+                        o_module.f_o_js( // this will add the variables to the state
                             [
                               {
                                 innerText: 'drag ME!'
@@ -356,12 +358,12 @@ let a_o_test = [
                     ]
                 }
             )
-            // the 
-            window.setInterval(()=>{
-                o_state.o_dedicated_to_overlay.o_trn.n_x = (Math.random())*window.innerWidth
-                o_state.o_dedicated_to_overlay.o_trn.n_y = (Math.random())*window.innerHeight
-                console.log(o_state.o_dedicated_to_overlay.o_js__overlay_window._f_update());
-            }, 1000)
+            // // the 
+            // window.setInterval(()=>{
+            //     o_state.o_dedicated_to_overlay.o_trn.n_x = (Math.random())*window.innerWidth
+            //     o_state.o_dedicated_to_overlay.o_trn.n_y = (Math.random())*window.innerHeight
+            //     console.log(o_state.o_dedicated_to_overlay.o_js__overlay_window._f_update());
+            // }, 1000)
             // console.log(o)
             window.setTimeout(()=>{o_state.o_dedicated_to_overlay.o_scl = new O_vec2(500,500)}, 1000)
             document.body.appendChild(o)
@@ -471,13 +473,77 @@ let a_o_test = [
                             o_state.o_state__for_module
                         ),
                         {
-                            innerText: "the before is a datepicker"
+                            innerText: "the following is a datepicker with some custom restrictions"
                         }, 
+                        o_module.f_o_js( // this will add the variables to the state
+                            Object.assign(
+                                o_state,
+                                {
+                                    o_state__for_module_restrictions: {
+                                        a_s_name_month: ['كانُون الثانِي', 'شُباط', 'آذار', 'نَيْسان', 'أَيّار', 'حَزِيران', 'تَمُّوز', 'آب', 'أَيْلُول', 'تِشْرِين الْأَوَّل'],
+                                        // b_date_updated_first_time,
+                                        o_date: new Date(),// the pre selected date
+                                        f_on_update__o_date: ()=>{
+                                            console.log('a date has been selected')
+                                        },
+                                        f_b_selectable: (o_date)=>{
+                                            // conditions for date to be selectable, 
+                                            // can be crazy like only each second day
+                                            return o_date.getUTCDate() % 2 == 0;
+                                        },
+                                        f_on_click__o_date: ()=>{
+                                            console.log('a date has been clicked but maybe it is not selectable')
+                                        },
+                                        s_text_before_first_select: 'Bitte waehlen sie ein datum',//the text shown before the select
+                                        f_s_value_input: (o_state)=>{
+                                            if(!o_state.b_date_updated_first_time){
+                                                return 'Bitte waehlen sie ein datum'
+                                            }
+                                            return o_state.o_date.toString()
+                                        },
+                                        n_selectable_years_plus_minus: 5,//number of years shown before and after
+                                    }
+                                } 
+                            ).o_state__for_module_restrictions  
+                        ),
                     ]
                 }
             )
 
             document.body.appendChild(o);
+        }
+    ), 
+
+    f_o_test(
+        "datepicker_on_a_overlay_window", 
+        async ()=>{
+            
+            let o_module__datepicker = await import( './jsh_modules/datepicker/mod.js');
+            let o_module__overlay = await import( './jsh_modules/overlay_window/mod.js');
+
+            let o_state = {
+                s: "this is an example state string in a scope", 
+                o_state__for_overlay: {}, 
+                o_state__for_datepicker: {}
+            };
+            let o = await f_o_html__and_make_renderable(
+                {
+                    a_o: [
+                        o_module__overlay.f_o_js( // this will add the variables to the state
+                            [
+                                o_module__datepicker.f_o_js( // this will add the variables to the state
+                                    o_state.o_state__for_datepicker
+                                ),
+                            ], 
+                            o_state.o_state__for_overlay
+                        ), 
+                    ]
+                }
+            )
+            window.setTimeout(()=>{o_state.o_state__for_overlay.o_scl = new O_vec2(500,500)}, 1000)
+            document.body.appendChild(o)
+            
+
         }
     ), 
 ]

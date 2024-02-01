@@ -76,342 +76,139 @@ let f_o_js = function(
                 f_o_jsh: ()=>{
                     return {
                         class: [
-                            'position_relative', 
                             s_uuid_module_scope, 
-                            o_state?.s_uuid_function_scope
+                            o_state?.s_uuid_function_scope, 
                         ].join(' '),
-                        a_o:[
-                            Object.assign(
-                                o_state, 
-                                {
-                                    o_js__input: {
-                                        f_o_jsh: function(){
-                                
-                                            return {
-                                                class: "input",
-                                                a_o: [
-    
-                                                    {
-                                                        s_tag: "input", 
-                                                        readonly: 'true',
-                                                        class: "clickable p-1_2_rem",
-                                                        type: "text",
-                                                        value: o_state.f_s_value_input(o_state),
-                                                        onmousedown: function(){
-                                                            o_state.b_show_picker = true
-                                                            o_state?.o_js__s_name_month_n_year._f_render();
-                                                        }
-                                                    },
-                                                    {
-                                                        s_tag: 'i',
-                                                        class: "fa-regular fa-calendar icon clickable p-1_2_rem", 
-                                                        onmouseup: function () {
-                                                            
-                                                            o_state.b_show_picker = true;
-                                                            o_state?.o_js__s_name_month_n_year._f_render();
-                                                        }
-                                                    }
-                                                ]
-                                            }
-                                        }
-                                    }
-                                    }
-                            ).o_js__input,
-                            Object.assign(
-                                o_state, 
-                                {
-                                    o_js__a_s_name_month : {
-                                        f_o_jsh: function(){
-                                            return {
-                                                class: "a_s_name_month d_flex",
-                                                a_o:[
-                                                    ...o_state.a_s_name_month.map(
-                                                        function(s_name_month){
-                                                            var n_idx_month = o_state.a_s_name_month.indexOf(s_name_month);
-                                                            var o_date_month = new Date(new Date().setUTCMonth(n_idx_month));
-                                
-                                                            var b_selectable = true;//we would need to check every day of month if it is selectable, if even one day is selectable the whole month is selectable //o_state.f_b_selectable(o_date_month);
-                                                            let b_same_month = o_state.o_date.getUTCMonth() == o_date_month.getUTCMonth();
-                                                            let b_clickable = b_selectable;
-                                                            let b_clicked = b_same_month;
-                                
-                                                            return {
-                                                                class: [
-                                                                    "s_name_month", 
-                                                                    ((b_clickable) ? 'clickable' : ''), 
-                                                                    ((b_clicked) ? 'clicked' : ''), 
-                                                                    'w_1_t_3',
-                                                                    'pt-0_9_rem',
-                                                                    'pb-0_9_rem',
-                                                                ].join(' '),
-                                                                innerText: s_name_month,
-                                                                onclick: function(){
-                                                                    o_state._o_date__being_selected = new Date(
-                                                                        o_state._o_date__being_selected.setUTCMonth(n_idx_month)
-                                                                    );
-                                
-                                                                    o_state.o_js_active = o_state?.o_js__a_s_name_day;
+                        a_o: [
+                            {
+                                class: 'position_relative theme_dark', 
+                                a_o:[
+                                    Object.assign(
+                                        o_state, 
+                                        {
+                                            o_js__input: {
+                                                f_o_jsh: function(){
+                                        
+                                                    return {
+                                                        class: "input",
+                                                        a_o: [
+            
+                                                            {
+                                                                s_tag: "input", 
+                                                                readonly: 'true',
+                                                                class: "clickable p-1_2_rem",
+                                                                type: "text",
+                                                                value: o_state.f_s_value_input(o_state),
+                                                                onmousedown: function(){
+                                                                    o_state.b_show_picker = true
                                                                     o_state?.o_js__s_name_month_n_year._f_render();
                                                                 }
-                                                            };
-                                                        }
-                                                    )
-                                                ]
-                                            }
-                                        }
-                                    }
-                                }
-                            ).o_js__a_s_name_month,
-                            Object.assign(
-                                o_state, 
-                                {
-                                    o_js__a_s_name_day : {
-                                        f_o_jsh: function(){
-                                            var o_date = o_state._o_date__being_selected;
-                                            var o_date_last_day_of_month = new Date(
-                                                Date.UTC(
-                                                    o_date.getUTCFullYear(),
-                                                    o_date.getUTCMonth()+1,
-                                                    0,
-                                                )
-                                            );
-                                            var o_date_first_day_of_month = new Date(
-                                                Date.UTC(
-                                                    o_date.getUTCFullYear(),
-                                                    o_date.getUTCMonth(),
-                                                    1,
-                                                )
-                                            );
-                                            var o_date_start = o_date_first_day_of_month;
-                                            let n_ms__one_day = 24*60*60*1000;
-                                            while(o_date_start.getUTCDay() != 1){
-                                                o_date_start = new Date(o_date_start.getTime()-n_ms__one_day)
-                                            }
-                                
-                                            var o_date_end = o_date_last_day_of_month;
-                                            while(o_date_end.getUTCDay() != 0){
-                                                o_date_end = new Date(o_date_end.getTime()+n_ms__one_day)
-                                            }
-                                            var a_o_date_day = [];
-                                            var o_date_it = o_date_start; 
-                                            while(o_date_it.getTime() <= o_date_end.getTime()){
-                                                a_o_date_day.push(o_date_it)
-                                                o_date_it = new Date(o_date_it.getTime()+n_ms__one_day);
-                                            }
-                                            var a_s_name_day = [
-                                                "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"
-                                            ];
-                                            return {
-                                                a_o:[
-                                                    {
-                                                        "class": [
-                                                            "a_s_name_day", 
-                                                            'd_flex'
-                                                        ].join(" "),
-                                                        a_o: [
-                                                            ...a_s_name_day.map(function(s_name_day){
-                                                                return {
-                                                                    class: [
-                                                                        "w_1_t_7",
-                                                                        'pt-0_9_rem',
-                                                                        'pb-0_9_rem',
-                                                                    ].join(" "),
-                                                                    innerText: s_name_day
-                                                                }
-                                                            })
-                                                        ]
-                                                    }, 
-                                                    {
-                                                        "class": [
-                                                            "a_o_date_day", 
-                                                            'd_flex'
-                                                        ].join(" "),
-                                                        a_o: [
-                                                            ...a_o_date_day.map(function(o_date_day){
-                                                                var b_selectable = o_state.f_b_selectable(o_date_day);
-                                                                var b_day_of_this_month = o_date_day.getUTCMonth() == o_state._o_date__being_selected.getUTCMonth();
-                                                                let b_same_day = f_b_same_day(o_date_day, o_state.o_date);
-                                                                let b_clickable = b_day_of_this_month && b_selectable;
-                                                                let b_clicked = b_same_day;
-                                                                return {
-                                                                    class: [
-                                                                        `w_1_t_7`,
-                                                                        'pt-0_9_rem',
-                                                                        'pb-0_9_rem',
-                                                                        ((b_clickable) ? 'clickable' : ''), 
-                                                                        ((b_clicked) ? 'clicked' : ''), 
-                                                                    ].join(" "),
-                                                                    innerText: (b_day_of_this_month) ? o_date_day.getUTCDate(): '',//.toString().padStart(2,'0'), 
-                                                                    onclick: function(){
-                                                                        if(!b_day_of_this_month){
-                                                                            return
-                                                                        }
-                                
-                                                                        o_state._o_date__being_selected = o_date_day;
-                                                                        
-                                                                        o_state?.o_js__a_s_name_day._f_render();
-                                                                        if(b_selectable){
-                                                                            o_state.o_date = new Date(o_date_day.getTime())
-                                                                            o_state.b_date_updated_first_time = true;
-                                                                            o_state.f_on_update__o_date(
-                                                                                o_state.o_date
-                                                                            );
-                                                                            o_state.b_show_picker = false;
-                                                                            o_state?.o_js__s_name_month_n_year._f_render();
-                                                                        }
-                                                                        o_state.f_on_click__o_date(
-                                                                            o_date_day
-                                                                        );
-                                                                        o_state?.o_js__a_s_name_day._f_render()
-                                                                        o_state?.o_js__input._f_render();
-                                                                    }
-                                                                }
-                                                            })
-                                                        ]
-                                                    }, 
-                                                ]
-                                            }
-                                
-                                        }
-                                    }
-                                }
-                            ).o_js__a_s_name_day,
-                            Object.assign(
-                                o_state, 
-                                {
-                                    o_js__a_n_year : {
-                                        f_o_jsh: function(){
-                                            return {
-                                
-                                                
-                                                class: "a_n_year d_flex",
-                                                a_o:[
-                                                    ...o_state.a_n_year.map(
-                                                        function(n_year){
-                                                            
-                                                            var b_selectable = true;//n_year == o_state.o_date.getUTCFullYear()
-                                                            //we would need to check if the date is selectable for every day in the year to know if a year is selectable/clickable
-                                
-                                                            let b_clickable = b_selectable;
-                                                            var o_date_year = new Date(new Date().setUTCFullYear(n_year));
-                                                            let b_clicked = o_date_year.getFullYear() == o_state._o_date__being_selected.getFullYear();
-                                
-                                                            return {
-                                                                class: [
-                                                                    "n_year", 
-                                                                    'w_1_t_3',
-                                                                    'pt-0_9_rem',
-                                                                    'pb-0_9_rem',
-                                                                    ((b_clickable) ? 'clickable' : ''), 
-                                                                    ((b_clicked) ? 'clicked' : ''), 
-                                
-                                                                ].join(' '),
-                                                                innerText: n_year,
-                                                                onclick: function(){
-                                
-                                                                    o_state._o_date__being_selected = new Date(
-                                                                        o_state._o_date__being_selected.setUTCFullYear(n_year)
-                                                                    );
-                                                                    o_state.o__js_active = o_state?.o_js__a_s_name_day;
-                                                                    o_state?.o__js_s_name_month_n_year._f_render();
-                                
-                                                                }
-                                                            };
-                                                        }
-                                                    )
-                                                ]
-                                            }
-                                        }
-                                    }
-                                }
-                            ).o_js__a_n_year,
-                            Object.assign(
-                                o_state, 
-                                {
-                                    o_js__s_name_month_n_year: {
-                                        f_o_jsh:function(){
-                                            return {
-                                                class:  "o_js_s_name_month_n_year border_shadow_popup",
-                                                a_o: [
-                                                    {
-                                                        style: (!o_state.b_show_picker) ? 'display:none' : '',
-                                                        // b_render: o_state.b_show_picker,
-                                                        a_o:[
-                                                            {
-                                                                class: "o_js_s_name_month_n_year_nav", 
-                                                                a_o:[
-                                                                    {
-                                                                        class: [
-                                                                            'p-1_2_rem',
-                                                                            'clickable'
-                                                                        ].join(' '),
-                                                                        innerText: "<", 
-                                                                        onclick: function(){
-                                                                            o_state._o_date__being_selected = new Date(
-                                                                                o_state._o_date__being_selected.setUTCMonth(
-                                                                                    o_state._o_date__being_selected.getUTCMonth()-1
-                                                                                )
-                                                                            );
-                                                                            o_state?.o_js__s_name_month_n_year._f_render()
-                                                                        }
-                                                                    },
-                                                                    {
-                                        
-                                                                        class: [
-                                                                            'p-1_2_rem',
-                                                                            'clickable'
-                                                                        ].join(' '),
-                                                                        innerText: o_state.a_s_name_month[o_state._o_date__being_selected.getUTCMonth()].substring(0,3), 
-                                                                        onclick: function(){
-                                                                            //switch to monmth view
-                                                                            o_state.o_js__active = o_state?.o_js__a_s_name_month
-                                                                            o_state?.o_js__s_name_month_n_year._f_render()
-                                                                        }
-                                                                    },
-                                                                    {
-                                                                        class: [
-                                                                            'p-1_2_rem',
-                                                                            'clickable'
-                                                                        ].join(' '),
-                                                                        innerText: ">", 
-                                                                        onclick: function(){
-                                                                            o_state._o_date__being_selected = new Date(
-                                                                                o_state._o_date__being_selected.setUTCMonth(
-                                                                                    o_state._o_date__being_selected.getUTCMonth()+1
-                                                                                )
-                                                                            );
-                                                                            o_state?.o_js__s_name_month_n_year._f_render()
-                                                                        }
-                                                                    },
-                                                                    {
-                                                                        class: [
-                                                                            'p-1_2_rem',
-                                                                            'clickable'
-                                                                        ].join(' '),
-                                                                        innerText: o_state._o_date__being_selected.getUTCFullYear(), 
-                                                                        onclick: function(){
-                                                                            //switch to year view
-                                                                            o_state.o_js__active = o_state?.o_js__a_n_year
-                                                                            o_state?.o_js__s_name_month_n_year._f_render()
-                                                                        }
-                                                                    },
-                                                                ]
                                                             },
-                                                            o_state?.o_js__active,
+                                                            {
+                                                                s_tag: 'i',
+                                                                class: "fa-regular fa-calendar icon clickable p-1_2_rem", 
+                                                                onmouseup: function () {
+                                                                    
+                                                                    o_state.b_show_picker = true;
+                                                                    o_state?.o_js__s_name_month_n_year._f_render();
+                                                                }
+                                                            }
                                                         ]
                                                     }
-                                                ]
+                                                }
+                                            }
+                                            }
+                                    ).o_js__input,
+                                    Object.assign(
+                                        o_state, 
+                                        {
+                                            o_js__s_name_month_n_year: {
+                                                f_o_jsh:function(){
+                                                    return {
+                                                        class:  "o_js__s_name_month_n_year border_shadow_popup",
+                                                        a_o: [
+                                                            {
+                                                                style: (!o_state.b_show_picker) ? 'display:none' : '',
+                                                                // b_render: o_state.b_show_picker,
+                                                                a_o:[
+                                                                    {
+                                                                        class: "o_js__s_name_month_n_year_nav", 
+                                                                        a_o:[
+                                                                            {
+                                                                                class: [
+                                                                                    'p-1_2_rem',
+                                                                                    'clickable'
+                                                                                ].join(' '),
+                                                                                innerText: "<", 
+                                                                                onclick: function(){
+                                                                                    o_state._o_date__being_selected = new Date(
+                                                                                        o_state._o_date__being_selected.setUTCMonth(
+                                                                                            o_state._o_date__being_selected.getUTCMonth()-1
+                                                                                        )
+                                                                                    );
+                                                                                    o_state?.o_js__s_name_month_n_year._f_render()
+                                                                                }
+                                                                            },
+                                                                            {
+                                                
+                                                                                class: [
+                                                                                    'p-1_2_rem',
+                                                                                    'clickable'
+                                                                                ].join(' '),
+                                                                                innerText: o_state.a_s_name_month[o_state._o_date__being_selected.getUTCMonth()].substring(0,3), 
+                                                                                onclick: function(){
+                                                                                    //switch to monmth view
+                                                                                    o_state.o_js__active = o_state?.o_js__a_s_name_month
+                                                                                    o_state?.o_js__s_name_month_n_year._f_render()
+                                                                                }
+                                                                            },
+                                                                            {
+                                                                                class: [
+                                                                                    'p-1_2_rem',
+                                                                                    'clickable'
+                                                                                ].join(' '),
+                                                                                innerText: ">", 
+                                                                                onclick: function(){
+                                                                                    o_state._o_date__being_selected = new Date(
+                                                                                        o_state._o_date__being_selected.setUTCMonth(
+                                                                                            o_state._o_date__being_selected.getUTCMonth()+1
+                                                                                        )
+                                                                                    );
+                                                                                    o_state?.o_js__s_name_month_n_year._f_render()
+                                                                                }
+                                                                            },
+                                                                            {
+                                                                                class: [
+                                                                                    'p-1_2_rem',
+                                                                                    'clickable'
+                                                                                ].join(' '),
+                                                                                innerText: o_state._o_date__being_selected.getUTCFullYear(), 
+                                                                                onclick: function(){
+                                                                                    //switch to year view
+                                                                                    o_state.o_js__active = o_state?.o_js__a_n_year
+                                                                                    o_state?.o_js__s_name_month_n_year._f_render()
+                                                                                }
+                                                                            },
+                                                                        ]
+                                                                    },
+                                                                    o_state?.o_js__active,
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                }
                                             }
                                         }
-                                    }
+                                    ).o_js__s_name_month_n_year,
+                                ], 
+                                onmouseup: function(){
+                                    o_state.b_show_picker = true;
+                        
                                 }
-                            ).o_js__s_name_month_n_year,
-                        ], 
-                        onmouseup: function(){
-                            o_state.b_show_picker = true;
-                
-                        }
+                            },
+                        ]
                     }
+
                 }
             },
             // state
@@ -455,10 +252,6 @@ let f_o_js = function(
                 (o_state._o_date__being_selected) 
                     ? o_state._o_date__being_selected 
                     : new Date(),
-            s_poor_unique_id: 
-                (o_state.s_poor_unique_id) 
-                    ? o_state.s_poor_unique_id 
-                    : `poor_uuid_${crypto.randomUUID()}`,
             b_show_picker: 
                 (o_state.b_show_picker) 
                     ? o_state.b_show_picker 
@@ -485,6 +278,211 @@ let f_o_js = function(
         }
     )
 
+    Object.assign(
+        o_state, 
+        {
+            o_js__a_s_name_month : {
+                f_o_jsh: function(){
+                    return {
+                        class: "a_s_name_month d_flex",
+                        a_o:[
+                            ...o_state.a_s_name_month.map(
+                                function(s_name_month){
+                                    var n_idx_month = o_state.a_s_name_month.indexOf(s_name_month);
+                                    var o_date_month = new Date(new Date().setUTCMonth(n_idx_month));
+        
+                                    var b_selectable = true;//we would need to check every day of month if it is selectable, if even one day is selectable the whole month is selectable //o_state.f_b_selectable(o_date_month);
+                                    let b_same_month = o_state.o_date.getUTCMonth() == o_date_month.getUTCMonth();
+                                    let b_clickable = b_selectable;
+                                    let b_clicked = b_same_month;
+        
+                                    return {
+                                        class: [
+                                            "s_name_month", 
+                                            ((b_clickable) ? 'clickable' : ''), 
+                                            ((b_clicked) ? 'clicked' : ''), 
+                                            'w_1_t_3',
+                                            'pt-0_9_rem',
+                                            'pb-0_9_rem',
+                                        ].join(' '),
+                                        innerText: s_name_month,
+                                        onclick: function(){
+                                            o_state._o_date__being_selected = new Date(
+                                                o_state._o_date__being_selected.setUTCMonth(n_idx_month)
+                                            );
+                                            o_state.o__js_active = o_state?.o_js__a_s_name_day;
+                                            o_state?.o_js__s_name_month_n_year._f_render();
+                                        }
+                                    };
+                                }
+                            )
+                        ]
+                    }
+                }
+            }
+        }
+    )
+    Object.assign(
+        o_state, 
+        {
+            o_js__a_s_name_day : {
+                f_o_jsh: function(){
+                    var o_date = o_state._o_date__being_selected;
+                    var o_date_last_day_of_month = new Date(
+                        Date.UTC(
+                            o_date.getUTCFullYear(),
+                            o_date.getUTCMonth()+1,
+                            0,
+                        )
+                    );
+                    var o_date_first_day_of_month = new Date(
+                        Date.UTC(
+                            o_date.getUTCFullYear(),
+                            o_date.getUTCMonth(),
+                            1,
+                        )
+                    );
+                    var o_date_start = o_date_first_day_of_month;
+                    let n_ms__one_day = 24*60*60*1000;
+                    while(o_date_start.getUTCDay() != 1){
+                        o_date_start = new Date(o_date_start.getTime()-n_ms__one_day)
+                    }
+        
+                    var o_date_end = o_date_last_day_of_month;
+                    while(o_date_end.getUTCDay() != 0){
+                        o_date_end = new Date(o_date_end.getTime()+n_ms__one_day)
+                    }
+                    var a_o_date_day = [];
+                    var o_date_it = o_date_start; 
+                    while(o_date_it.getTime() <= o_date_end.getTime()){
+                        a_o_date_day.push(o_date_it)
+                        o_date_it = new Date(o_date_it.getTime()+n_ms__one_day);
+                    }
+                    var a_s_name_day = [
+                        "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"
+                    ];
+                    return {
+                        a_o:[
+                            {
+                                "class": [
+                                    "a_s_name_day", 
+                                    'd_flex'
+                                ].join(" "),
+                                a_o: [
+                                    ...a_s_name_day.map(function(s_name_day){
+                                        return {
+                                            class: [
+                                                "w_1_t_7",
+                                                'pt-0_9_rem',
+                                                'pb-0_9_rem',
+                                            ].join(" "),
+                                            innerText: s_name_day
+                                        }
+                                    })
+                                ]
+                            }, 
+                            {
+                                "class": [
+                                    "a_o_date_day", 
+                                    'd_flex'
+                                ].join(" "),
+                                a_o: [
+                                    ...a_o_date_day.map(function(o_date_day){
+                                        var b_selectable = o_state.f_b_selectable(o_date_day);
+                                        var b_day_of_this_month = o_date_day.getUTCMonth() == o_state._o_date__being_selected.getUTCMonth();
+                                        let b_same_day = f_b_same_day(o_date_day, o_state.o_date);
+                                        let b_clickable = b_day_of_this_month && b_selectable;
+                                        let b_clicked = b_same_day;
+                                        return {
+                                            class: [
+                                                `w_1_t_7`,
+                                                'pt-0_9_rem',
+                                                'pb-0_9_rem',
+                                                ((b_clickable) ? 'clickable' : ''), 
+                                                ((b_clicked) ? 'clicked' : ''), 
+                                            ].join(" "),
+                                            innerText: (b_day_of_this_month) ? o_date_day.getUTCDate(): '',//.toString().padStart(2,'0'), 
+                                            onclick: function(){
+                                                if(!b_day_of_this_month){
+                                                    return
+                                                }
+        
+                                                o_state._o_date__being_selected = o_date_day;
+                                                
+                                                o_state?.o_js__a_s_name_day._f_render();
+                                                if(b_selectable){
+                                                    o_state.o_date = new Date(o_date_day.getTime())
+                                                    o_state.b_date_updated_first_time = true;
+                                                    o_state.f_on_update__o_date(
+                                                        o_state.o_date
+                                                    );
+                                                    o_state.b_show_picker = false;
+                                                    o_state?.o_js__s_name_month_n_year._f_render();
+                                                }
+                                                o_state.f_on_click__o_date(
+                                                    o_date_day
+                                                );
+                                                o_state?.o_js__a_s_name_day._f_render()
+                                                o_state?.o_js__input._f_render();
+                                            }
+                                        }
+                                    })
+                                ]
+                            }, 
+                        ]
+                    }
+        
+                }
+            }
+        }
+    )
+    Object.assign(
+        o_state, 
+        {
+            o_js__a_n_year : {
+                f_o_jsh: function(){
+                    return {
+                        class: "a_n_year d_flex",
+                        a_o:[
+                            ...o_state.a_n_year.map(
+                                function(n_year){
+                                    
+                                    var b_selectable = true;//n_year == o_state.o_date.getUTCFullYear()
+                                    //we would need to check if the date is selectable for every day in the year to know if a year is selectable/clickable
+        
+                                    let b_clickable = b_selectable;
+                                    var o_date_year = new Date(new Date().setUTCFullYear(n_year));
+                                    let b_clicked = o_date_year.getFullYear() == o_state._o_date__being_selected.getFullYear();
+        
+                                    return {
+                                        class: [
+                                            "n_year", 
+                                            'w_1_t_3',
+                                            'pt-0_9_rem',
+                                            'pb-0_9_rem',
+                                            ((b_clickable) ? 'clickable' : ''), 
+                                            ((b_clicked) ? 'clicked' : ''), 
+        
+                                        ].join(' '),
+                                        innerText: n_year,
+                                        onclick: function(){
+        
+                                            o_state._o_date__being_selected = new Date(
+                                                o_state._o_date__being_selected.setUTCFullYear(n_year)
+                                            );
+                                            o_state.o_js__active = o_state?.o_js__a_s_name_day;
+                                            o_state?.o_js__s_name_month_n_year._f_render();
+        
+                                        }
+                                    };
+                                }
+                            )
+                        ]
+                    }
+                }
+            }
+        }
+    )
     let o_date_minus = new Date(o_state.o_date.getTime());
     let o_date_plus = new Date(o_state.o_date.getTime());
     o_state.a_n_year.push(o_state.o_date.getUTCFullYear())
@@ -499,13 +497,14 @@ let f_o_js = function(
     o_state.a_n_year.sort((n1, n2)=>n1-n2)
 
     window.addEventListener("mouseup", function(){
-        let o = (window.event.target.closest("."+o_state.s_poor_unique_id));
+        let o = (window.event.target.closest("."+o_state.s_uuid_function_scope));
         if(!o){
             o_state.b_show_picker = false;
             o_state?.o_js__s_name_month_n_year._f_render();
         }
     })
 
+    o_state.o_js__active =  o_state?.o_js__a_s_name_day 
     return o_state[s_prop_o_js]
 }
 // css for only this module
@@ -525,7 +524,7 @@ let s_css = `
 .position_relative{
     position:relative
 }
-.o_js_s_name_month_n_year{
+.o_js__s_name_month_n_year{
     position:absolute;
     top:100%;
     left:0;
@@ -620,7 +619,7 @@ ${['.theme_dark .clickable'].map(
     }
     `
 ).join('\n')}
-*{
+div {
     font-family:helvetica;
 }
 ${(new Array(20).fill(0)).map(
@@ -636,13 +635,13 @@ ${(new Array(20).fill(0)).map(
         `
     }
 ).join("\n")} 
-.o_js_s_name_month_n_year{
+.o_js__s_name_month_n_year{
     z-index:1;
 }
-.o_js_s_name_month_n_year{
+.o_js__s_name_month_n_year{
     max-width:500px;
 }
-.o_js_s_name_month_n_year_nav{
+.o_js__s_name_month_n_year_nav{
     display:flex;
 }
 .test{
@@ -652,7 +651,7 @@ ${(new Array(20).fill(0)).map(
 f_add_css(
     f_s_css_prefixed(
         s_css,
-        s_selector_modscope
+        `.${s_uuid_module_scope}`
     )
 )
 
