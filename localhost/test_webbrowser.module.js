@@ -447,127 +447,39 @@ let a_o_test = [
         }
     ), 
 
-
+ 
     f_o_test(
-        "custom_notifire", 
+        "datepicker", 
         async ()=>{
+            
+            let o_module = await import( './jsh_modules/datepicker/mod.js');
+            
             let o_state = {
                 s: "this is an example state string in a scope", 
-                a_s_not: ['hello'],
+                o_state__for_module: {
+
+                },
             };
+
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
-                        Object.assign(
-                            o_state, 
-                            {
-                                o_js__a_s_not: {
-                                    f_o_jsh: ()=>{
-                                        return {
-                                            a_o: [
-                                                o_state.a_s_not.map(s=>{
-                                                    return {
-                                                        innerText: s
-                                                    }
-                                                })
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        ).o_js__a_s_not
+                        {
+                            innerText: "the following is a datepicker"
+                        },
+                        o_module.f_o_js( // this will add the variables to the state
+                            o_state.o_state__for_module
+                        ),
+                        {
+                            innerText: "the before is a datepicker"
+                        }, 
                     ]
                 }
             )
 
             document.body.appendChild(o);
-            o_state.a_s_not.push('asdf !')
-            o_state.o_js__a_s_not._f_render()
-            console.log(o_state.o_js__a_s_not)
-            o_state.a_s_not.push('asdf !')
-            o_state.o_js__a_s_not._f_render()
-            console.log(o_state.o_js__a_s_not)
         }
     ), 
-
-    f_o_test(
-        "custom_notifire_2", 
-        async ()=>{
-            let o_state = {
-                s: "this is an example state string in a scope", 
-                a_s_not: ['hello'],
-            };
-            let o = await f_o_html__and_make_renderable(
-                {
-                    a_o: [
-                        f_o_js_from_params(
-                            o_state, 
-                            'o_js__a_s_not', 
-                            {
-                                f_o_jsh: ()=>{
-                                    return {
-                                        a_o: [
-                                            o_state.a_s_not.map(s=>{
-                                                return {
-                                                    innerText: s
-                                                }
-                                            })
-                                        ]
-                                    }
-                                }
-                            }
-                        )
-                    ]
-                }
-            )
-
-            document.body.appendChild(o);
-            o_state.a_s_not.push('asdf !')
-            o_state.o_js__a_s_not._f_render()
-            console.log(o_state.o_js__a_s_not)
-            o_state.a_s_not.push('asdf !')
-            o_state.o_js__a_s_not._f_render()
-            console.log(o_state.o_js__a_s_not)
-        }
-    ), 
-    f_o_test(
-        "custom_notifire_3", 
-        async ()=>{
-            let o_state = {
-                s: "this is an example state string in a scope", 
-                a_s_not: ['hello'],
-            };
-            let o_js__a_s_not = {
-                f_o_jsh: ()=>{
-                    return {
-                        a_o: [
-                            o_state.a_s_not.map(s=>{
-                                return {
-                                    innerText: s
-                                }
-                            })
-                        ]
-                    }
-                }
-            }
-            let o = await f_o_html__and_make_renderable(
-                {
-                    a_o: [
-                        o_js__a_s_not
-                    ]
-                }
-            )
-
-            document.body.appendChild(o);
-            o_state.a_s_not.push('asdf !')
-            o_js__a_s_not._f_render()
-            console.log(o_js__a_s_not)
-            o_state.a_s_not.push('asdf !')
-            o_js__a_s_not._f_render()
-            console.log(o_js__a_s_not)
-        }
-    ), 
-
 ]
 
 
