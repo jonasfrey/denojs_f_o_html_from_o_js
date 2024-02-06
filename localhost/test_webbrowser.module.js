@@ -155,7 +155,29 @@ let a_o_test = [
                 s_text: 'this is my input', 
                 a_s_text: [], 
             }
-
+            // we can also have modules as single objects
+            let o_js__random_number = {
+                f_o_jsh: function(){
+                    return {
+                        innerText: `rand num: ${Math.random()}`
+                    }
+                }
+            }
+            let o_js__random_text = {
+                f_o_jsh: function(){
+                    return {
+                        innerText: `rand text: ${new Array(10).fill(0).map(n=>{return String.fromCharCode(65+Math.random()*32)})}`
+                    }
+                }
+            }
+            let o_js__active = o_js__random_number;
+            window.onmousedown = function(){
+                o_js__active = [
+                    o_js__random_number, 
+                    o_js__random_text
+                ].filter(o=>o!=o_js__active)[0]
+                o_state?.o_js__active_container?._f_render?.();
+            }
             var o_html = await f_o_html__and_make_renderable(
                 {
                     a_o: [
@@ -214,7 +236,30 @@ let a_o_test = [
                                 o_state.o_js__a_s_text?._f_render();
                             } 
 
-                        }
+                        }, 
+                        Object.assign(
+                            o_state, 
+                            {
+                                o_js__active_container: {
+                                    f_o_jsh: ()=>{
+                                        // we again have to render it here, i dont know why
+                                        // o_js__active?._f_render?.();
+                                        return {
+                                            a_o: [
+                                                {
+                                                    innerText: "below the 'active' is rendered"
+                                                },
+                                                {
+                                                    f_o_jsh: o_js__active?.f_o_jsh
+                                                }
+                                                // o_js__active,
+                                            ]
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        ).o_js__active_container,
                     ]
                 }
             );
@@ -526,6 +571,7 @@ let a_o_test = [
                 o_state__for_overlay: {}, 
                 o_state__for_datepicker: {}
             };
+            window.o_state = o_state
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [

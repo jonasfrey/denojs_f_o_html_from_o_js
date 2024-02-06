@@ -69,9 +69,9 @@ let f_o_js = function(
         o_state, 
         {
             //
-            o_js__active: {
-                f_o_jsh: ()=>{return {}}
-            },
+            // o_js__active: {
+            //     f_o_jsh: ()=>{return {}}
+            // },
             [s_prop_o_js]:  {
                 f_o_jsh: ()=>{
                     return {
@@ -117,13 +117,14 @@ let f_o_js = function(
                                                     }
                                                 }
                                             }
-                                            }
+                                        }
                                     ).o_js__input,
                                     Object.assign(
                                         o_state, 
                                         {
                                             o_js__s_name_month_n_year: {
                                                 f_o_jsh:function(){
+                                                    o_state?.o_js__active?._f_render?.()
                                                     return {
                                                         class:  "o_js__s_name_month_n_year border_shadow_popup",
                                                         a_o: [
@@ -191,7 +192,9 @@ let f_o_js = function(
                                                                             },
                                                                         ]
                                                                     },
-                                                                    o_state?.o_js__active,
+                                                                    {
+                                                                        f_o_jsh: o_state?.o_js__active?.f_o_jsh
+                                                                    }
                                                                 ]
                                                             }
                                                         ]
@@ -310,7 +313,7 @@ let f_o_js = function(
                                             o_state._o_date__being_selected = new Date(
                                                 o_state._o_date__being_selected.setUTCMonth(n_idx_month)
                                             );
-                                            o_state.o__js_active = o_state?.o_js__a_s_name_day;
+                                            o_state.o_js__active = o_state?.o_js__a_s_name_day;
                                             o_state?.o_js__s_name_month_n_year._f_render();
                                         }
                                     };
