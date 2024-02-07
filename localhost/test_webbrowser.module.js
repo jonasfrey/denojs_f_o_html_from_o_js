@@ -154,17 +154,22 @@ let a_o_test = [
             let o_state = {
                 s_text: 'this is my input', 
                 a_s_text: [], 
+                n_count: 0
             }
             // we can also have modules as single objects
             let o_js__random_number = {
+                s_id: 'random_number',
                 f_o_jsh: function(){
+                    console.log('random num rendered!')
                     return {
                         innerText: `rand num: ${Math.random()}`
                     }
                 }
             }
             let o_js__random_text = {
+                s_id: 'random_text',
                 f_o_jsh: function(){
+                    console.log('random text rendered!')
                     return {
                         innerText: `rand text: ${new Array(10).fill(0).map(n=>{return String.fromCharCode(65+Math.random()*32)})}`
                     }
@@ -172,6 +177,7 @@ let a_o_test = [
             }
             let o_js__active = o_js__random_number;
             window.onmousedown = function(){
+
                 o_js__active = [
                     o_js__random_number, 
                     o_js__random_text
@@ -242,17 +248,17 @@ let a_o_test = [
                             {
                                 o_js__active_container: {
                                     f_o_jsh: ()=>{
-                                        // we again have to render it here, i dont know why
-                                        // o_js__active?._f_render?.();
+                                        o_state.n_count +=1;                                        
                                         return {
                                             a_o: [
                                                 {
-                                                    innerText: "below the 'active' is rendered"
+                                                    innerText: "below the 'active' is rendered",
+                                                    b_render: o_state.n_count % 2 == 0
                                                 },
-                                                {
-                                                    f_o_jsh: o_js__active?.f_o_jsh
-                                                }
-                                                // o_js__active,
+                                                // {
+                                                //     f_o_jsh: o_js__active?.f_o_jsh
+                                                // }
+                                                o_js__active,
                                             ]
                                             
                                         }
@@ -568,25 +574,41 @@ let a_o_test = [
 
             let o_state = {
                 s: "this is an example state string in a scope", 
-                o_state__for_overlay: {}, 
-                o_state__for_datepicker: {}
+                o_state__for_overlay1: {n:1}, 
+                o_state__for_overlay2: {n:2}, 
+                o_state__for_datepicker1: {},
+                o_state__for_datepicker2: {}
             };
-            window.o_state = o_state
+            // window.o_state = o_state
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
                         o_module__overlay.f_o_js( // this will add the variables to the state
                             [
+                                {
+                                    innerText: "me to drag me!"
+                                },
                                 o_module__datepicker.f_o_js( // this will add the variables to the state
-                                    o_state.o_state__for_datepicker
+                                    o_state.o_state__for_datepicker1
+                                ),
+                            ],
+                            o_state.o_state__for_overlay1
+                        ), 
+                        o_module__overlay.f_o_js( // this will add the variables to the state
+                            [
+                                {
+                                    innerText: "drag me!"
+                                },
+                                o_module__datepicker.f_o_js( // this will add the variables to the state
+                                    o_state.o_state__for_datepicker2
                                 ),
                             ], 
-                            o_state.o_state__for_overlay
+                            o_state.o_state__for_overlay2
                         ), 
+
                     ]
                 }
             )
-            window.setTimeout(()=>{o_state.o_state__for_overlay.o_scl = new O_vec2(500,500)}, 1000)
             document.body.appendChild(o)
             
 

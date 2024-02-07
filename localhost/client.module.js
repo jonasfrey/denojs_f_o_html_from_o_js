@@ -88,7 +88,7 @@ let f_o_html__from_o_jsh = function(
 }
 
 
-var f_o_html__and_make_renderable = async function(
+var f_v_o_html__and_make_renderable = async function(
     o_js, 
 ){
 
@@ -96,29 +96,27 @@ var f_o_html__and_make_renderable = async function(
         async (f_res)=>{
             // if(!o_js._s_uuid){
             //     o_js._s_uuid = crypto.randomUUID();
-            // }
-            // console.log('run')
-            if(!o_js?._b_f_render_called){
-                o_js._a_o_html = [];
-                // console.log('needs rendering!')
-                if(typeof o_js.f_o_jsh != 'function'){
-                    // static objects can be rendered/converted to html once without having any function    
-                    o_js.o_jsh = o_js;
-                }else{
-                    o_js.o_jsh = await o_js.f_o_jsh();
-                }
-                // we could create the o_html element here and then clone it ,but because
-                // cloneNode(true) does not deep copy functions added with o_html.onclick =...
-                // we anyways have to create a new element for each reference
-                // retrun o_js._o_html.cloneNod(true)// not working because event listeners are not cloned...:( 
+            // }            
+            // so the initial thought was to be able to place multiple references of the same object
+            // as child objects and then only one has to be rendered and since the others are the same reference
+            // the already rendered content could be used / unfortunately this will then not render the child object 
+            // if it is dynamically exchanged in the parent /therefore i disable it again in this version
+            if(o_js?.b_render == false){
+                return f_res(null);
             }
+            if(typeof o_js.f_o_jsh != 'function'){
+                // static objects can be rendered/converted to html once without having any function    
+                o_js.o_jsh = o_js;
+            }else{
+                o_js.o_jsh = await o_js.f_o_jsh();
+            }
+
             // we create a new element from the o_jsh information
             o_js._o_html = f_o_html__from_o_jsh(
                 o_js.o_jsh, 
                 o_js
             );
             // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
-            o_js._a_o_html.push(o_js._o_html)
         
             let a_o_promise = []
             for(let s_prop in o_js.o_jsh){
@@ -132,29 +130,20 @@ var f_o_html__and_make_renderable = async function(
                         // debugger
                         // o._b_f_render_called = o_js._b_f_render_called
                         a_o_promise.push(
-                            f_o_html__and_make_renderable(o)
+                            f_v_o_html__and_make_renderable(o)
                         )
-                        // let o_html_child = await f_o_html__and_make_renderable(o);
-                        // o_js._o_html.appendChild(
-                        //     o_html_child
-                        // )//.cloneNode(true))
 
-                        // f_o_html__and_make_renderable(o).then(
-                        //     (o_html)=>{
-                        //         o_js._o_html.appendChild(
-                        //             o_html
-                        //         )//.cloneNode(true))
-                        //     }
-                        // );
                     }
                 }
             }
             let a_v_resolved = await Promise.all(a_o_promise);
             for(let v of a_v_resolved){
                 // console.log(v)
-                o_js._o_html.appendChild(
-                    v
-                )
+                if(v){
+                    o_js._o_html.appendChild(
+                        v
+                    )
+                }
             }
             o_js._b_f_render_called = true;
         
@@ -162,17 +151,16 @@ var f_o_html__and_make_renderable = async function(
                 
                 let o_self = o_js;//this;
                 o_self._b_f_render_called = false;
-                let a_o_html_old = o_self._a_o_html;
-                return Promise.all(
-                    a_o_html_old.map(o_html_old=>{
-                        return f_o_html__and_make_renderable(o_self).then(o_html=>{
+                let o_html_old = o_self._o_html
+                return f_v_o_html__and_make_renderable(o_self).then(v_o_html=>{
+                        if(v_o_html){
                             o_html_old.parentElement.replaceChild(
-                                o_html,
+                                v_o_html,
                                 o_html_old, 
                             )
-                        })
-                    })
-                )
+                        }
+                })
+                
                 // for(let o_html_old of a_o_html_old){
                 //     f_o_html__and_make_renderable(this).then(o_html=>{
                 //         o_html_old.parentElement.replaceChild(
@@ -183,15 +171,12 @@ var f_o_html__and_make_renderable = async function(
                 // }
             }
             o_js._f_update = async function(){
-                // console.log(o_js)
                 o_js.o_jsh = await o_js.f_o_jsh();
-                for(let o_html of o_js._a_o_html){
-                    f_update_o_html_from_o_jsh(
-                        o_html,
-                        o_js.o_jsh,
-                        o_js
-                    )
-                }
+                f_update_o_html_from_o_jsh(
+                    o_js._o_html,
+                    o_js.o_jsh,
+                    o_js
+                )
             }
             
             return f_res(o_js._o_html)
@@ -208,9 +193,10 @@ let f_o_js_from_params = function(o_o_js, s_name, o){
     }
     return o
 }
-
+let f_o_html__and_make_renderable = f_v_o_html__and_make_renderable 
 export {
-    f_o_html__and_make_renderable, 
+    f_o_html__and_make_renderable,
+    f_v_o_html__and_make_renderable, 
     f_o_js_from_params
 }
 

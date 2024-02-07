@@ -412,7 +412,6 @@ let f_o_js = function(
         
                                                 o_state._o_date__being_selected = o_date_day;
                                                 
-                                                o_state?.o_js__a_s_name_day._f_render();
                                                 if(b_selectable){
                                                     o_state.o_date = new Date(o_date_day.getTime())
                                                     o_state.b_date_updated_first_time = true;
@@ -425,7 +424,7 @@ let f_o_js = function(
                                                 o_state.f_on_click__o_date(
                                                     o_date_day
                                                 );
-                                                o_state?.o_js__a_s_name_day._f_render()
+                                                o_state?.o_js__a_s_name_day?._f_render?.()
                                                 o_state?.o_js__input._f_render();
                                             }
                                         }
