@@ -101,7 +101,7 @@ var f_v_o_html__and_make_renderable = async function(
             // as child objects and then only one has to be rendered and since the others are the same reference
             // the already rendered content could be used / unfortunately this will then not render the child object 
             // if it is dynamically exchanged in the parent /therefore i disable it again in this version
-            if(o_js?.b_render == false){
+            if(o_js?.b_render === false){
                 return f_res(null);
             }
             if(typeof o_js.f_o_jsh != 'function'){

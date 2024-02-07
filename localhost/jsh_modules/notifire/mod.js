@@ -10,13 +10,15 @@ let s_class = 'notifire';
 let s_prop_o_js = 'o_js'//`o_js__${s_class}`;
 let s_uuid_module_scope = f_s_selector_css_from_s_uuid(crypto.randomUUID());
 
-let f_throw_notification = null;  
+let v_f_throw_notification = null; 
+let v_f_clear_notification = null; 
 
 let o_s_type_s_ascii_icon = {
     'success': '✓',
     'warning': '⚠',
     'info': "ℹ", 
-    'error': '✖'
+    'error': '✖', 
+    'loading': '↻'//'|'
 }
 let a_s_position_x = ['left', 'center', 'right']
 let a_s_position_y = ['top', 'bottom']
@@ -26,7 +28,8 @@ class O_notification{
         s_text, 
         s_type, 
         s_position_x, 
-        s_position_y, 
+        s_position_y,
+        b_timeout, 
         n_ms_initial,
         n_ms_left, 
         o_js
@@ -35,6 +38,7 @@ class O_notification{
         this.s_text = s_text
         this.s_position_x = s_position_x
         this.s_position_y = s_position_y
+        this.b_timeout = b_timeout
         this.n_ms_initial = n_ms_initial
         this.n_ms_left = n_ms_left 
         this.o_js = null
@@ -43,8 +47,8 @@ class O_notification{
         let o_self = this
         this.n_wpf = window.performance.now();
         this.n_wpf_last = window.performance.now();
-        this.f_raf = async ()=>{ 
-            console.log(`${o_self.n_wpf} raf ${o_self.n_ms_left}`)
+        this.f_raf = async ()=>{
+            // console.log(`${o_self.n_wpf} raf ${o_self.n_ms_left}`)
             if(o_self.n_ms_left < 0){
                 window.cancelAnimationFrame(o_self.n_id_raf)
                 o_self.n_id_raf = 0
@@ -97,7 +101,11 @@ let f_o_js = function(
                                                                         {
                                                                             o_js: {
                                                                                 f_o_jsh: function(){
-                                                                                    if(o_notification.n_id_raf == 0 && o_notification.n_ms_left > 0){
+                                                                                    if(
+                                                                                        o_notification.n_id_raf == 0
+                                                                                        && o_notification.n_ms_left > 0
+                                                                                        && o_notification.b_timeout
+                                                                                    ){
                                                                                         o_notification.n_id_raf = window.requestAnimationFrame(o_notification.f_raf);
                                                                                     }
                                                                                     return {
@@ -106,10 +114,17 @@ let f_o_js = function(
                                                                                             'clickable', 
                                                                                             ...o_notification.s_type.split(' ')
                                                                                         ].join(' '),
+                                                                                        // b_render: false,
+                                                                                        // b_render: o_notification.n_ms_left > 0,
                                                                                         style: `display: ${(o_notification.n_ms_left > 0) ? 'block': 'none'}`,
                                                                                         a_o:[
                                                                                             {
-                                                                                                innerText: `${o_s_type_s_ascii_icon[o_notification.s_type]} ${o_notification.s_text}`,
+                                                                                                class: "icon",
+                                                                                                s_tag: "span",
+                                                                                                innerText: `${o_s_type_s_ascii_icon[o_notification.s_type]}`
+                                                                                            },
+                                                                                            {
+                                                                                                innerText: `${o_notification.s_text}`,
                                                                                             }, 
                                                                                             Object.assign(
                                                                                                     o_notification, 
@@ -156,7 +171,7 @@ let f_o_js = function(
         }
     )
 
-    f_throw_notification = async function(
+    v_f_throw_notification = async function(
         s,
         s_type = 'info',
         s_position_x = 'left', 
@@ -174,7 +189,8 @@ let f_o_js = function(
             s, 
             s_type,
             s_position_x,
-            s_position_y,
+            s_position_y, 
+            s_type != 'loading',
             n_ms,
             n_ms
         )
@@ -182,89 +198,116 @@ let f_o_js = function(
         await o_state?.[s_prop_o_js]?._f_render()
     }
 
+    v_f_clear_notification = async function(){
+        for(let o of o_state.a_o_notification){
+            window.cancelAnimationFrame(o.n_id_raf)
+        }
+        o_state.a_o_notification = []
+        await o_state?.[s_prop_o_js]?._f_render()
+    }
     return o_state[s_prop_o_js]
 }
 // css for only this module
 let s_selector_classscope = `.${[s_class].join('.')}`
 let s_selector_modscope = `.${[s_class, s_uuid_module_scope].join('.')}`
 // let s_selector_functionscope = `.${[s_class, s_uuid_module_scope, s_uuid_function_scope].join('.')}`
-let s_css = `
+let s_css = 
+    `
+    @keyframes notifire_spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+    }
+    ${
+        f_s_css_prefixed(
+            `
+            .a_o_notification{
+                font-family: helvetica;
+                position: fixed;
+            }
+            .o_notification{
+                position:relative;
+                max-width: 500px;
+                padding: 0.5rem;
+                margin: 0.5rem;
+            }
+            .o_notification .icon{
+                float:left;
+                display:inline;
+                padding: 0 0.2rem;
+            }
+            .o_notification.loading .icon{
+                animation: notifire_spin 1s linear infinite;
+            }
+            .bar{
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                height:  5px;
+            }
+            .top {
+                top:0;
+            }
+            .bottom{
+                bottom:0;
+            }
+            .left{
+                left: 0;
+            }
+            .right{
+                right:0;
+            }
+            .center{
+                left: 50%;
+                transform: translate(-50%)
+            }
+            
+            .success {
+                color: #155724;
+                background-color: #d4edda;
+                border-color: #c3e6cb;
+            }
+            .success .bar{
+                background: #1557243f;
+            }
+            .warning {
+                color: #856404;
+                background-color: #fff3cd;
+                border-color: #ffeeba;
+            }
+            .warning .bar{
+                background: #8564043f;
+            }
+            .info, .loading {
+                color: #004085;
+                background-color: #cce5ff;
+                border-color: #b8daff;
+            }
+            .info .bar, .loading .bar{
+                background: #0040853f;
+            }
 
-.a_o_notification{
-    font-family: helvetica;
-    position: absolute;
-}
-.o_notification{
-    position:relative;
-    max-width: 500px;
-    padding: 0.5rem;
-    margin: 0.5rem;
-}
-.bar{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height:  5px;
-}
-.top {
-    top:0;
-}
-.bottom{
-    bottom:0;
-}
-.left{
-    left: 0;
-}
-.right{
-    right:0;
-}
-.center{
-    left: 50%;
-    transform: translate(-50%)
-}
+            .error {
+                color: #721c24;
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+            }
+            .error .bar{
+                background: #721c243f;
+            }
+            `,
+            s_selector_modscope
+        )
 
-.success {
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-}
-.success .bar{
-    background: #1557243f;
-}
-.warning {
-    color: #856404;
-    background-color: #fff3cd;
-    border-color: #ffeeba;
-}
-.warning .bar{
-    background: #8564043f;
-}
-.info {
-    color: #004085;
-    background-color: #cce5ff;
-    border-color: #b8daff;
-}
-.info .bar{
-    background: #0040853f;
-}
-.error {
-    color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-}
-.error .bar{
-    background: #721c243f;
-}
-`;
-f_add_css(
-    f_s_css_prefixed(
-        s_css,
-        s_selector_modscope
-    )
-)
+    }`
+f_add_css(s_css)
 export {
     f_o_js,
-    f_throw_notification, 
+    v_f_throw_notification,  
+    v_f_clear_notification,
     s_css, 
     O_notification
 }

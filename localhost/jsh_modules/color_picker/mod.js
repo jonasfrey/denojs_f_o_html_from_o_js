@@ -11,11 +11,9 @@ import {
 } from "../functions.module.js"
 
 let f_o_js = function(
-    a_o_js = []
+    o_state
 ){
     
-
-
     // let o_js__color_picker = null;
     // let o ={ o_state: {}};
     // let o_state = o.o_state;
@@ -78,16 +76,18 @@ let f_o_js = function(
 
     // }
     // Object.assign(o_js__color_picker, o);
-    let o_state = {
-        s_color_border:`#f00`,
-        s_border_radius: '50%',
-        o_scl: new O_vec2(500),
-        b_pointer_down: false,
-        o_trn_nor_pick: new O_vec2(0.5),
-        o_scl_pick: new O_vec2(20),
-        o_rgba_color_pick: new O_vec4()
-    }
-    window.o_state_col = o_state
+    let o = Object.assign(
+        o_state, 
+        {
+            s_color_border:`#f00`,
+            s_border_radius: '50%',
+            o_scl: new O_vec2(500),
+            b_pointer_down: false,
+            o_trn_nor_pick: new O_vec2(0.5),
+            o_scl_pick: new O_vec2(20),
+            o_rgba_color_pick: new O_vec4()
+        }
+    )
 
     let o_canvas = f_o_canvas_webgl(
         `#version 300 es
@@ -152,127 +152,137 @@ let f_o_js = function(
                 fragColor+=vec4(vec3(o_donut_pick.w),1.);
             }
         }
-        `, 
+        `,
         o_state.o_scl[0], 
         o_state.o_scl[1]
     )
 
-    document.body.appendChild(o_canvas);
-    o_canvas.f_render({
-        o_trn_nor_pick: o_state.o_trn_nor_pick.a_n_comp, 
-    });
+    // document.body.appendChild(o_canvas);
+    // o_canvas.f_render({
+    //     o_trn_nor_pick: o_state.o_trn_nor_pick.a_n_comp, 
+    // });
     
-    return f_o_js_from_s_name(
-        'o_everything', 
+    return Object.assign(
+        o, 
         {
-            o_state,
-            f_o_jsh: async function(){
-
-                console.log(o_state.s_color_border)
-
-                return {
-                    style: `
-                    position:relative;
-                    width: ${o_state.o_scl.n_x}px;
-                    height: ${o_state.o_scl.n_y}px;
-                    user-select: none;
-                    `, 
-                    a_o: [
-                    
-                        // f_o_js_from_s_name(
-                        //     'o_js__pick', {
-                        //         f_o_jsh: function(){
-                        //             return {
-                        //                 style: `
-                        //                     position: absolute; 
-                        //                     left: ${o_state.o_trn_nor_pick.n_x*100}%;
-                        //                     top: ${o_state.o_trn_nor_pick.n_y*100}%;
-                        //                     width:${o_state.o_scl_pick.n_x}px; 
-                        //                     height:${o_state.o_scl_pick.n_y}px;
-                        //                     border: 1px solid white;
-                        //                     outline: 1px solid black;
-                        //                     transform:translate(-50%,-50%);
-                        //                     background-color: ${o_state.s_color_border};
-                        //                     z-index:1;
-                        
-                        //                 `,
-                        //                 // this element will be infront of the cursor and get the pointer events
-                        //                 onpointerup: ()=>{o_state.b_pointer_down = false;console.log('up')},
-                        //                 onpointerdown: ()=>{o_state.b_pointer_down = true;console.log('down')},
-                        //             }
-                        //         }
-                        //     }
-                        // ),
-                        f_o_js_from_s_name(
-                            'o_js__canvas', 
+            o_js: {    
+                f_o_jsh: async function(){
+                    return {
+                        a_o: [
                             {
-                                f_o_jsh: function(){
-                                    return                         {
-                                        onpointerup: ()=>{o_state.b_pointer_down = false;console.log('up')},
-                                        onpointerdown: ()=>{o_state.b_pointer_down = true;console.log('down')},
-                                        onmousemove: function(o_e){
-                                            if(o_state.b_pointer_down){
-                                                o_state.o_trn_nor_pick = new O_vec2(f_o_trn__relative_to_o_html__nor(
-                                                    new O_vec2(o_e.clientX,o_e.clientY),
-                                                    o_e.target
-                                                ));
-                                                console.log(o_state.o_trn_nor_pick)
-                                                let o_ctx = o_canvas.getContext("webgl2", {preserveDrawingBuffer: true});
-                                                let n_pixels = 1;
-                                                let n_channels = 4;
-                                                let a_n_u8__rgba_image_data = new Uint8Array(n_pixels*n_channels);
-                                                let o_trn_read = new O_vec2(
-                                                    o_state.o_trn_nor_pick.n_x*o_state.o_scl.n_x, 
-                                                    // read starts from lower left corner!
-                                                    (1.-o_state.o_trn_nor_pick.n_y)*o_state.o_scl.n_y, 
-                                                )
-                                                o_ctx.readPixels(
-                                                  ...o_trn_read.a_n_comp,
-                                                  1,
-                                                  1,
-                                                  o_ctx.RGBA,
-                                                  o_ctx.UNSIGNED_BYTE,
-                                                  a_n_u8__rgba_image_data,
-                                                );
-                                                console.log('read out image data')
-                                                console.log(a_n_u8__rgba_image_data); // 
-                                                o_state.o_rgba_color_pick = new O_vec4(...a_n_u8__rgba_image_data).div(255);
-                                                // o_o_js?.o_js__pick?._f_render();
-                                                // o_o_js?.o_everything?._f_render();
-                                                o_state.s_color_border = `rgba(${o_state.o_rgba_color_pick[0]*255}, ${o_state.o_rgba_color_pick[1]*255},${o_state.o_rgba_color_pick[2]*255}, ${o_state.o_rgba_color_pick[2]})`
-                                                // hsla(240,100%,50%,0.05) 
-            
-                                                o_canvas.f_render({
-                                                    o_trn_nor_pick: o_state.o_trn_nor_pick.a_n_comp,
-                                                    o_rgba_color_pick: o_state.o_rgba_color_pick.a_n_comp
-                                                });
-                                                // o_o_js?.o_js__pick?._f_update()
-                                                // o_o_js?.o_everything?._f_update();
-                                                o_o_js?.o_js__canvas?._f_update()
+                                style: `
+                                position:relative;
+                                width: ${o_state.o_scl.n_x}px;
+                                height: ${o_state.o_scl.n_y}px;
+                                user-select: none;
+                                `, 
+                                a_o: [
+                                    {
+                                        innerText: "asdf"
+                                    },
+                                    // f_o_js_from_s_name(
+                                    //     'o_js__pick', {
+                                    //         f_o_jsh: function(){
+                                    //             return {
+                                    //                 style: `
+                                    //                     position: absolute; 
+                                    //                     left: ${o_state.o_trn_nor_pick.n_x*100}%;
+                                    //                     top: ${o_state.o_trn_nor_pick.n_y*100}%;
+                                    //                     width:${o_state.o_scl_pick.n_x}px; 
+                                    //                     height:${o_state.o_scl_pick.n_y}px;
+                                    //                     border: 1px solid white;
+                                    //                     outline: 1px solid black;
+                                    //                     transform:translate(-50%,-50%);
+                                    //                     background-color: ${o_state.s_color_border};
+                                    //                     z-index:1;
+                                    
+                                    //                 `,
+                                    //                 // this element will be infront of the cursor and get the pointer events
+                                    //                 onpointerup: ()=>{o_state.b_pointer_down = false;console.log('up')},
+                                    //                 onpointerdown: ()=>{o_state.b_pointer_down = true;console.log('down')},
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // ),
+                                    Object.assign(
+                                        o_state, 
+                                        {
+                                            o_js__canvas: {
+                                                f_o_jsh: function(){
+                                                    return {
+                                                        onpointerup: ()=>{o_state.b_pointer_down = false;console.log('up')},
+                                                        onpointerdown: ()=>{o_state.b_pointer_down = true;console.log('down')},
+                                                        onmousemove: function(o_e){
+                                                            console.log('asdf')
+                                                            if(o_state.b_pointer_down){
+                                                                o_state.o_trn_nor_pick = new O_vec2(f_o_trn__relative_to_o_html__nor(
+                                                                    new O_vec2(o_e.clientX,o_e.clientY),
+                                                                    o_e.target
+                                                                ));
+                                                                console.log(o_state.o_trn_nor_pick)
+                                                                let o_ctx = o_canvas.getContext("webgl2", {preserveDrawingBuffer: true});
+                                                                let n_pixels = 1;
+                                                                let n_channels = 4;
+                                                                let a_n_u8__rgba_image_data = new Uint8Array(n_pixels*n_channels);
+                                                                let o_trn_read = new O_vec2(
+                                                                    o_state.o_trn_nor_pick.n_x*o_state.o_scl.n_x, 
+                                                                    // read starts from lower left corner!
+                                                                    (1.-o_state.o_trn_nor_pick.n_y)*o_state.o_scl.n_y, 
+                                                                )
+                                                                o_ctx.readPixels(
+                                                                  ...o_trn_read.a_n_comp,
+                                                                  1,
+                                                                  1,
+                                                                  o_ctx.RGBA,
+                                                                  o_ctx.UNSIGNED_BYTE,
+                                                                  a_n_u8__rgba_image_data,
+                                                                );
+                                                                console.log('read out image data')
+                                                                console.log(a_n_u8__rgba_image_data); // 
+                                                                o_state.o_rgba_color_pick = new O_vec4(...a_n_u8__rgba_image_data).div(255);
+                                                                // o_o_js?.o_js__pick?._f_render();
+                                                                // o_o_js?.o_everything?._f_render();
+                                                                o_state.s_color_border = `rgba(${o_state.o_rgba_color_pick[0]*255}, ${o_state.o_rgba_color_pick[1]*255},${o_state.o_rgba_color_pick[2]*255}, ${o_state.o_rgba_color_pick[2]})`
+                                                                // hsla(240,100%,50%,0.05) 
+                            
+                                                                o_canvas.f_render({
+                                                                    o_trn_nor_pick: o_state.o_trn_nor_pick.a_n_comp,
+                                                                    o_rgba_color_pick: o_state.o_rgba_color_pick.a_n_comp
+                                                                });
+                                                                // o_o_js?.o_js__pick?._f_update()
+                                                                // o_o_js?.o_everything?._f_update();
+                                                                o_o_js?.o_js__canvas?._f_update()
+                                                            }
+                                                            
+                                                            o_e.stopPropagation()
+                                                            o_e.preventDefault()
+                                                        }, 
+                            
+                                                        // ondragstart: (o_e)=>{return o_e.preventDefault()},
+                                                        style: `
+                                                        border-radius: ${o_state.s_border_radius};
+                                                        `,
+                                                        s_tag: "img", 
+                                                        src: o_canvas.toDataURL(), 
+                                                        draggable: 'false'
+                            
+                                                    }
+                                                }
                                             }
-                                            
-                                            o_e.stopPropagation()
-                                            o_e.preventDefault()
-                                        }, 
             
-                                        // ondragstart: (o_e)=>{return o_e.preventDefault()},
-                                        style: `
-                                        border-radius: ${o_state.s_border_radius};
-                                        `,
-                                        s_tag: "img", 
-                                        src: o_canvas.toDataURL(), 
-                                        draggable: 'false'
+                                        }
+                                    ).o_js__canvas
             
-                                    }
-                                }
+                
+                                ]
                             }
-                        )
+                        ]
+                    }
 
-                    ]
                 }
             }
         }
-    )
+    ).o_js
 }
 export {
     f_o_js

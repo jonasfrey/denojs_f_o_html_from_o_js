@@ -176,14 +176,14 @@ let a_o_test = [
                 }
             }
             let o_js__active = o_js__random_number;
-            window.onmousedown = function(){
-
+            window.onmousedown = function(o_e){
                 o_js__active = [
                     o_js__random_number, 
                     o_js__random_text
                 ].filter(o=>o!=o_js__active)[0]
                 o_state?.o_js__active_container?._f_render?.();
             }
+
             var o_html = await f_o_html__and_make_renderable(
                 {
                     a_o: [
@@ -445,38 +445,39 @@ let a_o_test = [
             document.body.appendChild(o);
             console.log(o_state.o_dedicated_to_mod)
             // throw a notification with the helper function
-            await o_mod_notifire.f_throw_notification('Hello World !'),
-            await o_mod_notifire.f_throw_notification('Im living !', 'info'),
-            await o_mod_notifire.f_throw_notification('Well done !', 'success'),
-            await o_mod_notifire.f_throw_notification('Watch out !', 'warning'),
-            await o_mod_notifire.f_throw_notification('OH NO :(  !', 'error'),
-            await o_mod_notifire.f_throw_notification(`Lorem Ipsum is simply dummy text of the printing and typesetting`);
-            await o_mod_notifire.f_throw_notification(
+            await o_mod_notifire.v_f_throw_notification('Hello World !'),
+            await o_mod_notifire.v_f_throw_notification('Im living !', 'info'),
+            await o_mod_notifire.v_f_throw_notification('Well done !', 'success'),
+            await o_mod_notifire.v_f_throw_notification('Watch out !', 'warning'),
+            await o_mod_notifire.v_f_throw_notification('OH NO :(  !', 'error'),
+            await o_mod_notifire.v_f_throw_notification('Loading, please wait ...', 'loading'),
+            await o_mod_notifire.v_f_throw_notification(`Lorem Ipsum is simply dummy text of the printing and typesetting`);
+            await o_mod_notifire.v_f_throw_notification(
                 'Check', 
                 'info', 
                 'left', 
                 'top'
             );
 
-            await o_mod_notifire.f_throw_notification(
+            await o_mod_notifire.v_f_throw_notification(
                 'me', 
                 'error', 
                 'right', 
                 'top'
             );
-            await o_mod_notifire.f_throw_notification(
+            await o_mod_notifire.v_f_throw_notification(
                 'out', 
                 'success', 
                 'right', 
                 'bottom'
             );
-            await o_mod_notifire.f_throw_notification(
+            await o_mod_notifire.v_f_throw_notification(
                 'Mate!', 
                 'warning', 
                 'left', 
                 'bottom'
             );
-            await o_mod_notifire.f_throw_notification(
+            await o_mod_notifire.v_f_throw_notification(
                 'Hurray!', 
                 'warning', 
                 'center', 
@@ -484,7 +485,10 @@ let a_o_test = [
             );
 
 
-            window.onmousedown = ()=>{
+            window.onmousedown = (o_e)=>{
+                if(o_e.button == 2){
+                    o_mod_notifire.v_f_clear_notification();   
+                }
                 // o_state.o_dedicated_to_mod.a_s_not.push('asdf !')
                 o_state.o_dedicated_to_mod.a_o_notification.push(
                     new o_mod_notifire.O_notification(
@@ -492,6 +496,7 @@ let a_o_test = [
                         ['error', 'info', 'success', 'warning'][parseInt(Math.random()*4)],
                         ['left', 'right', 'center'][parseInt(Math.random()*3)],
                         ['bottom', 'top'][parseInt(Math.random()*2)],
+                        true,
                         ...new Array(2).fill(Math.random()*5000),
                     )
                 )
@@ -622,7 +627,30 @@ let a_o_test = [
                 }
             )
             document.body.appendChild(o)
+        }
+    ), 
+    f_o_test(
+        "color_picker", 
+        async ()=>{
             
+            let o_mod = await import( './jsh_modules/color_picker/mod.js');
+
+            let o_state = {
+                s: "this is an example state string in a scope", 
+                o_state__color_picker: {}, 
+            };
+
+            // window.o_state = o_state
+            let o = await f_o_html__and_make_renderable(
+                {
+                    a_o: [
+                        o_mod.f_o_js( // this will add the variables to the state
+                            o_state.o_state__color_picker
+                        ), 
+                    ]
+                }
+            )
+            document.body.appendChild(o)
         }
     ), 
 ]
