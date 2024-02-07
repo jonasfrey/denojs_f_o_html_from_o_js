@@ -579,6 +579,18 @@ let a_o_test = [
                 o_state__for_datepicker1: {},
                 o_state__for_datepicker2: {}
             };
+            window.addEventListener('mousedown', function(){
+                window.setTimeout(function(){
+                    Object.keys(o_state?.o_state__for_datepicker1).map(s=>{
+                        if(s!='o_js'){
+                            o_state.o_state__for_datepicker2[s] = o_state?.o_state__for_datepicker1?.[s]
+                        }
+                    })
+                    o_state?.o_state__for_datepicker1?.o_js?._f_render();
+                    o_state?.o_state__for_datepicker2?.o_js?._f_render();
+
+                },400)
+            })
             // window.o_state = o_state
             let o = await f_o_html__and_make_renderable(
                 {
@@ -611,7 +623,6 @@ let a_o_test = [
             )
             document.body.appendChild(o)
             
-
         }
     ), 
 ]
