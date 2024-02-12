@@ -14,7 +14,7 @@ import {
 
 
 import {
-    f_v_o_html__and_make_renderable,
+    f_o_html__and_make_renderable,
     f_o_js_from_params
 }
 from './client.module.js'
@@ -36,7 +36,7 @@ let a_o_test = [
             //md: all but the tagName, it needs to be named 's_tag' on the js object 
             //md: children elements are also possible , for this purpose an array is required
             document.body.appendChild(
-                await f_v_o_html__and_make_renderable(
+                await f_o_html__and_make_renderable(
                     {
                         s_tag: 'div', 
                         a_o: [
@@ -64,7 +64,7 @@ let a_o_test = [
             //./readme.md:start
             //md: ## we now can add child objects and render arrays like this'
             document.body.appendChild(
-                await f_v_o_html__and_make_renderable(
+                await f_o_html__and_make_renderable(
                 {
                     s_tag: 'div', 
                     a_o:[
@@ -115,7 +115,7 @@ let a_o_test = [
                     }
                 }
             }
-            var o_html = await f_v_o_html__and_make_renderable(
+            var o_html = await f_o_html__and_make_renderable(
                 {
                 a_o: [
                     {
@@ -167,7 +167,7 @@ let a_o_test = [
             let o_state = {
                 s_text: 'asdf'
             }
-            var o_html = await f_v_o_html__and_make_renderable(
+            var o_html = await f_o_html__and_make_renderable(
                 {
                 a_o: [
                     {
@@ -250,7 +250,7 @@ let a_o_test = [
                 o_state?.o_js__active_container?._f_render?.();
             }
 
-            var o_html = await f_v_o_html__and_make_renderable(
+            var o_html = await f_o_html__and_make_renderable(
                 {
                     a_o: [
                         Object.assign(// we assign the js object to the state so that we can reference and update/render it later on
@@ -399,7 +399,7 @@ let a_o_test = [
                 }, 
             }
 
-            var o_html = await f_v_o_html__and_make_renderable(
+            var o_html = await f_o_html__and_make_renderable(
                 {
                     a_o: [
                         Object.assign(
@@ -461,7 +461,7 @@ let a_o_test = [
                 s: "this is an example state string in a scope", 
                 o_dedicated_to_overlay: {}
             };
-            let o = await f_v_o_html__and_make_renderable(
+            let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
                         o_module.f_o_js( // this will add the variables to the state
@@ -498,7 +498,7 @@ let a_o_test = [
                 o_dedicated_to_mod: {}
             };
             let o2 = {}
-            let o = await f_v_o_html__and_make_renderable(
+            let o = await f_o_html__and_make_renderable(
                 Object.assign(
                     o2,
                     {
@@ -630,7 +630,7 @@ let a_o_test = [
                 },
             };
 
-            let o = await f_v_o_html__and_make_renderable(
+            let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
                         {
@@ -708,7 +708,7 @@ let a_o_test = [
                 },400)
             })
             // window.o_state = o_state
-            let o = await f_v_o_html__and_make_renderable(
+            let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
                         o_module__overlay.f_o_js( // this will add the variables to the state
@@ -752,7 +752,7 @@ let a_o_test = [
             };
 
             // window.o_state = o_state
-            let o = await f_v_o_html__and_make_renderable(
+            let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
                         o_mod.f_o_js( // this will add the variables to the state
