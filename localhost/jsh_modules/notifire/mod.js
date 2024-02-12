@@ -9,10 +9,77 @@ import {
 let s_class = 'notifire';
 let s_prop_o_js = 'o_js'//`o_js__${s_class}`;
 let s_uuid_module_scope = f_s_selector_css_from_s_uuid(crypto.randomUUID());
+// Rendering Updates: The browser's UI rendering process runs separately from the JavaScript execution thread but is coordinated with the event loop. Even if a script is deferred using setTimeout(fn, 0), rendering updates (like layout recalculations and repaints) may not occur immediately if the event loop is busy with other tasks.
+let n_ms_delay_minimum = Math.ceil(1000/300);//1000/n_fps
+let f_o_throw_notification = async function(
+    o_state,
+    s,
+    s_type = 'info',
+    s_position_x = 'left', 
+    s_position_y = 'top', 
+    ){
+        return new Promise( async (f_res)=>{
 
-let v_f_throw_notification = null; 
-let v_f_clear_all_notifications = null; 
+            let n_ms_minimum = 5000;
+            let n_words_per_minute_slow_reader = 50;
+            let n_chars_per_word_avg = 5;
+            let n_chars_per_minute = n_words_per_minute_slow_reader * n_chars_per_word_avg;
+            let n_chars_per_second = n_chars_per_minute / 60;
+            let n_ms_per_char = 1000 / n_chars_per_second;
+            let n_ms_per_text = Array.from(s).filter(s=>s.trim()!='').length * n_ms_per_char;
+            let n_ms = Math.max(n_ms_per_text, n_ms_minimum);
+            let o = new O_notification(
+                s, 
+                s_type,
+                s_position_x,
+                s_position_y, 
+                s_type != 'loading',
+                n_ms,
+                n_ms
+            )
+            o_state?.a_o_notification.push(o)
+            await o_state?.[s_prop_o_js]?._f_render()
+            // return f_res(true)
+            // timeout is needed to give time to the thread
+            // to render the page
+            // see 'wtfisgoingon.html'
+            setTimeout(() => {
+                return f_res(o);
+            }, n_ms_delay_minimum);
 
+        })
+};
+let f_clear_all_notifications = async function(
+    o_state
+){  
+    return new Promise(async (f_res)=>{
+
+        for(let o of o_state.a_o_notification){
+            await f_clear_o_notification(o);
+        }
+        o_state.a_o_notification = []
+        // await o_state?.[s_prop_o_js]?._f_render()
+
+        return setTimeout(() => {
+            return f_res(true);
+        }, n_ms_delay_minimum);
+    })
+}; 
+let f_clear_o_notification = async function(o_notification){
+
+    return new Promise(async (f_res)=>{
+
+        window.cancelAnimationFrame(o_notification.n_id_raf)
+        o_notification.n_ms_left = -1;
+        await o_notification.o_js._f_render();
+
+        return setTimeout(() => {
+            return f_res(true);
+        }, n_ms_delay_minimum);
+    })
+
+
+}
 let o_s_type_s_ascii_icon = {
     'success': '✓',
     'warning': '⚠',
@@ -65,7 +132,6 @@ class O_notification{
     }
 }
 let f_o_js = function(
-    a_o_js = [], 
     o_state = {}
 ){
     let s_uuid_function_scope = f_s_selector_css_from_s_uuid(crypto.randomUUID());
@@ -76,7 +142,6 @@ let f_o_js = function(
             //
             [s_prop_o_js]:  {
                 f_o_jsh: ()=>{
-                    console.log('render a_o_notif')
                     return {
                         class: [s_class,s_uuid_module_scope,s_uuid_function_scope].join(' '),
                         a_o: [
@@ -101,6 +166,8 @@ let f_o_js = function(
                                                                         {
                                                                             o_js: {
                                                                                 f_o_jsh: function(){
+                                                                                    console.log(o_notification)
+                                                                                    console.log(o_notification.n_ms_left > 0)
                                                                                     if(
                                                                                         o_notification.n_id_raf == 0
                                                                                         && o_notification.n_ms_left > 0
@@ -115,8 +182,8 @@ let f_o_js = function(
                                                                                             ...o_notification.s_type.split(' ')
                                                                                         ].join(' '),
                                                                                         // b_render: false,
-                                                                                        // b_render: o_notification.n_ms_left > 0,
-                                                                                        style: `display: ${(o_notification.n_ms_left > 0) ? 'block': 'none'}`,
+                                                                                        b_render: o_notification.n_ms_left > 0,
+                                                                                        // style: `display: ${(o_notification.n_ms_left > 0) ? 'block': 'none'}`,
                                                                                         a_o:[
                                                                                             {
                                                                                                 class: "icon",
@@ -131,7 +198,7 @@ let f_o_js = function(
                                                                                                     {
                                                                                                         o_js__bar: {
                                                                                                             f_o_jsh: function(){
-                                                                                                                console.log('render bar')
+                                                                                                                // console.log('render bar')
 
                                                                                                                 return {
                                                                                                                             class: "bar",
@@ -173,49 +240,9 @@ let f_o_js = function(
         }
     )
 
-    v_f_throw_notification = async function(
-        s,
-        s_type = 'info',
-        s_position_x = 'left', 
-        s_position_y = 'top', 
-        ){
-            return new Promise( async (f_res)=>{
+    
 
-                let n_ms_min = 5000;
-                let n_words_per_minute_slow_reader = 50;
-                let n_chars_per_word_avg = 5;
-                let n_chars_per_minute = n_words_per_minute_slow_reader * n_chars_per_word_avg;
-                let n_chars_per_second = n_chars_per_minute / 60;
-                let n_ms_per_char = 1000 / n_chars_per_second;
-                let n_ms_per_text = Array.from(s).filter(s=>s.trim()!='').length * n_ms_per_char;
-                let n_ms = Math.max(n_ms_per_text, n_ms_min);
-                let o = new O_notification(
-                    s, 
-                    s_type,
-                    s_position_x,
-                    s_position_y, 
-                    s_type != 'loading',
-                    n_ms,
-                    n_ms
-                )
-                o_state?.a_o_notification.push(o)
-                await o_state?.[s_prop_o_js]?._f_render()
-                return f_res(true)
-                // window.setTimeout(()=>{
-                //     return f_res(true)
-                // },1)
-            })
-    }
 
-    v_f_clear_all_notifications = async function(){
-        for(let o of o_state.a_o_notification){
-            window.cancelAnimationFrame(o.n_id_raf)
-            o.n_ms_left = -1;
-            await o._f_render();
-        }
-        o_state.a_o_notification = []
-        // await o_state?.[s_prop_o_js]?._f_render()
-    }
     return o_state[s_prop_o_js]
 }
 // css for only this module
@@ -317,8 +344,9 @@ let s_css =
 f_add_css(s_css)
 export {
     f_o_js,
-    v_f_throw_notification,  
-    v_f_clear_all_notifications,
+    f_o_throw_notification,  
+    f_clear_all_notifications,
+    f_clear_o_notification,
     s_css, 
     O_notification
 }

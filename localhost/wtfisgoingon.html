@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+</head>
+<body>
+    <h1>i am 'hardcoded' in the html</h1>
+    <p>left click to run sync</p>
+    <p>right click to run a-sync</p>
+    <p>middle click to use setTimeout(f,0)</p>
+    <script type="text/javascript">
+
+        let om = document.createElement("div");
+        document.body.append(om);
+        let f_some_sync = function(){
+            let n = 0; 
+            while(n < 10000000000){
+                n +=1;
+                let a = 2; 
+                let b = a*2;
+                let c = a+b; 
+                let d = a/b/c;
+            }
+        };
+        let f_some_async = async function(){
+            return new Promise(
+                (f_res)=>{
+                    f_some_sync();
+                    return f_res(true)
+                }
+            )
+        }
+
+        let f_sync = function(){
+            om.innerHTML = 'loading';
+            f_some_sync()
+            console.log('some done')
+            om.innerText = 'loading done'
+        }
+        let f_async = async function(){
+            om.innerHTML = 'loading';
+            await f_some_async();
+            console.log('some done')
+            om.innerText = 'loading done'
+        }
+        let f_sync_set_timeout = function(){
+            om.innerHTML = 'loading';
+            setTimeout(()=>{
+                f_some_sync()
+                console.log('some done')
+                om.innerText = 'loading done' 
+            }, 0);
+        }
+        window.onpointerdown = async function(o_e){
+            if(o_e.button == 0){
+                f_sync()
+            }
+            if(o_e.button == 1){
+                f_sync_set_timeout()
+            }
+            if(o_e.button == 2){
+                await f_async();
+            }
+        }
+
+
+        // if (window.Worker) {
+        //     const myWorker = new Worker('worker.js');
+
+        //     myWorker.onmessage = function(e) {
+        //         if (e.data === 'done') {
+        //             console.log('some done');
+        //             om.innerText = 'loading done';
+        //         }
+        //     };
+
+        //     myWorker.postMessage('start'); // Start the worker
+        // } else {
+        //     console.log('Your browser doesn\'t support web workers.');
+        // }
+
+    </script>
+</body>
+</html>

@@ -101,92 +101,64 @@ var f_v_o_html__and_make_renderable = async function(
             // as child objects and then only one has to be rendered and since the others are the same reference
             // the already rendered content could be used / unfortunately this will then not render the child object 
             // if it is dynamically exchanged in the parent /therefore i disable it again in this version
-            if(o_js?.b_render === false){
-                return f_res(null);
-            }
+
             if(typeof o_js.f_o_jsh != 'function'){
                 // static objects can be rendered/converted to html once without having any function    
                 o_js.o_jsh = o_js;
             }else{
                 o_js.o_jsh = await o_js.f_o_jsh();
             }
+            if(o_js?.o_jsh?.b_render === false){
+                o_js._o_html = document.createComment('b_render')
+            }else{
 
-            // we create a new element from the o_jsh information
-            o_js._o_html = f_o_html__from_o_jsh(
-                o_js.o_jsh, 
-                o_js
-            );
-            // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
-        
-            let a_o_promise = []
-            for(let s_prop in o_js.o_jsh){
-                let v = o_js.o_jsh[s_prop];
-                if(!f_b_allowed_propery_name_on_o_jsh(s_prop)){
-                    continue
+                // we create a new element from the o_jsh information
+                o_js._o_html = f_o_html__from_o_jsh(
+                    o_js.o_jsh, 
+                    o_js
+                );
+                // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
+            
+                let a_o_promise = []
+                for(let s_prop in o_js.o_jsh){
+                    let v = o_js.o_jsh[s_prop];
+                    if(!f_b_allowed_propery_name_on_o_jsh(s_prop)){
+                        continue
+                    }
+            
+                    if(Array.isArray(v)){
+                        for(let o of v){
+                            a_o_promise.push(
+                                f_v_o_html__and_make_renderable(o)
+                            )
+    
+                        }
+                    }
                 }
-        
-                if(Array.isArray(v)){
-                    for(let o of v){
-                        // debugger
-                        // o._b_f_render_called = o_js._b_f_render_called
-                        a_o_promise.push(
-                            f_v_o_html__and_make_renderable(o)
+                let a_v_resolved = await Promise.all(a_o_promise);
+                for(let v of a_v_resolved){
+                    // console.log(v)
+                    if(v){
+                        o_js._o_html.appendChild(
+                            v
                         )
-
                     }
                 }
             }
-            let a_v_resolved = await Promise.all(a_o_promise);
-            for(let v of a_v_resolved){
-                // console.log(v)
-                if(v){
-                    o_js._o_html.appendChild(
-                        v
-                    )
-                }
-            }
-            o_js._b_f_render_called = true;
         
             o_js._f_render = async function(){
 
                 let o_self = o_js; 
                 let o_html_old = o_self._o_html;
                 let v_o_html = await f_v_o_html__and_make_renderable(o_self);
+            
                 if(v_o_html){
-                    console.log('v_o_html from _f_render')
-                    console.log(v_o_html)
-                    console.log(typeof v_o_html)
-                    console.log(v_o_html.innerHTML)
-                    console.log(o_self.o_jsh)
                     o_html_old.parentElement.replaceChild(
                         v_o_html,
                         o_html_old,
                     )
                 }
-                console.log('_f_render done')
                 return true 
-              //---
-                // let o_self = o_js;//this;
-                // o_self._b_f_render_called = false;
-                // let o_html_old = o_self._o_html
-                
-                // return f_v_o_html__and_make_renderable(o_self).then(v_o_html=>{
-                //         if(v_o_html){
-                //             o_html_old.parentElement.replaceChild(
-                //                 v_o_html,
-                //                 o_html_old, 
-                //             )
-                //         }
-                //         console.log({
-                //             v_o_html, 
-                //             typeof_v_o_html: typeof v_o_html
-                //         })
-                //         console.log(v_o_html)
-                //         console.log(o_html_old.parentElement)
-                //         console.log(o_html_old)
-                //         console.log('render done')
-
-                // })
                 
 
             }
@@ -214,7 +186,7 @@ let f_o_js_from_params = function(o_o_js, s_name, o){
     return o
 }
 export {
-    f_v_o_html__and_make_renderable, 
+    f_o_html__and_make_renderable, 
     f_o_js_from_params
 }
 

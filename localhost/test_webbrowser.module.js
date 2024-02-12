@@ -22,7 +22,8 @@ from './client.module.js'
 import {
     O_vec2
 } from "https://deno.land/x/vector@0.8/mod.js"
-import { v_f_clear_all_notifications } from "./jsh_modules/notifire/mod.js";
+
+
 
 let a_o_test = [
     f_o_test(
@@ -93,22 +94,25 @@ let a_o_test = [
             //md: it will get called on every ._f_update() and ._f_render() or call
             var a_s_animal = ['luchs', 'pferd', 'schildkroete']
             let s_color_background = 'red';
+            let n_count = 0;
             var o_js__a_s_animal = {
                 f_o_jsh: function(){
-                return {
-                    style: `background-color: ${s_color_background}`,
-                    a_o: [
-                    ...a_s_animal.map(function(
-                        s,
-                        n_idx 
-                    ){
-                        return {
-                            s_tag:'option',
-                            innerText: `animal number ${n_idx} is called: '${s}'`
-                        }
-                    })
-                    ]
-                }
+                    console.log('f_o_jsh was called')
+                    return {
+                        style: `background-color: ${s_color_background}`,
+                        a_o: [
+                        ...a_s_animal.map(function(
+                            s,
+                            n_idx 
+                        ){
+                            return {
+                                s_tag:'option',
+                                innerText: `animal number ${n_idx} is called: '${s}'`, 
+                                b_render: parseInt(n_idx)%2==(n_count%2)
+                            }
+                        })
+                        ]
+                    }
                 }
             }
             var o_html = await f_v_o_html__and_make_renderable(
@@ -118,17 +122,29 @@ let a_o_test = [
                     s_tag: "h2", 
                     innerText: "This is my app"
                     }, 
-                    o_js__a_s_animal// we can add the object / 'component' here
+                    o_js__a_s_animal,// we can add the object / 'component' here, 
+                    {
+                        s_tag: 'button',
+                        innerText: "click me to update",  
+                        onclick: async ()=>{
+                            // if we cann ._f_update() it will only do an update of the html element, each attribute is going to be updated
+                            // this is usefull if we want to change a style or a class for example
+                            s_color_background = `rgb(${Math.random()*255},${Math.random()*255},${Math.random()*255})`
+                            o_js__a_s_animal._f_update();
+                        }
+                    },
+                    {
+                        s_tag: 'button',
+                        innerText: "click me to re-render completly",  
+                        onclick: async ()=>{
+                            n_count +=1;
+                            o_js__a_s_animal._f_render();
+                        }
+                    }
                 ]
                 }
             );
             document.body.appendChild(o_html)
-            // if we cann ._f_update() it will only do an update of the html element, each attribute is going to be updated
-            // this is usefull if we want to change a style or a class for example
-            document.onclick = function(){
-                s_color_background = `rgb(${Math.random()*255},${Math.random()*255},${Math.random()*255})`
-                o_js__a_s_animal._f_update();
-            }
 
             // if we want to update the dom of all the children tough, we have to use '_f_render()'
             // so we can manually render the single object / 'component' like this
@@ -140,6 +156,55 @@ let a_o_test = [
             a_s_animal.push('whale')
             a_s_animal.push('bird')
             await o_js__a_s_animal._f_render();
+            //./readme.md:end
+        }
+    ),
+    f_o_test(
+        'conditional_rendering', 
+        async ()=>{
+            //./readme.md:start
+            //md: ## conditional rendering
+            let o_state = {
+                s_text: 'asdf'
+            }
+            var o_html = await f_v_o_html__and_make_renderable(
+                {
+                a_o: [
+                    {
+                        s_tag: "h2", 
+                        innerText: "This is my app"
+                    }, 
+                    Object.assign(
+                        o_state,
+                        {
+                            o_js__s_text: {
+                                f_o_jsh: ()=>{
+                                    let b_render = parseInt(window.performance.now())%2==0
+                                    console.log(
+                                        b_render
+                                    )
+                                    return {
+                                        b_render: b_render, 
+                                        innerText: o_state.s_text
+                                    }
+                                }
+                            }
+                        }
+                    ).o_js__s_text,
+                    {
+                        s_tag: 'button',
+                        innerText: "click me to update",  
+                        onclick: async ()=>{
+                            // if we cann ._f_update() it will only do an update of the html element, each attribute is going to be updated
+                            // this is usefull if we want to change a style or a class for example
+                            o_state.o_js__s_text._f_render();
+                        }
+                    },
+
+                ]
+                }
+            );
+            document.body.appendChild(o_html)
             //./readme.md:end
         }
     ),
@@ -428,7 +493,6 @@ let a_o_test = [
         async ()=>{
             let o_mod_notifire = await import( './jsh_modules/notifire/mod.js');
 
-
             let o_state = {
                 s: "this is an example state string in a scope", 
                 o_dedicated_to_mod: {}
@@ -443,7 +507,6 @@ let a_o_test = [
                                 return {
                                     a_o: [
                                         o_mod_notifire.f_o_js( // this will add the variables to the state
-                                            [], 
                                             o_state.o_dedicated_to_mod
                                         ), 
                                     ]
@@ -454,16 +517,14 @@ let a_o_test = [
                 ).o_js__everything
             )
             document.body.appendChild(o);
-            console.log(o_state.o_dedicated_to_mod)
+            // console.log(o_state.o_dedicated_to_mod)
             // throw a notification with the helper function
-            await o_mod_notifire.v_f_throw_notification('Loading, please wait !', 'loading')
-            // o2.o_js__everything?._f_render()
-            console.log('Loading notifiction should be displayed')
-            // window.setInterval(()=>{
-
-            //     console.log(o_state.o_dedicated_to_mod.a_o_notification)
-            // },10)
-            console.log(o_state.o_dedicated_to_mod)
+            // we have to await the rendering so that the browser render thread can render 
+            // if we had a loong loop directly after the throw notification the html would not be rendered without awaiting
+            // the problem occuring is is commonly referred to as blocking the main thread or UI thread blocking. It occurs when long-running JavaScript tasks prevent the browser's main thread from updating the user interface, leading to unresponsive pages or delayed updates to the UI.
+            await o_mod_notifire.f_o_throw_notification(o_state.o_dedicated_to_mod,'Loading, please wait !', 'loading')
+            await o_mod_notifire.f_o_throw_notification(o_state.o_dedicated_to_mod,'Loading 2, please wait !', 'loading')
+            await o_mod_notifire.f_o_throw_notification(o_state.o_dedicated_to_mod,'Loading 3, please wait !', 'loading')
             let f_some = function(){
                 let n = 0; 
                 while(n < 10000000000){
@@ -475,44 +536,59 @@ let a_o_test = [
                 }
             };
             f_some()
-            
-            v_f_clear_all_notifications()
+            console.log('some done')
+            await o_mod_notifire.f_clear_all_notifications(o_state.o_dedicated_to_mod);
 
-            // window.setTimeout(function(){
-            //     f_some();
-            // })
-            await o_mod_notifire.v_f_throw_notification('Im living !', 'info')
-            await o_mod_notifire.v_f_throw_notification('Well done !', 'success')
-            await o_mod_notifire.v_f_throw_notification('Watch out !', 'warning')
-            await o_mod_notifire.v_f_throw_notification('OH NO :(  !', 'error')
-            await o_mod_notifire.v_f_throw_notification('Loading, please wait ...', 'loading')
-            // await o_mod_notifire.v_f_throw_notification(`Lorem Ipsum is simply dummy text of the printing and typesetting`);
-            // await o_mod_notifire.v_f_throw_notification(
+            // clear a single notification
+            let o_notification = await o_mod_notifire.f_o_throw_notification(o_state.o_dedicated_to_mod,'Click to end this endless loading', 'loading')
+            window.addEventListener('pointerdown',async ()=>{
+                await o_mod_notifire.f_clear_o_notification(o_notification);
+            })
+            // // o2.o_js__everything?._f_render()
+            // console.log('Loading notifiction should be displayed')
+            // // window.setInterval(()=>{
+
+            // //     console.log(o_state.o_dedicated_to_mod.a_o_notification)
+            // // },10)
+            // console.log(o_state.o_dedicated_to_mod)
+            
+            // f_clear_all_notifications()
+
+            // // window.setTimeout(function(){
+            // //     f_some();
+            // // })
+            // await o_mod_notifire.f_throw_notification(o_state.o_dedicated_to_mod,'Im living !', 'info')
+            // await o_mod_notifire.f_throw_notification(o_state.o_dedicated_to_mod,'Well done !', 'success')
+            // await o_mod_notifire.f_throw_notification(o_state.o_dedicated_to_mod,'Watch out !', 'warning')
+            // await o_mod_notifire.f_throw_notification(o_state.o_dedicated_to_mod,'OH NO :(  !', 'error')
+            // await o_mod_notifire.f_throw_notification(o_state.o_dedicated_to_mod,'Loading, please wait ...', 'loading')
+            // await o_mod_notifire.f_throw_notification(`Lorem Ipsum is simply dummy text of the printing and typesetting`);
+            // await o_mod_notifire.f_throw_notification(
             //     'Check', 
             //     'info', 
             //     'left', 
             //     'top'
             // );
 
-            // await o_mod_notifire.v_f_throw_notification(
+            // await o_mod_notifire.f_throw_notification(
             //     'me', 
             //     'error', 
             //     'right', 
             //     'top'
             // );
-            // await o_mod_notifire.v_f_throw_notification(
+            // await o_mod_notifire.f_throw_notification(
             //     'out', 
             //     'success', 
             //     'right', 
             //     'bottom'
             // );
-            // await o_mod_notifire.v_f_throw_notification(
+            // await o_mod_notifire.f_throw_notification(
             //     'Mate!', 
             //     'warning', 
             //     'left', 
             //     'bottom'
             // );
-            // await o_mod_notifire.v_f_throw_notification(
+            // await o_mod_notifire.f_throw_notification(
             //     'Hurray!', 
             //     'warning', 
             //     'center', 
