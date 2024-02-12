@@ -88,7 +88,7 @@ let f_o_html__from_o_jsh = function(
 }
 
 
-var f_v_o_html__and_make_renderable = async function(
+var f_o_html__and_make_renderable = async function(
     o_js, 
 ){
 
@@ -129,7 +129,7 @@ var f_v_o_html__and_make_renderable = async function(
                     if(Array.isArray(v)){
                         for(let o of v){
                             a_o_promise.push(
-                                f_v_o_html__and_make_renderable(o)
+                                f_o_html__and_make_renderable(o)
                             )
     
                         }
@@ -150,14 +150,12 @@ var f_v_o_html__and_make_renderable = async function(
 
                 let o_self = o_js; 
                 let o_html_old = o_self._o_html;
-                let v_o_html = await f_v_o_html__and_make_renderable(o_self);
+                let v_o_html = await f_o_html__and_make_renderable(o_self);
             
-                if(v_o_html){
-                    o_html_old.parentElement.replaceChild(
-                        v_o_html,
-                        o_html_old,
-                    )
-                }
+                o_html_old.parentElement.replaceChild(
+                    v_o_html,
+                    o_html_old,
+                )
                 return true 
                 
 
