@@ -148,27 +148,47 @@ var f_v_o_html__and_make_renderable = async function(
             o_js._b_f_render_called = true;
         
             o_js._f_render = async function(){
+
+                let o_self = o_js; 
+                let o_html_old = o_self._o_html;
+                let v_o_html = await f_v_o_html__and_make_renderable(o_self);
+                if(v_o_html){
+                    console.log('v_o_html from _f_render')
+                    console.log(v_o_html)
+                    console.log(typeof v_o_html)
+                    console.log(v_o_html.innerHTML)
+                    console.log(o_self.o_jsh)
+                    o_html_old.parentElement.replaceChild(
+                        v_o_html,
+                        o_html_old,
+                    )
+                }
+                console.log('_f_render done')
+                return true 
+              //---
+                // let o_self = o_js;//this;
+                // o_self._b_f_render_called = false;
+                // let o_html_old = o_self._o_html
                 
-                let o_self = o_js;//this;
-                o_self._b_f_render_called = false;
-                let o_html_old = o_self._o_html
-                return f_v_o_html__and_make_renderable(o_self).then(v_o_html=>{
-                        if(v_o_html){
-                            o_html_old.parentElement.replaceChild(
-                                v_o_html,
-                                o_html_old, 
-                            )
-                        }
-                })
+                // return f_v_o_html__and_make_renderable(o_self).then(v_o_html=>{
+                //         if(v_o_html){
+                //             o_html_old.parentElement.replaceChild(
+                //                 v_o_html,
+                //                 o_html_old, 
+                //             )
+                //         }
+                //         console.log({
+                //             v_o_html, 
+                //             typeof_v_o_html: typeof v_o_html
+                //         })
+                //         console.log(v_o_html)
+                //         console.log(o_html_old.parentElement)
+                //         console.log(o_html_old)
+                //         console.log('render done')
+
+                // })
                 
-                // for(let o_html_old of a_o_html_old){
-                //     f_o_html__and_make_renderable(this).then(o_html=>{
-                //         o_html_old.parentElement.replaceChild(
-                //             o_html,
-                //             o_html_old, 
-                //         )
-                //     })
-                // }
+
             }
             o_js._f_update = async function(){
                 o_js.o_jsh = await o_js.f_o_jsh();
@@ -193,9 +213,7 @@ let f_o_js_from_params = function(o_o_js, s_name, o){
     }
     return o
 }
-let f_o_html__and_make_renderable = f_v_o_html__and_make_renderable 
 export {
-    f_o_html__and_make_renderable,
     f_v_o_html__and_make_renderable, 
     f_o_js_from_params
 }

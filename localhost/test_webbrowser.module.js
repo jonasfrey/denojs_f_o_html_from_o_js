@@ -14,7 +14,7 @@ import {
 
 
 import {
-    f_o_html__and_make_renderable,
+    f_v_o_html__and_make_renderable,
     f_o_js_from_params
 }
 from './client.module.js'
@@ -22,6 +22,7 @@ from './client.module.js'
 import {
     O_vec2
 } from "https://deno.land/x/vector@0.8/mod.js"
+import { v_f_clear_all_notifications } from "./jsh_modules/notifire/mod.js";
 
 let a_o_test = [
     f_o_test(
@@ -34,7 +35,7 @@ let a_o_test = [
             //md: all but the tagName, it needs to be named 's_tag' on the js object 
             //md: children elements are also possible , for this purpose an array is required
             document.body.appendChild(
-                await f_o_html__and_make_renderable(
+                await f_v_o_html__and_make_renderable(
                     {
                         s_tag: 'div', 
                         a_o: [
@@ -62,7 +63,7 @@ let a_o_test = [
             //./readme.md:start
             //md: ## we now can add child objects and render arrays like this'
             document.body.appendChild(
-                await f_o_html__and_make_renderable(
+                await f_v_o_html__and_make_renderable(
                 {
                     s_tag: 'div', 
                     a_o:[
@@ -110,7 +111,7 @@ let a_o_test = [
                 }
                 }
             }
-            var o_html = await f_o_html__and_make_renderable(
+            var o_html = await f_v_o_html__and_make_renderable(
                 {
                 a_o: [
                     {
@@ -184,7 +185,7 @@ let a_o_test = [
                 o_state?.o_js__active_container?._f_render?.();
             }
 
-            var o_html = await f_o_html__and_make_renderable(
+            var o_html = await f_v_o_html__and_make_renderable(
                 {
                     a_o: [
                         Object.assign(// we assign the js object to the state so that we can reference and update/render it later on
@@ -333,7 +334,7 @@ let a_o_test = [
                 }, 
             }
 
-            var o_html = await f_o_html__and_make_renderable(
+            var o_html = await f_v_o_html__and_make_renderable(
                 {
                     a_o: [
                         Object.assign(
@@ -395,7 +396,7 @@ let a_o_test = [
                 s: "this is an example state string in a scope", 
                 o_dedicated_to_overlay: {}
             };
-            let o = await f_o_html__and_make_renderable(
+            let o = await f_v_o_html__and_make_renderable(
                 {
                     a_o: [
                         o_module.f_o_js( // this will add the variables to the state
@@ -432,76 +433,110 @@ let a_o_test = [
                 s: "this is an example state string in a scope", 
                 o_dedicated_to_mod: {}
             };
-            let o = await f_o_html__and_make_renderable(
-                {
-                    a_o: [
-                        o_mod_notifire.f_o_js( // this will add the variables to the state
-                            [], 
-                            o_state.o_dedicated_to_mod
-                        ), 
-                    ]
-                }
+            let o2 = {}
+            let o = await f_v_o_html__and_make_renderable(
+                Object.assign(
+                    o2,
+                    {
+                        o_js__everything: {
+                            f_o_jsh: ()=>{
+                                return {
+                                    a_o: [
+                                        o_mod_notifire.f_o_js( // this will add the variables to the state
+                                            [], 
+                                            o_state.o_dedicated_to_mod
+                                        ), 
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ).o_js__everything
             )
             document.body.appendChild(o);
             console.log(o_state.o_dedicated_to_mod)
             // throw a notification with the helper function
-            await o_mod_notifire.v_f_throw_notification('Hello World !'),
-            await o_mod_notifire.v_f_throw_notification('Im living !', 'info'),
-            await o_mod_notifire.v_f_throw_notification('Well done !', 'success'),
-            await o_mod_notifire.v_f_throw_notification('Watch out !', 'warning'),
-            await o_mod_notifire.v_f_throw_notification('OH NO :(  !', 'error'),
-            await o_mod_notifire.v_f_throw_notification('Loading, please wait ...', 'loading'),
-            await o_mod_notifire.v_f_throw_notification(`Lorem Ipsum is simply dummy text of the printing and typesetting`);
-            await o_mod_notifire.v_f_throw_notification(
-                'Check', 
-                'info', 
-                'left', 
-                'top'
-            );
+            await o_mod_notifire.v_f_throw_notification('Loading, please wait !', 'loading')
+            // o2.o_js__everything?._f_render()
+            console.log('Loading notifiction should be displayed')
+            // window.setInterval(()=>{
 
-            await o_mod_notifire.v_f_throw_notification(
-                'me', 
-                'error', 
-                'right', 
-                'top'
-            );
-            await o_mod_notifire.v_f_throw_notification(
-                'out', 
-                'success', 
-                'right', 
-                'bottom'
-            );
-            await o_mod_notifire.v_f_throw_notification(
-                'Mate!', 
-                'warning', 
-                'left', 
-                'bottom'
-            );
-            await o_mod_notifire.v_f_throw_notification(
-                'Hurray!', 
-                'warning', 
-                'center', 
-                'bottom'
-            );
-
-
-            window.onmousedown = (o_e)=>{
-                if(o_e.button == 2){
-                    o_mod_notifire.v_f_clear_notification();   
+            //     console.log(o_state.o_dedicated_to_mod.a_o_notification)
+            // },10)
+            console.log(o_state.o_dedicated_to_mod)
+            let f_some = function(){
+                let n = 0; 
+                while(n < 10000000000){
+                    n +=1;
+                    let a = 2; 
+                    let b = a*2;
+                    let c = a+b; 
+                    let d = a/b/c;
                 }
-                // o_state.o_dedicated_to_mod.a_s_not.push('asdf !')
-                o_state.o_dedicated_to_mod.a_o_notification.push(
-                    new o_mod_notifire.O_notification(
-                        `It is:  ${new Date().toString()}`, 
-                        ['error', 'info', 'success', 'warning'][parseInt(Math.random()*4)],
-                        ['left', 'right', 'center'][parseInt(Math.random()*3)],
-                        ['bottom', 'top'][parseInt(Math.random()*2)],
-                        true,
-                        ...new Array(2).fill(Math.random()*5000),
-                    )
-                )
-                o_state.o_dedicated_to_mod.o_js._f_render()
-            }
+            };
+            f_some()
+            
+            v_f_clear_all_notifications()
+
+            // window.setTimeout(function(){
+            //     f_some();
+            // })
+            await o_mod_notifire.v_f_throw_notification('Im living !', 'info')
+            await o_mod_notifire.v_f_throw_notification('Well done !', 'success')
+            await o_mod_notifire.v_f_throw_notification('Watch out !', 'warning')
+            await o_mod_notifire.v_f_throw_notification('OH NO :(  !', 'error')
+            await o_mod_notifire.v_f_throw_notification('Loading, please wait ...', 'loading')
+            // await o_mod_notifire.v_f_throw_notification(`Lorem Ipsum is simply dummy text of the printing and typesetting`);
+            // await o_mod_notifire.v_f_throw_notification(
+            //     'Check', 
+            //     'info', 
+            //     'left', 
+            //     'top'
+            // );
+
+            // await o_mod_notifire.v_f_throw_notification(
+            //     'me', 
+            //     'error', 
+            //     'right', 
+            //     'top'
+            // );
+            // await o_mod_notifire.v_f_throw_notification(
+            //     'out', 
+            //     'success', 
+            //     'right', 
+            //     'bottom'
+            // );
+            // await o_mod_notifire.v_f_throw_notification(
+            //     'Mate!', 
+            //     'warning', 
+            //     'left', 
+            //     'bottom'
+            // );
+            // await o_mod_notifire.v_f_throw_notification(
+            //     'Hurray!', 
+            //     'warning', 
+            //     'center', 
+            //     'bottom'
+            // );
+
+
+            // window.onmousedown = (o_e)=>{
+            //     if(o_e.button == 2){
+            //         o_mod_notifire.v_f_clear_notification();   
+            //     }
+            //     // o_state.o_dedicated_to_mod.a_s_not.push('asdf !')
+            //     o_state.o_dedicated_to_mod.a_o_notification.push(
+            //         new o_mod_notifire.O_notification(
+            //             `It is:  ${new Date().toString()}`, 
+            //             ['error', 'info', 'success', 'warning'][parseInt(Math.random()*4)],
+            //             ['left', 'right', 'center'][parseInt(Math.random()*3)],
+            //             ['bottom', 'top'][parseInt(Math.random()*2)],
+            //             true,
+            //             ...new Array(2).fill(Math.random()*5000),
+            //         )
+            //     )
+            //     o_state.o_dedicated_to_mod.o_js._f_render()
+            // }
         }
     ), 
 
@@ -519,7 +554,7 @@ let a_o_test = [
                 },
             };
 
-            let o = await f_o_html__and_make_renderable(
+            let o = await f_v_o_html__and_make_renderable(
                 {
                     a_o: [
                         {
@@ -597,7 +632,7 @@ let a_o_test = [
                 },400)
             })
             // window.o_state = o_state
-            let o = await f_o_html__and_make_renderable(
+            let o = await f_v_o_html__and_make_renderable(
                 {
                     a_o: [
                         o_module__overlay.f_o_js( // this will add the variables to the state
@@ -641,7 +676,7 @@ let a_o_test = [
             };
 
             // window.o_state = o_state
-            let o = await f_o_html__and_make_renderable(
+            let o = await f_v_o_html__and_make_renderable(
                 {
                     a_o: [
                         o_mod.f_o_js( // this will add the variables to the state
