@@ -120,6 +120,10 @@ let f_o_js = function(
     let o = Object.assign(
         o_state, 
         {
+            b_render: 
+                (o_state.b_render) 
+                    ? o_state.b_render
+                    : false,
             o_color__hsl:
                 (o_state.o_color__hsl) 
                     ? o_state.o_color__hsl
@@ -354,164 +358,188 @@ let f_o_js = function(
                 f_o_jsh: async function(){
                     
                     return {
+                        style: 'position:relative',
                         a_o: [
+                            {
+                                s_tag: 'button', 
+                                innerText: "color",
+                                onpointerdown: ()=>{
+                                    o.b_render = !o.b_render
+                                    console.log(o.b_render)
+                                    o.o_js__overlay._f_render()
+                                }
+                            },
                             Object.assign(
                                 o, 
                                 {
-                                    o_js__other: {
+                                    o_js__overlay: 
+                                    {
                                         f_o_jsh: ()=>{
-                                            
                                             return {
-                                                class: 'inputs',
+                                                b_render: o.b_render,
                                                 a_o: [
-                                                    {
-                                                        innerText: o.s_color_format,
-                                                        // style: `color: ${}`
-                                                    },
                                                     Object.assign(
                                                         o, 
                                                         {
-                                                            o_js__alpha: {
-                                                                f_o_jsh:()=>{
+                                                            o_js__other: {
+                                                                f_o_jsh: ()=>{
                                                                     return {
-                                                                        style: "width:100%;height: 1rem",
+                                                                        class: 'inputs',
                                                                         a_o: [
                                                                             {
-                                                                                s_tag: 'input', 
-                                                                                type: 'range', 
-                                                                                min: 0, 
-                                                                                max: 1, 
-                                                                                step: 0.01, 
-                                                                                value: o.n_alpha_nor, 
-                                                                                oninput: (o_e)=>{
-                                                                                    o.n_alpha_nor = parseFloat(o_e.target.value);
-                                                                                
-                                                                                    o_canvas.f_render({
-                                                                                        n_alpha_nor: o_state.n_alpha_nor,
-                                                                                        o_trn_nor_pick: o_state.o_trn_nor_pick.a_n_comp,
-                                                                                        o_rgba_color_pick: o_state.o_rgba_color_pick.a_n_comp
-                                                                                    });
-                                                                                }
+                                                                                innerText: o.s_color_format,
+                                                                                // style: `color: ${}`
                                                                             },
+                                                                            Object.assign(
+                                                                                o, 
+                                                                                {
+                                                                                    o_js__alpha: {
+                                                                                        f_o_jsh:()=>{
+                                                                                            return {
+                                                                                                style: "width:100%;height: 1rem",
+                                                                                                a_o: [
+                                                                                                    {
+                                                                                                        s_tag: 'input', 
+                                                                                                        type: 'range', 
+                                                                                                        min: 0, 
+                                                                                                        max: 1, 
+                                                                                                        step: 0.01, 
+                                                                                                        value: o.n_alpha_nor, 
+                                                                                                        oninput: (o_e)=>{
+                                                                                                            o.n_alpha_nor = parseFloat(o_e.target.value);
+                                                                                                        
+                                                                                                            o_canvas.f_render({
+                                                                                                                n_alpha_nor: o_state.n_alpha_nor,
+                                                                                                                o_trn_nor_pick: o_state.o_trn_nor_pick.a_n_comp,
+                                                                                                                o_rgba_color_pick: o_state.o_rgba_color_pick.a_n_comp
+                                                                                                            });
+                                                                                                        }
+                                                                                                    },
+                                                                                                ]
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ).o_js__alpha,
+                                                                            
+                                                                            ...[0,1,2].map(n=>{
+                                                                                return {
+                                                                                    s_tag: 'input', 
+                                                                                    type: 'number', 
+                                                                                    step: 0.01, 
+                                                                                    min: 0, 
+                                                                                    max:1, 
+                                                                                    value: o.o_color_format.o_vec4_current_value[n],
+                                                                                    oninput: (o_e)=>{
+                                                                                        let n = parseFloat(o_e.target.value);
+                                                                                        n = Math.max(0, n)
+                                                                                        n = Math.min(1, n)
+                                                                                        o.o_color_format.o_vec4_current_value[n] = n
+                                                                                        // o_canvas.f_render({
+                                                                                        //     o_trn_nor_pick: o_state.o_trn_nor_pick.a_n_comp,
+                                                                                        //     o_rgba_color_pick: o_state.o_rgba_color_pick.a_n_comp
+                                                                                        // });
+                                                                                    } 
+                                                                                }
+                                                                            }),
+                                                                            {
+                                                                                s_tag: 'select', 
+                                                                                a_o: a_o_color_format.map(s=>{
+                                                                                    return {
+                                                                                        s_tag: 'option',
+                                                                                        innerText: s, 
+                                                                                        value: s, 
+                                                                                    }
+                                                                                }), 
+                                                                                onchange: (o_e)=>{
+                                                                                    o_state.o_color_format = o.a_o_color_format.find(o2=>o2.s_name == o_e.target.value)
+                                                                                    o.o_js__other._f_render()
+                                                                                }
+                        
+                                                                            }
                                                                         ]
+                        
                                                                     }
                                                                 }
                                                             }
                                                         }
-                                                    ).o_js__alpha,
-                                                    
-                                                    ...[0,1,2].map(n=>{
-                                                        return {
-                                                            s_tag: 'input', 
-                                                            type: 'number', 
-                                                            step: 0.01, 
-                                                            min: 0, 
-                                                            max:1, 
-                                                            value: o.o_color_format.o_vec4_current_value[n],
-                                                            oninput: (o_e)=>{
-                                                                let n = parseFloat(o_e.target.value);
-                                                                n = Math.max(0, n)
-                                                                n = Math.min(1, n)
-                                                                o.o_color_format.o_vec4_current_value[n] = n
-                                                                // o_canvas.f_render({
-                                                                //     o_trn_nor_pick: o_state.o_trn_nor_pick.a_n_comp,
-                                                                //     o_rgba_color_pick: o_state.o_rgba_color_pick.a_n_comp
-                                                                // });
-                                                            } 
-                                                        }
-                                                    }),
+                                                    ).o_js__other,
                                                     {
-                                                        s_tag: 'select', 
-                                                        a_o: a_o_color_format.map(s=>{
-                                                            return {
-                                                                s_tag: 'option',
-                                                                innerText: s, 
-                                                                value: s, 
-                                                            }
-                                                        }), 
-                                                        onchange: (o_e)=>{
-                                                            o_state.o_color_format = o.a_o_color_format.find(o2=>o2.s_name == o_e.target.value)
-                                                            o.o_js__other._f_render()
-                                                        }
-
+                                                        a_o: [
+                                                            {
+                                                                onpointerup: ()=>{
+                                                                    o_state.b_pointer_down = false;
+                                                                    console.log('up')
+                                                                },
+                                                                onpointerdown: (o_e)=>{
+                                                                    o_state.b_pointer_down = true;
+                                                                    console.log('down')
+                                                                    o_state.o_trn_nor_pick = new O_vec2(f_o_trn__relative_to_o_html__nor(
+                                                                        new O_vec2(o_e.clientX,o_e.clientY),
+                                                                        o_e.target
+                                                                    ));
+                                                                    f_update_color_from_mouse()
+                                
+                                                                },
+                                                                onmousemove: function(o_e){
+                                                                    console.log(`mousemove on canvas ${new Date()}`)
+                                
+                                                                    if(o_state.b_pointer_down){
+                                                                        o_state.o_trn_nor_pick = new O_vec2(f_o_trn__relative_to_o_html__nor(
+                                                                            new O_vec2(o_e.clientX,o_e.clientY),
+                                                                            o_e.target
+                                                                        ));
+                                                                        f_update_color_from_mouse()
+                                                                    }
+                                                                    o_e.stopPropagation()
+                                                                    o_e.preventDefault()
+                                                                }, 
+                                                                id: s_id_canvas,
+                                                                style: `
+                                                                position:relative;
+                                                                width: ${o_state.o_scl.n_x}px;
+                                                                height: ${o_state.o_scl.n_y}px;
+                                                                user-select: none;
+                                                                `, 
+                                                                a_o: [
+                                                                    Object.assign(
+                                                                        o, 
+                                                                        {
+                                                                            o_js__pick: {
+                                                                                f_o_jsh: function(){
+                                                                                    return {
+                                                                                        style: `
+                                                                                            position: absolute; 
+                                                                                            left: ${o_state.o_trn_nor_pick.n_x*100-3}%;
+                                                                                            top: ${o_state.o_trn_nor_pick.n_y*100-3}%;
+                                                                                            width:${o_state.o_scl_pick.n_x}px; 
+                                                                                            height:${o_state.o_scl_pick.n_y}px;
+                                                                                            border: 1px solid white;
+                                                                                            border-radius: 20%;
+                                                                                            outline: 1px solid black;
+                                                                                            transform:translate(-50%,-50%);
+                                                                                            background-color: ${o_state.s_color_border};
+                                                                                            z-index:1;
+                                                                        
+                                                                                        `,
+                                                                                        // this element will be infront of the cursor and get the pointer events
+                                                                                        onpointerup: ()=>{o_state.b_pointer_down = false;console.log('up')},
+                                                                                        onpointerdown: ()=>{o_state.b_pointer_down = true;console.log('down')},
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    ).o_js__pick,
+                                                                ]
+                                                            },
+                                                        ]
                                                     }
                                                 ]
-
                                             }
                                         }
                                     }
                                 }
-                            ).o_js__other,
-                            {
-                                a_o: [
-                                    {
-                                        onpointerup: ()=>{
-                                            o_state.b_pointer_down = false;
-                                            console.log('up')
-                                        },
-                                        onpointerdown: (o_e)=>{
-                                            o_state.b_pointer_down = true;
-                                            console.log('down')
-                                            o_state.o_trn_nor_pick = new O_vec2(f_o_trn__relative_to_o_html__nor(
-                                                new O_vec2(o_e.clientX,o_e.clientY),
-                                                o_e.target
-                                            ));
-                                            f_update_color_from_mouse()
-        
-                                        },
-                                        onmousemove: function(o_e){
-                                            console.log(`mousemove on canvas ${new Date()}`)
-        
-                                            if(o_state.b_pointer_down){
-                                                o_state.o_trn_nor_pick = new O_vec2(f_o_trn__relative_to_o_html__nor(
-                                                    new O_vec2(o_e.clientX,o_e.clientY),
-                                                    o_e.target
-                                                ));
-                                                f_update_color_from_mouse()
-                                            }
-                                            o_e.stopPropagation()
-                                            o_e.preventDefault()
-                                        }, 
-                                        id: s_id_canvas,
-                                        style: `
-                                        position:relative;
-                                        width: ${o_state.o_scl.n_x}px;
-                                        height: ${o_state.o_scl.n_y}px;
-                                        user-select: none;
-                                        `, 
-                                        a_o: [
-                                            Object.assign(
-                                                o, 
-                                                {
-                                                    o_js__pick: {
-                                                        f_o_jsh: function(){
-                                                            return {
-                                                                style: `
-                                                                    position: absolute; 
-                                                                    left: ${o_state.o_trn_nor_pick.n_x*100-3}%;
-                                                                    top: ${o_state.o_trn_nor_pick.n_y*100-3}%;
-                                                                    width:${o_state.o_scl_pick.n_x}px; 
-                                                                    height:${o_state.o_scl_pick.n_y}px;
-                                                                    border: 1px solid white;
-                                                                    border-radius: 20%;
-                                                                    outline: 1px solid black;
-                                                                    transform:translate(-50%,-50%);
-                                                                    background-color: ${o_state.s_color_border};
-                                                                    z-index:1;
-                                                
-                                                                `,
-                                                                // this element will be infront of the cursor and get the pointer events
-                                                                onpointerup: ()=>{o_state.b_pointer_down = false;console.log('up')},
-                                                                onpointerdown: ()=>{o_state.b_pointer_down = true;console.log('down')},
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ).o_js__pick,
-                                        ]
-                                    },
-                                ]
-                            }
+                            ).o_js__overlay
                         ]
                     }
 
