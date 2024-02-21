@@ -4,11 +4,11 @@ import {
 } from "https://deno.land/x/f_add_css@1.1/mod.js"
 
 import { 
-    f_s_selector_css_from_s_uuid
+    f_s_css_class_from_s_uuid
 } from "./../functions.module.js"
 let s_class = 'notifire';
 let s_prop_o_js = 'o_js'//`o_js__${s_class}`;
-let s_uuid_module_scope = f_s_selector_css_from_s_uuid(crypto.randomUUID());
+let s_css_class_uuid_module_scope = f_s_css_class_from_s_uuid(crypto.randomUUID());
 // Rendering Updates: The browser's UI rendering process runs separately from the JavaScript execution thread but is coordinated with the event loop. Even if a script is deferred using setTimeout(fn, 0), rendering updates (like layout recalculations and repaints) may not occur immediately if the event loop is busy with other tasks.
 let n_ms_delay_minimum = Math.ceil(1000/300);//1000/n_fps
 let f_o_throw_notification = async function(
@@ -134,7 +134,7 @@ class O_notification{
 let f_o_js = function(
     o_state = {}
 ){
-    let s_uuid_function_scope = f_s_selector_css_from_s_uuid(crypto.randomUUID());
+    let s_css_class_uuid_function_scope = f_s_css_class_from_s_uuid(crypto.randomUUID());
 
     Object.assign(
         o_state, 
@@ -143,7 +143,7 @@ let f_o_js = function(
             [s_prop_o_js]:  {
                 f_o_jsh: ()=>{
                     return {
-                        class: [s_class,s_uuid_module_scope,s_uuid_function_scope].join(' '),
+                        class: [s_class,s_css_class_uuid_module_scope,s_css_class_uuid_function_scope].join(' '),
                         a_o: [
                             ...a_s_position_y.map(
                                 s_position_y=>{
@@ -235,8 +235,8 @@ let f_o_js = function(
             //
             a_o_notification: [],
             // 
-            s_uuid_module_scope,
-            s_uuid_function_scope
+            s_css_class_uuid_module_scope,
+            s_css_class_uuid_function_scope
         }
     )
 
@@ -247,8 +247,8 @@ let f_o_js = function(
 }
 // css for only this module
 let s_selector_classscope = `.${[s_class].join('.')}`
-let s_selector_modscope = `.${[s_class, s_uuid_module_scope].join('.')}`
-// let s_selector_functionscope = `.${[s_class, s_uuid_module_scope, s_uuid_function_scope].join('.')}`
+let s_selector_modscope = `.${[s_class, s_css_class_uuid_module_scope].join('.')}`
+// let s_selector_functionscope = `.${[s_class, s_css_class_uuid_module_scope, s_css_class_uuid_function_scope].join('.')}`
 let s_css = 
     `
     @keyframes notifire_spin {

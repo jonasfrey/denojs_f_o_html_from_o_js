@@ -3,6 +3,13 @@ import {
     f_o_test
 } from "https://deno.land/x/deno_test_server_and_client_side@1.1/mod.js"
 
+import {
+    O_vec2
+} from "https://deno.land/x/vector@0.8/mod.js"
+import {
+    f_add_css,
+    f_s_css_prefixed,
+} from "https://deno.land/x/f_add_css@1.1/mod.js"
 //readme.md:start
 //md: ![./logo_wide.png](./logo_wide.png)
 //readme.md:end
@@ -18,11 +25,6 @@ import {
     f_o_js_from_params
 }
 from './client.module.js'
-
-import {
-    O_vec2
-} from "https://deno.land/x/vector@0.8/mod.js"
-
 
 
 let a_o_test = [
@@ -761,6 +763,42 @@ let a_o_test = [
                     ]
                 }
             )
+            document.body.appendChild(o)
+        }
+    ), 
+    f_o_test(
+        "tooltip", 
+        async ()=>{
+            
+            let o_mod = await import( './jsh_modules/tooltip/mod.js');
+
+            let o_state = {
+                s: "this is an example state string in a scope", 
+                o_state__tooltip: {}, 
+            };
+
+            // window.o_state = o_state
+            let o = await f_o_html__and_make_renderable(
+                {
+                    a_o: [
+                        {
+                            s_tag: 'h1',
+                            innerText: 'hello do me hover!', 
+                            data_tooltip: 'i am the tooltip text'
+                        },
+                        {
+                            s_tag:  "img", 
+                            src: "https://www.w3schools.com/tags/img_girl.jpg",
+                            data_tooltip: 'A girl from behind'
+                        },
+                        o_mod.f_o_js( // this will add the variables to the state
+                            o_state.o_state__tooltip
+                        ),
+                    ]
+                }
+            );
+            console.log(o_mod.s_css)
+            f_add_css(o_mod.s_css)
             document.body.appendChild(o)
         }
     ), 

@@ -1,36 +1,31 @@
-let s_class = 'template';
-let s_prop_o_js = `o_js__${s_class}`;
-let s_uuid_module_scope = crypto.randomUUID();
+import {
+    f_add_css,
+    f_s_css_prefixed,
+} from "https://deno.land/x/f_add_css@1.1/mod.js"
 
-let f_o_js__overlay_window = function(
-    a_o_js = [], 
+import { 
+    f_s_css_class_from_s_uuid
+} from "./../functions.module.js"
+let s_class = 'template';
+let s_css_class_uuid_module_scope = f_s_css_class_from_s_uuid(crypto.randomUUID());
+
+let f_o_js = function(
     o_state = {}
 ){
-    let s_uuid_function_scope = crypto.randomUUID();
+    let s_css_class_uuid_function_scope = f_s_css_class_from_s_uuid(crypto.randomUUID());
 
-    let o = Object.assign(
+    Object.assign(
         o_state, 
         {
             //
-            [s_prop_o_js]: null,
-            //
-            n_num: 1, 
-            s_string: 'asdf',
-            b_bool: true, 
-            o_obj: {n:1}, 
-            a_n: [1,2,3], 
-            // 
-            s_uuid_module_scope,
-            s_uuid_function_scope
-        }
-    )
-    return Object.assign(
-        o, 
-        {
-            [s_prop_o_js]: {
+            o_js: {
                 f_o_jsh: function(){
                     return {
-                        class: [s_class,s_uuid_module_scope,s_uuid_function_scope].join(' '),
+                        class: [
+                            s_class,
+                            s_css_class_uuid_module_scope,
+                            s_css_class_uuid_function_scope
+                        ].join(' '),
                         a_o: [
                             ...Object.keys(o_state).map(
                                 s=>{
@@ -45,21 +40,60 @@ let f_o_js__overlay_window = function(
                         ]
                     }
                 }
-            }
+            },
+            //
+            n_num:
+                (o_state.n_num) 
+                    ? o_state.n_num
+                    : 1,
+            s_string:
+                (o_state.s_string) 
+                    ? o_state.s_string
+                    : 'asdf',
+            b_bool:
+                (o_state.b_bool) 
+                    ? o_state.b_bool
+                    : false,
+            o_obj:
+                (o_state.o_obj) 
+                    ? o_state.o_obj
+                    : {n:1,s:'ad',b:true,a:[1,2],o:{n:1}},
+            a_n:
+                (o_state.a_n) 
+                    ? o_state.a_n
+                    : [1,2],
+            v_n:
+                (o_state.v_n) 
+                    ? o_state.v_n
+                    : null,
+            f_test:
+                (o_state.f_test) 
+                    ? o_state.f_test
+                    : ()=>{console.log('f_test was called')},
+            //
+            s_css_class_uuid_module_scope:
+                (o_state.s_css_class_uuid_module_scope) 
+                    ? o_state.s_css_class_uuid_module_scope
+                    : s_css_class_uuid_module_scope,
+            s_css_class_uuid_function_scope:
+                (o_state.s_css_class_uuid_function_scope) 
+                    ? o_state.s_css_class_uuid_function_scope
+                    : s_css_class_uuid_function_scope,
         }
-    )[s_prop_o_js]
+    )
+    return o_state.o_js
 }
 // css for only this module
-let s_selector_classscope = `.${[s_class].join('.')}`
-let s_selector_modscope = `.${[s_class, s_uuid_module_scope].join('.')}`
-let s_selector_functionscope = `.${[s_class, s_uuid_module_scope, s_uuid_function_scope].join('.')}`
-let s_css = `
-${s_selector_modscope} .clickable:hover{
-    background:red;
-}
-`
+let s_css = f_s_css_prefixed(
+    `
+        .clickable:hover{
+            background: blue;
+        }
+    `,
+    `.${s_css_class_uuid_module_scope}`
+)
 
 export {
-    f_o_js__overlay_window,
+    f_o_js,
     s_css
 }
