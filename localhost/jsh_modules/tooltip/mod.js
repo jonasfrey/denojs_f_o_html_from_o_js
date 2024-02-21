@@ -107,6 +107,8 @@ let f_o_js = function(
             
             o_state.o_trn_px = o_trn_px_mouse.clone().add(o_state.o_trn_px_margin)
         }
+        await o_state.o_js._f_update();
+
         let o = document.querySelector(`.${s_class}.${s_css_class_uuid_module_scope}`);
         let o_bounding_rect = o?.getBoundingClientRect();
         o_state.o_scl_px = new O_vec2(o_bounding_rect.width, o_bounding_rect?.height);

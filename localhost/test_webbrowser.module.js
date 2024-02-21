@@ -794,6 +794,16 @@ let a_o_test = [
                         o_mod.f_o_js( // this will add the variables to the state
                             o_state.o_state__tooltip
                         ),
+                        {
+                            s_tag:'input', 
+                            type: "text", 
+                            data_tooltip: `text recommended: <br> - yes <br> - no`
+                        },
+                        {
+                            s_tag:  "img", 
+                            src: "https://www.w3schools.com/tags/img_girl.jpg",
+                            data_tooltip: 'A nother'
+                        },
                     ]
                 }
             );
