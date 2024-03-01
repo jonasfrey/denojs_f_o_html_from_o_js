@@ -63,7 +63,16 @@ let f_update_o_html_from_o_jsh = function(
                 } catch (error) {
                     console.warn(error)
                 }
-                // console.log(o_html)
+                // // console.log(o_html)
+                // if(
+                //     s_prop_name == 'innerText'
+                //     ||
+                //     s_prop_name == 'textContent'
+                //     ||
+                //     s_prop_name == 'innerHTML'
+                // ){
+                //     continue
+                // }
                 try {
                     o_html.setAttribute(s_prop_name, value);
                 } catch (error) {

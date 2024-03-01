@@ -867,6 +867,66 @@ let a_o_test = [
             document.body.appendChild(o)
         }
     ), 
+    f_o_test(
+        "performance_test_when_attribute_innerhtml_is_set", 
+        async ()=>{
+            // a test for comparing <div innerText='hello'>hello</div> vs <div>hello</div>
+            let n = 200000;
+            let o_state = {
+                s: "this is an example state string in a scope", 
+                o_state__tooltip: {}, 
+                a_s_rand: new Array(n).fill(0).map(
+                    (n,n_idx)=>{
+                        return `rand${n_idx}`
+                    }
+                )
+            };
+
+            // window.o_state = o_state
+            let n_ms = window.performance.now();
+            let o = await f_o_html__and_make_renderable(
+                {
+                    a_o: [
+                        {
+                            innerText: "asdf",
+                        },
+                        Object.assign(
+                            o_state, 
+                            {
+                                o_js__complex: {
+                                    f_o_jsh: ()=>{
+                                        return {
+                                            a_o: [
+                                                o_state.a_s_rand.map(s=>{
+                                                    return {
+                                                        id: s,
+                                                        innerText: s
+                                                    }
+                                                })
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        ).o_js__complex
+                    ]
+                }
+            );
+            let n_ms2 = window.performance.now();
+            console.log({
+                s: `render delta: ${n_ms2-n_ms} ms`
+            })
+
+            n_ms = window.performance.now();
+            document.querySelector(`#rand42112`)
+            n_ms2 = window.performance.now();
+            console.log({
+                s: `querySelector delta: ${n_ms2-n_ms} ms`
+            })
+
+            document.body.appendChild(o)
+        }
+    ), 
 ]
 
 
