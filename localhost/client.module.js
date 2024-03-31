@@ -13,6 +13,27 @@ let f_o_html_element__from_s_tag = function(s_tag){
     }else{
         o_doc = document;
     }
+    if([
+        'svg',
+        'circle',
+        'rect',
+        'path',
+        'polygon',
+        'polyline',
+        'ellipse',
+        'text',
+        'g',
+        'defs',
+        'use',
+        'line',
+        'linearGradient',
+        'radialGradient'
+    ].includes(s_tag)){
+        return document.createElementNS("http://www.w3.org/2000/svg",  s_tag);
+    }
+    // if(['math', 'mrow', 'mfrac', 'msqrt', 'msub', 'msup', 'munder', 'mover', 'mi', 'mo', 'mn', 'mtext'].includes(s_tag)){
+    //     return document.createElementNS("http://www.w3.org/1998/Math/MathML",  s_tag);
+    // }
     return o_doc.createElement(s_tag);
 
 }
