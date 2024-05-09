@@ -5,90 +5,9 @@ import {
 
 import { 
     f_s_css_class_from_s_uuid
-} from "./../functions.module.js"
-let s_class = 'notifire';
-let s_prop_o_js = 'o_js'//`o_js__${s_class}`;
-let s_css_class_uuid_module_scope = f_s_css_class_from_s_uuid(crypto.randomUUID());
-// Rendering Updates: The browser's UI rendering process runs separately from the JavaScript execution thread but is coordinated with the event loop. Even if a script is deferred using setTimeout(fn, 0), rendering updates (like layout recalculations and repaints) may not occur immediately if the event loop is busy with other tasks.
-let n_ms_delay_minimum = Math.ceil(1000/300);//1000/n_fps
-let f_o_throw_notification = async function(
-    o_state,
-    s,
-    s_type = 'info',
-    s_position_x = 'left', 
-    s_position_y = 'top', 
-    ){
-        return new Promise( async (f_res)=>{
+} from "../functions.module.js"
+let s_class = 'gamepad';
 
-            let n_ms_minimum = 5000;
-            let n_words_per_minute_slow_reader = 50;
-            let n_chars_per_word_avg = 5;
-            let n_chars_per_minute = n_words_per_minute_slow_reader * n_chars_per_word_avg;
-            let n_chars_per_second = n_chars_per_minute / 60;
-            let n_ms_per_char = 1000 / n_chars_per_second;
-            let n_ms_per_text = Array.from(s).filter(s=>s.trim()!='').length * n_ms_per_char;
-            let n_ms = Math.max(n_ms_per_text, n_ms_minimum);
-            let o = new O_notification(
-                s, 
-                s_type,
-                s_position_x,
-                s_position_y, 
-                s_type != 'loading',
-                n_ms,
-                n_ms
-            )
-            o_state?.a_o_notification.push(o)
-            await o_state?.[s_prop_o_js]?._f_render()
-            // return f_res(true)
-            // timeout is needed to give time to the thread
-            // to render the page
-            // see 'wtfisgoingon.html'
-            setTimeout(() => {
-                return f_res(o);
-            }, n_ms_delay_minimum);
-
-        })
-};
-let f_clear_all_notifications = async function(
-    o_state
-){  
-    return new Promise(async (f_res)=>{
-
-        for(let o of o_state.a_o_notification){
-            await f_clear_o_notification(o);
-        }
-        o_state.a_o_notification = []
-        // await o_state?.[s_prop_o_js]?._f_render()
-
-        return setTimeout(() => {
-            return f_res(true);
-        }, n_ms_delay_minimum);
-    })
-}; 
-let f_clear_o_notification = async function(o_notification){
-
-    return new Promise(async (f_res)=>{
-
-        window.cancelAnimationFrame(o_notification.n_id_raf)
-        o_notification.n_ms_left = -1;
-        await o_notification?.o_js?._f_render?.();
-
-        return setTimeout(() => {
-            return f_res(true);
-        }, n_ms_delay_minimum);
-    })
-
-
-}
-let o_s_type_s_ascii_icon = {
-    'success': '✓',
-    'warning': '⚠',
-    'info': "ℹ", 
-    'error': '✖', 
-    'loading': '↻'//'|'
-}
-let a_s_position_x = ['left', 'center', 'right']
-let a_s_position_y = ['top', 'bottom']
 
 class O_notification{
     constructor(
@@ -262,79 +181,9 @@ let s_css =
     ${
         f_s_css_prefixed(
             `
-            .a_o_notification{
+            .o_gamepad{
                 font-family: helvetica;
                 position: fixed;
-            }
-            .o_notification{
-                position:relative;
-                max-width: 500px;
-                padding: 0.5rem;
-                margin: 0.5rem;
-            }
-            .o_notification .icon{
-                float:left;
-                display:inline;
-                padding: 0 0.2rem;
-            }
-            .o_notification.loading .icon{
-                animation: notifire_spin 1s linear infinite;
-            }
-            .bar{
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                height:  5px;
-            }
-            .top {
-                top:0;
-            }
-            .bottom{
-                bottom:0;
-            }
-            .left{
-                left: 0;
-            }
-            .right{
-                right:0;
-            }
-            .center{
-                left: 50%;
-                transform: translate(-50%)
-            }
-            
-            .success {
-                color: #155724;
-                background-color: #d4edda;
-                border-color: #c3e6cb;
-            }
-            .success .bar{
-                background: #1557243f;
-            }
-            .warning {
-                color: #856404;
-                background-color: #fff3cd;
-                border-color: #ffeeba;
-            }
-            .warning .bar{
-                background: #8564043f;
-            }
-            .info, .loading {
-                color: #004085;
-                background-color: #cce5ff;
-                border-color: #b8daff;
-            }
-            .info .bar, .loading .bar{
-                background: #0040853f;
-            }
-
-            .error {
-                color: #721c24;
-                background-color: #f8d7da;
-                border-color: #f5c6cb;
-            }
-            .error .bar{
-                background: #721c243f;
             }
             `,
             s_selector_modscope

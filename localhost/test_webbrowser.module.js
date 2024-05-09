@@ -25,6 +25,7 @@ import {
     f_o_js_from_params
 }
 from './client.module.js'
+import { f_clear_o_notification } from "./jsh_modules/notifire/mod.js"
 
 
 let a_o_test = [
@@ -527,6 +528,8 @@ let a_o_test = [
             await o_mod_notifire.f_o_throw_notification(o_state.o_dedicated_to_mod,'Loading, please wait !', 'loading')
             await o_mod_notifire.f_o_throw_notification(o_state.o_dedicated_to_mod,'Loading 2, please wait !', 'loading')
             await o_mod_notifire.f_o_throw_notification(o_state.o_dedicated_to_mod,'Loading 3, please wait !', 'loading')
+            let o4 = o_mod_notifire.f_o_throw_notification(o_state.o_dedicated_to_mod,'Loading 4, please wait !', 'loading')
+
             let f_some = function(){
                 let n = 0; 
                 while(n < 10000000000){
@@ -538,6 +541,9 @@ let a_o_test = [
                 }
             };
             f_some()
+            o4.then(o4=>{
+                f_clear_o_notification(o4)
+            })
             console.log('some done')
             await o_mod_notifire.f_clear_all_notifications(o_state.o_dedicated_to_mod);
 
