@@ -188,16 +188,15 @@ var f_o_html__and_make_renderable = async function(
                     let o_html_old = o_self._o_html;
                     let v_o_html = null; 
                     try {
-                        v_o_html = await f_o_html__and_make_renderable(o_self);
-                    } catch (error) {
+                        v_o_html = await f_o_html__and_make_renderable(o_self);                    
+                        o_html_old.parentElement.replaceChild(
+                            v_o_html,
+                            o_html_old,
+                        )
+                    } catch (o_err) {
                         o_js._b_rendering = false;
-                        throw error;
+                        throw o_err;
                     } 
-                
-                    o_html_old.parentElement.replaceChild(
-                        v_o_html,
-                        o_html_old,
-                    )
                     o_js._b_rendering = false;
                     return true 
 
@@ -209,12 +208,17 @@ var f_o_html__and_make_renderable = async function(
                     }
                     o_js._b_updating = true;
 
-                    o_js.o_jsh = await o_js.f_o_jsh();
-                    f_update_o_html_from_o_jsh(
-                        o_js._o_html,
-                        o_js.o_jsh,
-                        o_js
-                    )
+                    try {
+                        o_js.o_jsh = await o_js.f_o_jsh();
+                        f_update_o_html_from_o_jsh(
+                            o_js._o_html,
+                            o_js.o_jsh,
+                            o_js
+                        )
+                    } catch (o_err) {
+                        o_js._b_updating = false;
+                        throw o_err;
+                    }
                     o_js._b_updating = false;
 
                 }
