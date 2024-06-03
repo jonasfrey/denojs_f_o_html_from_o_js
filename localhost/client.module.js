@@ -185,7 +185,13 @@ var f_o_html__and_make_renderable = async function(
                 o_js._b_rendering = true;
                 let o_self = o_js; 
                 let o_html_old = o_self._o_html;
-                let v_o_html = await f_o_html__and_make_renderable(o_self);
+                let v_o_html = null; 
+                try {
+                    v_o_html = await f_o_html__and_make_renderable(o_self);
+                } catch (error) {
+                    o_js._b_rendering = false;
+                    throw error;
+                } 
             
                 o_html_old.parentElement.replaceChild(
                     v_o_html,
