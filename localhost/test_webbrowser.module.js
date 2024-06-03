@@ -933,6 +933,53 @@ let a_o_test = [
             document.body.appendChild(o)
         }
     ), 
+    f_o_test(
+        'error_during_render', 
+        async ()=>{
+            //./readme.md:start
+            //md: ## error test
+            let o_state = {}
+            window.o_state = o_state
+            document.body.appendChild(
+                await f_o_html__and_make_renderable(
+                {
+                    s_tag: 'div', 
+                    a_o:[
+                        Object.assign(
+                            o_state, 
+                            {
+                                o_js__test: {
+                                    f_o_jsh:()=>{
+                                        let b_error = Math.random() > 0.5;
+                                        if(b_error){
+                                            asdf
+                                        }
+                                        return {
+                                            innerText: `i will randomly throw an error: ${Math.random()} `
+                                        }
+                                    }
+                                }
+                            }
+                        ).o_js__test,
+                    {
+                        s_tag: "button", 
+                        innerText: "i am a button", 
+                        onpointerdown : async ()=>{await o_state?.o_js__test._f_render()}
+                    }, 
+                    ...[1,2,3,4].map(function(n){ //with the help of js array.map function we can dynamically render elements :)
+                        return {
+                        s_tag: "button", 
+                        innerText: `i am button number: ${n}`
+                        }
+                    })
+                    ]
+                }
+                )
+            );
+            //./readme.md:end
+        }
+    ),
+
 ]
 
 
