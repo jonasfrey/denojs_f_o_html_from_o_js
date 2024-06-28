@@ -166,8 +166,8 @@ let f_o_js = function(
                                                                         {
                                                                             o_js: {
                                                                                 f_o_jsh: function(){
-                                                                                    console.log(o_notification)
-                                                                                    console.log(o_notification.n_ms_left > 0)
+                                                                                    // console.log(o_notification)
+                                                                                    // console.log(o_notification.n_ms_left > 0)
                                                                                     if(
                                                                                         o_notification.n_id_raf == 0
                                                                                         && o_notification.n_ms_left > 0

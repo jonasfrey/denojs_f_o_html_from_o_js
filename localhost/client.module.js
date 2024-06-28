@@ -123,102 +123,116 @@ var f_o_html__and_make_renderable = async function(
 ){
 
     return new Promise(
-        async (f_res)=>{
-            // if(!o_js._s_uuid){
-            //     o_js._s_uuid = crypto.randomUUID();
-            // }            
-            // so the initial thought was to be able to place multiple references of the same object
-            // as child objects and then only one has to be rendered and since the others are the same reference
-            // the already rendered content could be used / unfortunately this will then not render the child object 
-            // if it is dynamically exchanged in the parent /therefore i disable it again in this version
+        async (f_res, f_rej)=>{
+            try {
+                // if(!o_js._s_uuid){
+                //     o_js._s_uuid = crypto.randomUUID();
+                // }            
+                // so the initial thought was to be able to place multiple references of the same object
+                // as child objects and then only one has to be rendered and since the others are the same reference
+                // the already rendered content could be used / unfortunately this will then not render the child object 
+                // if it is dynamically exchanged in the parent /therefore i disable it again in this version
 
-            if(typeof o_js.f_o_jsh != 'function'){
-                // static objects can be rendered/converted to html once without having any function    
-                o_js.o_jsh = o_js;
-            }else{
-                o_js.o_jsh = await o_js.f_o_jsh();
-            }
-            if(o_js?.o_jsh?.b_render === false){
-                o_js._o_html = document.createComment('b_render')
-            }else{
-
-                // we create a new element from the o_jsh information
-                o_js._o_html = f_o_html__from_o_jsh(
-                    o_js.o_jsh, 
-                    o_js
-                );
-                if(typeof o_js.f_after_f_o_html__and_make_renderable == 'function'){
-                    await o_js.f_after_f_o_html__and_make_renderable(o_js._o_html);
+                if(typeof o_js.f_o_jsh != 'function'){
+                    // static objects can be rendered/converted to html once without having any function    
+                    o_js.o_jsh = o_js;
+                }else{
+                    o_js.o_jsh = await o_js.f_o_jsh();
                 }
-                // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
-            
-                let a_o_promise = []
-                for(let s_prop in o_js.o_jsh){
-                    let v = o_js.o_jsh[s_prop];
-                    if(!f_b_allowed_propery_name_on_o_jsh(s_prop)){
-                        continue
+                if(o_js?.o_jsh?.b_render === false){
+                    o_js._o_html = document.createComment('b_render')
+                }else{
+
+                    // we create a new element from the o_jsh information
+                    o_js._o_html = f_o_html__from_o_jsh(
+                        o_js.o_jsh, 
+                        o_js
+                    );
+                    if(typeof o_js.f_after_f_o_html__and_make_renderable == 'function'){
+                        await o_js.f_after_f_o_html__and_make_renderable(o_js._o_html);
                     }
-            
-                    if(Array.isArray(v)){
-                        for(let o of v){
-                            a_o_promise.push(
-                                f_o_html__and_make_renderable(o)
+                    // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
+                
+                    let a_o_promise = []
+                    for(let s_prop in o_js.o_jsh){
+                        let v = o_js.o_jsh[s_prop];
+                        if(!f_b_allowed_propery_name_on_o_jsh(s_prop)){
+                            continue
+                        }
+                
+                        if(Array.isArray(v)){
+                            for(let o of v){
+                                a_o_promise.push(
+                                    f_o_html__and_make_renderable(o)
+                                )
+        
+                            }
+                        }
+                    }
+                    let a_v_resolved = await Promise.all(a_o_promise);
+                    for(let v of a_v_resolved){
+                        // console.log(v)
+                        if(v){
+                            o_js._o_html.appendChild(
+                                v
                             )
-    
                         }
                     }
                 }
-                let a_v_resolved = await Promise.all(a_o_promise);
-                for(let v of a_v_resolved){
-                    // console.log(v)
-                    if(v){
-                        o_js._o_html.appendChild(
-                            v
-                        )
-                    }
-                }
-            }
-        
-            o_js._f_render = async function(){
-
-                if(o_js._b_rendering){
-                    console.warn('_f_render was called while _f_render was still in progress, make sure to await _f_render() or do not call multiple times quickly after each other')
-                    return true
-                }
-                o_js._b_rendering = true;
-                let o_self = o_js; 
-                let o_html_old = o_self._o_html;
-                let v_o_html = await f_o_html__and_make_renderable(o_self);
-  
-                o_html_old.parentElement.replaceChild(
-                    v_o_html,
-                    o_html_old,
-                )
-                if(typeof o_js.f_after_f_o_html__and_make_renderable == 'function'){
-                    await o_js.f_after_f_o_html__and_make_renderable(v_o_html);
-                }
-                o_js._b_rendering = false;
-                return true 
-
-            }
-            o_js._f_update = async function(){
-                if(o_js._b_updating){
-                    console.warn('_f_update was called while _f_update was still in progress, make sure to await _f_update() or do not call multiple times quickly after each other')
-                    return true
-                }
-                o_js._b_updating = true;
-
-                o_js.o_jsh = await o_js.f_o_jsh();
-                f_update_o_html_from_o_jsh(
-                    o_js._o_html,
-                    o_js.o_jsh,
-                    o_js
-                )
-                o_js._b_updating = false;
-
-            }
             
-            return f_res(o_js._o_html)
+                o_js._f_render = async function(){
+
+                    if(o_js._b_rendering){
+                        console.warn('_f_render was called while _f_render was still in progress, make sure to await _f_render() or do not call multiple times quickly after each other')
+                        return true
+                    }
+                    o_js._b_rendering = true;
+                    let o_self = o_js; 
+                    let o_html_old = o_self._o_html;
+                    let v_o_html = null; 
+                    try {
+                        v_o_html = await f_o_html__and_make_renderable(o_self);                    
+                        o_html_old.parentElement.replaceChild(
+                            v_o_html,
+                            o_html_old,
+                        )
+                        if(typeof o_js.f_after_f_o_html__and_make_renderable == 'function'){
+                            await o_js.f_after_f_o_html__and_make_renderable(o_js._o_html);
+                        }
+                    } catch (o_err) {
+                        o_js._b_rendering = false;
+                        throw o_err;
+                    } 
+                    o_js._b_rendering = false;
+                    return true 
+
+                }
+                o_js._f_update = async function(){
+                    if(o_js._b_updating){
+                        console.warn('_f_update was called while _f_update was still in progress, make sure to await _f_update() or do not call multiple times quickly after each other')
+                        return true
+                    }
+                    o_js._b_updating = true;
+
+                    try {
+                        o_js.o_jsh = await o_js.f_o_jsh();
+                        f_update_o_html_from_o_jsh(
+                            o_js._o_html,
+                            o_js.o_jsh,
+                            o_js
+                        )
+                    } catch (o_err) {
+                        o_js._b_updating = false;
+                        throw o_err;
+                    }
+                    o_js._b_updating = false;
+
+                }
+                
+                return f_res(o_js._o_html)   
+            } catch (o_err) {
+                f_rej(o_err)
+            }
         }
     )
 }

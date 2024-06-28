@@ -934,6 +934,52 @@ let a_o_test = [
         }
     ), 
     f_o_test(
+        'error_during_render', 
+        async ()=>{
+            //./readme.md:start
+            //md: ## error test
+            let o_state = {}
+            window.o_state = o_state
+            document.body.appendChild(
+                await f_o_html__and_make_renderable(
+                {
+                    s_tag: 'div', 
+                    a_o:[
+                        Object.assign(
+                            o_state, 
+                            {
+                                o_js__test: {
+                                    f_o_jsh:()=>{
+                                        let b_error = Math.random() > 0.5;
+                                        if(b_error){
+                                            asdf
+                                        }
+                                        return {
+                                            innerText: `i will randomly throw an error: ${Math.random()} `
+                                        }
+                                    }
+                                }
+                            }
+                        ).o_js__test,
+                    {
+                        s_tag: "button", 
+                        innerText: "i am a button", 
+                        onpointerdown : async ()=>{await o_state?.o_js__test._f_render()}
+                    }, 
+                    ...[1,2,3,4].map(function(n){ //with the help of js array.map function we can dynamically render elements :)
+                        return {
+                        s_tag: "button", 
+                        innerText: `i am button number: ${n}`
+                        }
+                    })
+                    ]
+                }
+                )
+            );
+            //./readme.md:end
+        }
+    ),
+    f_o_test(
         "test_function_execution_after_html_element_has_been_rendered_and_appended_to_tree", 
         async ()=>{
             // if there is a canvas we would have to always create a new element and re-render
@@ -957,6 +1003,7 @@ let a_o_test = [
                                     f_after_f_o_html__and_make_renderable: (v_o_html)=>{
                                         console.log({v_o_html})
                                         v_o_html.appendChild(o_canvas);
+                                        console.log('render done, canvas appended')
                                     },
                                     f_o_jsh: ()=>{
                                         return {
@@ -971,12 +1018,15 @@ let a_o_test = [
             );
             setTimeout(async()=>{
                 await o_state.o_js__canvas._f_render();
+                console.log('re render done')
             },1000)
 
             document.body.appendChild(o)
         }
     ), 
 ]
+
+
 
 
 f_display_test_selection_or_run_selected_test_and_print_summary(
