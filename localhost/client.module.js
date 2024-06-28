@@ -147,6 +147,9 @@ var f_o_html__and_make_renderable = async function(
                     o_js.o_jsh, 
                     o_js
                 );
+                if(typeof o_js.f_after_f_o_html__and_make_renderable == 'function'){
+                    await o_js.f_after_f_o_html__and_make_renderable(o_js._o_html);
+                }
                 // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
             
                 let a_o_promise = []
@@ -186,11 +189,14 @@ var f_o_html__and_make_renderable = async function(
                 let o_self = o_js; 
                 let o_html_old = o_self._o_html;
                 let v_o_html = await f_o_html__and_make_renderable(o_self);
-            
+  
                 o_html_old.parentElement.replaceChild(
                     v_o_html,
                     o_html_old,
                 )
+                if(typeof o_js.f_after_f_o_html__and_make_renderable == 'function'){
+                    await o_js.f_after_f_o_html__and_make_renderable(v_o_html);
+                }
                 o_js._b_rendering = false;
                 return true 
 

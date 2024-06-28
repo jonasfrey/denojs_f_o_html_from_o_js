@@ -933,6 +933,49 @@ let a_o_test = [
             document.body.appendChild(o)
         }
     ), 
+    f_o_test(
+        "test_function_execution_after_html_element_has_been_rendered_and_appended_to_tree", 
+        async ()=>{
+            // if there is a canvas we would have to always create a new element and re-render
+            // instead we can re-append it after a certain o_jsh has been rendered and appended to its parent in the tree
+            let o_canvas = document.createElement("canvas");
+            let o_ctx = o_canvas.getContext("2d");
+            o_ctx.beginPath();
+            o_ctx?.arc(50,50,20, 0, (6.2831/4)*3);
+            o_ctx.stroke();
+            let o_state = {}
+            let o = await f_o_html__and_make_renderable(
+                {
+                    a_o: [
+                        {
+                            innerText: "asdf",
+                        },
+                        Object.assign(
+                            o_state, 
+                            {
+                                o_js__canvas: {
+                                    f_after_f_o_html__and_make_renderable: (v_o_html)=>{
+                                        console.log({v_o_html})
+                                        v_o_html.appendChild(o_canvas);
+                                    },
+                                    f_o_jsh: ()=>{
+                                        return {
+                                            id: "canvas_parent"
+                                        }
+                                    }
+                                }
+                            }
+                        ).o_js__canvas
+                    ]
+                }
+            );
+            setTimeout(async()=>{
+                await o_state.o_js__canvas._f_render();
+            },1000)
+
+            document.body.appendChild(o)
+        }
+    ), 
 ]
 
 
