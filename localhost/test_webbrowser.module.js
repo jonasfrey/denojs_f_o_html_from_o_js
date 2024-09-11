@@ -982,6 +982,8 @@ let a_o_test = [
     f_o_test(
         "test_function_execution_after_html_element_has_been_rendered_and_appended_to_tree", 
         async ()=>{
+            //./readme.md:start
+            //md: ## f_after_f_o_html__and_make_renderable
             // if there is a canvas we would have to always create a new element and re-render
             // instead we can re-append it after a certain o_jsh has been rendered and appended to its parent in the tree
             let o_canvas = document.createElement("canvas");
@@ -1022,6 +1024,7 @@ let a_o_test = [
             },1000)
 
             document.body.appendChild(o)
+            //./readme.md:end
         }
     ), 
 ]
@@ -1032,4 +1035,3 @@ let a_o_test = [
 f_display_test_selection_or_run_selected_test_and_print_summary(
     a_o_test
 )
-// //readme.md:end
