@@ -143,6 +143,9 @@ var f_o_html__and_make_renderable = async function(
                     o_js._o_html = document.createComment('b_render')
                 }else{
 
+                    if(typeof o_js.f_before_f_o_html__and_make_renderable == 'function'){
+                        await o_js.f_before_f_o_html__and_make_renderable(o_js._o_html);
+                    }
                     // we create a new element from the o_jsh information
                     o_js._o_html = f_o_html__from_o_jsh(
                         o_js.o_jsh, 
@@ -191,7 +194,10 @@ var f_o_html__and_make_renderable = async function(
                     let o_html_old = o_self._o_html;
                     let v_o_html = null; 
                     try {
-                        v_o_html = await f_o_html__and_make_renderable(o_self);                    
+                        v_o_html = await f_o_html__and_make_renderable(o_self);      
+                        if(typeof o_js.f_before_f_o_html__and_make_renderable == 'function'){
+                            await o_js.f_before_f_o_html__and_make_renderable(o_html_old);
+                        }
                         o_html_old.parentElement.replaceChild(
                             v_o_html,
                             o_html_old,
