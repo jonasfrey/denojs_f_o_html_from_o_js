@@ -1,4 +1,4 @@
-<!-- {"s_msg":"this file was automatically generated","s_by":"f_generate_markdown.module.js","s_ts_created":"Wed Sep 11 2024 16:43:22 GMT+0200 (Central European Summer Time)","n_ts_created":1726065802887} -->
+<!-- {"s_msg":"this file was automatically generated","s_by":"f_generate_markdown.module.js","s_ts_created":"Thu Sep 19 2024 22:42:57 GMT+0200 (Central European Summer Time)","n_ts_created":1726778577916} -->
 # changelog
 
 ## most simple example
@@ -474,6 +474,60 @@ well... what should i say, a module is nothing more than an object :shrug:
             );
             setTimeout(async()=>{
                 await o_state.o_js__canvas._f_render();
+                console.log('re render done')
+            },1000)
+
+            document.body.appendChild(o)
+```
+## f_after_f_o_html__and_make_renderable
+```javascript
+            // if there is a scrollable element that will be rerendered the scroll state will be lost on rerender, therefore we can 
+            // do this
+            let o_state = {
+                a_n : new Array(100).fill(0).map((n, n_idx)=>{return n_idx})
+            };
+            let n_x_tmp = 0;
+            let o = await f_o_html__and_make_renderable(
+                {
+                    style: "max-height: 30vh; overflow-y:scroll",
+                    a_o: [
+                        {
+                            innerText: "asdf",
+                        },
+                        Object.assign(
+                            o_state, 
+                            {
+                                o_js__a_n: {
+                                    f_o_jsh: ()=>{
+                                        return {
+                                            f_before_f_o_html__and_make_renderable: (v_o_html)=>{
+                                                n_x_tmp = window.pageYOffset;
+                                                console.log({v_o_html, n_x_tmp})
+                                                console.log(
+                                                    {b_active: document.activeElement == v_o_html   }
+                                                )
+                                            },
+                                            a_o: [
+                                                ...o_state.a_n.map(n=>{
+                                                    return {
+                                                        s_tag: "input",
+                                                        style: "width: 100%", 
+                                                        value: `${n}: rand:${Math.random()}`
+                                                    } 
+                                                })
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        ).o_js__a_n
+                    ]
+                }
+            );
+            setInterval(async()=>{
+                o_state.a_n = new Array(parseInt(Math.random()*200)).fill(0).map((n, n_idx)=>{return n_idx})
+
+                await o_state.o_js__a_n._f_render();
                 console.log('re render done')
             },1000)
 
