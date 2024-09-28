@@ -4,11 +4,11 @@ import {
 } from "https://deno.land/x/f_add_css@1.1/mod.js"
 
 import { 
-    f_s_selector_css_from_s_uuid
+    f_s_css_class_from_s_uuid
 } from "../functions.module.js"
 let s_class = 'datepicker';
 let s_prop_o_js = 'o_js'//`o_js__${s_class}`;
-let s_uuid_module_scope = f_s_selector_css_from_s_uuid(crypto.randomUUID());
+let s_uuid_module_scope = f_s_css_class_from_s_uuid(crypto.randomUUID());
 
 let f_throw_notification = null;  
 
@@ -275,7 +275,7 @@ let f_o_js = function(
             s_uuid_function_scope: 
                 (o_state.s_uuid_function_scope) 
                     ? o_state.s_uuid_function_scope 
-                    : f_s_selector_css_from_s_uuid(crypto.randomUUID()),
+                    : f_s_css_class_from_s_uuid(crypto.randomUUID()),
 
             s_uuid_module_scope,
         }

@@ -151,9 +151,7 @@ var f_o_html__and_make_renderable = async function(
                         o_js.o_jsh, 
                         o_js
                     );
-                    if(typeof o_js.f_after_f_o_html__and_make_renderable == 'function'){
-                        await o_js.f_after_f_o_html__and_make_renderable(o_js._o_html);
-                    }
+
                     // o_js._o_html.setAttribute('data-s_uuid', crypto.randomUUID());
                 
                     let a_o_promise = []
@@ -173,6 +171,10 @@ var f_o_html__and_make_renderable = async function(
                         }
                     }
                     let a_v_resolved = await Promise.all(a_o_promise);
+
+                    if(typeof o_js.f_after_f_o_html__and_make_renderable == 'function'){
+                        await o_js.f_after_f_o_html__and_make_renderable(o_js._o_html);
+                    }
                     for(let v of a_v_resolved){
                         // console.log(v)
                         if(v){
@@ -194,10 +196,10 @@ var f_o_html__and_make_renderable = async function(
                     let o_html_old = o_self._o_html;
                     let v_o_html = null; 
                     try {
-                        v_o_html = await f_o_html__and_make_renderable(o_self);      
                         if(typeof o_js.f_before_f_o_html__and_make_renderable == 'function'){
                             await o_js.f_before_f_o_html__and_make_renderable(o_html_old);
                         }
+                        v_o_html = await f_o_html__and_make_renderable(o_self);      
                         o_html_old.parentElement.replaceChild(
                             v_o_html,
                             o_html_old,

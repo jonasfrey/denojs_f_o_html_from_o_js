@@ -1085,6 +1085,203 @@ let a_o_test = [
             document.body.appendChild(o)
             //./readme.md:end
         }
+    ),
+    f_o_test(
+        "manual_scalable_dragable_window", 
+        async ()=>{
+            
+
+            let o_state = {
+                s: "this is an example state string in a scope", 
+                o_state__color_picker: {},
+                b_scale: false, 
+                b_translate: false,
+                o_pd: {n_x: 0, n_y:0}, 
+                o_scl: {n_x: 100, n_y: 100},
+                o_trn: {n_x: 100, n_y: 100}, 
+                o_scl_pd: {n_x: 0, n_y: 0},
+                o_trn_pd: {n_x: 0, n_y: 0},
+            };
+            let f_o_assigned = function(s, o, o2){
+                return Object.assign(
+                    o2, 
+                    {
+                        [s]: o
+                    }
+                )[s]
+            }
+            window.onpointerup = function(){
+                o_state.b_scale = false;
+                o_state.b_translate = false;
+            }
+            window.onpointermove = async function(o_e){
+                
+                let o_diff_scl_x = o_state.o_pd.n_x - o_e.clientX;
+                let o_diff_scl_y = o_state.o_pd.n_y - o_e.clientY;
+                let o_diff_trn_x = o_state.o_trn_pd.n_x - o_e.clientX;
+                let o_diff_trn_y = o_state.o_trn_pd.n_y - o_e.clientY;
+                
+                let o_diff_trn_x2 = o_state.o_trn_pd.n_x - o_state.o_pd.n_x;
+                let o_diff_trn_y2 = o_state.o_trn_pd.n_y - o_state.o_pd.n_y;
+
+                let o_diff_scl_x2 = o_state.o_scl_pd.n_x - o_state.o_pd.n_x;
+                let o_diff_scl_y2 = o_state.o_scl_pd.n_y - o_state.o_pd.n_y;
+
+                if(o_state.b_scale){
+                    o_state.o_scl.n_x = o_state.o_scl_pd.n_x-o_diff_scl_x;
+                    o_state.o_scl.n_y = o_state.o_scl_pd.n_y-o_diff_scl_y;
+                    await o_state.o_js__translatable_scalable_window._f_update();
+                }
+                if(o_state.b_translate){
+                    o_state.o_trn.n_x = o_state.o_trn_pd.n_x-o_diff_trn_x+o_diff_trn_x2;
+                    o_state.o_trn.n_y = o_state.o_trn_pd.n_y-o_diff_trn_y+o_diff_trn_y2;
+                    await o_state.o_js__translatable_scalable_window._f_update();
+                }
+            }
+            let f_update_pointerdown = function(o_e){
+                o_state.o_pd = {n_x: o_e.clientX, n_y: o_e.clientY}
+                o_state.o_scl_pd = Object.assign({}, o_state.o_scl)
+                o_state.o_trn_pd = Object.assign({}, o_state.o_trn)
+            }
+            let f_update_pointerdown_scl = function(o_e){
+                o_state.b_scale = true;
+                f_update_pointerdown(o_e);
+            }
+            let f_update_pointerdown_trn = function(o_e){
+                o_state.b_translate = true;
+                f_update_pointerdown(o_e);
+            }
+            // window.o_state = o_state
+            let o = await f_o_html__and_make_renderable(
+                {
+                    a_o: [
+                        f_o_assigned(
+                            'o_js__translatable_scalable_window', 
+                            {
+                                f_o_jsh: async ()=>{
+                                    console.log('asdf')
+                                    return {
+                                        style: [
+                                            "background-color: red",
+                                            `position: absolute`, 
+                                            `left: ${o_state.o_trn.n_x}px`,
+                                            `top:${o_state.o_trn.n_y}px`, 
+                                            `width:${o_state.o_scl.n_x}px`,
+                                            `height: ${o_state.o_scl.n_y}px`
+                                        ].join(';'),
+                                        a_o: [
+                                            {innerText: "drag me"}, 
+                                            {
+                                                s_tag: "button", 
+                                                innerText: "translate", 
+                                                onpointerdown: (o_e)=>{
+                                                    f_update_pointerdown_trn(o_e);
+                                                }
+                                            },
+                                            {
+                                                s_tag: "button", 
+                                                innerText: "scale",
+                                                onpointerdown: (o_e)=>{
+                                                    f_update_pointerdown_scl(o_e);
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                           o_state 
+                        )
+                    ]
+                }
+            )
+            document.body.appendChild(o)
+        }
+    ),
+    f_o_test(
+        "translatable_scalable_window", 
+        async ()=>{
+            let o_module = await import( './jsh_modules/translatable_scalable_window/mod.js');
+
+            let o_state = {
+                s: "this is an example state string in a scope", 
+                o_dedicated_to_overlay: {
+                    o_scl: {n_x: 500, n_y: 500}, 
+                    o_trn: {n_x: 200, n_y: 200}, 
+                    a_s_css_propval: [
+                        'background: blue'
+                    ]
+                }
+            };
+            let o = await f_o_html__and_make_renderable(
+                {
+                    a_o: [
+                        o_module.f_o_js( // this will add the variables to the state
+                            [
+                            ... (new Array(20)).fill(0).map(
+                                n =>{
+                                    let s_rel_x = ['left', 'right'][parseInt(Math.random()*2)]
+                                    let s_rel_y = ['top', 'bottom'][parseInt(Math.random()*2)]
+                                    let n_x_nor = Math.random()*50;
+                                    let n_y_nor = Math.random()*50;
+                                    let s = ['scl', 'trn'][parseInt(Math.random()*2)];
+
+                                    return {
+                                        s_tag: "button", 
+                                        style: `position:absolute; ${s_rel_x}:${n_x_nor}%;${s_rel_y}:${n_y_nor}%`,
+                                        onpointerdown: (o_e)=>{o_module[`f_update_pointerdown_${s}`](
+                                            o_state.o_dedicated_to_overlay, 
+                                            o_e
+                                        )},
+                                        innerText: s
+                                      }
+                                }
+                            ),
+                              {
+                                s_tag: "button", 
+                                style: "position:absolute; top:0;left:0",
+                                onpointerdown: (o_e)=>{o_module.f_update_pointerdown_scl(
+                                    o_state.o_dedicated_to_overlay, 
+                                    o_e
+                                )},
+                                innerText: 'scale',
+                              }, 
+                              {
+                                s_tag: "button", 
+                                style: "position:absolute; top:0;right:0",
+                                onpointerdown: (o_e)=>{o_module.f_update_pointerdown_trn(
+                                    o_state.o_dedicated_to_overlay, 
+                                    o_e
+                                )},
+                                innerText: 'translate',
+                              },
+                              {
+                                s_tag: "button", 
+                                style: "position:absolute; bottom:0;right:0",
+                                onpointerdown: (o_e)=>{o_module.f_update_pointerdown_scl(
+                                    o_state.o_dedicated_to_overlay, 
+                                    o_e
+                                )},
+                                innerText: 'scl',
+                              }, 
+                              {
+                                s_tag: "button", 
+                                style: "position:absolute; bottom:0;left:0",
+                                onpointerdown: (o_e)=>{o_module.f_update_pointerdown_trn(
+                                    o_state.o_dedicated_to_overlay, 
+                                    o_e
+                                )},
+                                innerText: 'translate',
+                              },  
+                            ], 
+                            o_state.o_dedicated_to_overlay
+                        ), 
+                    ]
+                }
+            )
+
+            document.body.appendChild(o)
+
+        }
     ), 
 ]
 
