@@ -1207,14 +1207,21 @@ let a_o_test = [
                 o_dedicated_to_overlay: {
                     o_scl: {n_x: 500, n_y: 500}, 
                     o_trn: {n_x: 200, n_y: 200}, 
-                    a_s_css_propval: [
-                        'background: blue'
-                    ]
+                    s_style:'background: blue',
+                    b_render: true
                 }
             };
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
+                        {
+                            s_tag: "button", 
+                            onclick: async ()=>{
+                                o_state.o_dedicated_to_overlay.b_render = !o_state.o_dedicated_to_overlay.b_render;
+                                o_state.o_dedicated_to_overlay.o_js._f_render();
+                            },
+                            innerText: `${(o_state.o_dedicated_to_overlay.b_render) ? 'hide' : 'show'}`
+                        },
                         o_module.f_o_js( // this will add the variables to the state
                             [
                             ... (new Array(20)).fill(0).map(
@@ -1278,6 +1285,7 @@ let a_o_test = [
                     ]
                 }
             )
+
 
             document.body.appendChild(o)
 
