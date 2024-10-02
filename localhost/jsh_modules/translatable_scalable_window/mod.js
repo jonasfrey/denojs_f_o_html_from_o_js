@@ -25,12 +25,12 @@ let s_class = 'overlay_window';
 let s_uuid_mod_scope = crypto.randomUUID();
 let f_o_js = function(
     a_o_js = [], 
-    o_state__input = {}
+    o_state = {}
 ){
     let s_uuid_func_scope = crypto.randomUUID(); 
     let a_s_class = [s_class, s_uuid_mod_scope, s_uuid_func_scope]
 
-    let o_state = Object.assign(
+    o_state = Object.assign(
         {
             
             b_render: true, 
@@ -44,7 +44,7 @@ let f_o_js = function(
             s_style: 'border-radius: 3px', 
             s_class: '',
         }, 
-        o_state__input
+        o_state
     )
 
     window.onpointerup = function(){
