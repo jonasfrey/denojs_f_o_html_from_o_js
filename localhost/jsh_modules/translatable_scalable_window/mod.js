@@ -30,22 +30,24 @@ let f_o_js = function(
     let s_uuid_func_scope = crypto.randomUUID(); 
     let a_s_class = [s_class, s_uuid_mod_scope, s_uuid_func_scope]
 
-    o_state = Object.assign(
-        {
+    let o1 = {
             
-            b_render: true, 
-            b_scale: false, 
-            b_translate: false,
-            o_pd: {n_x: 0, n_y:0}, 
-            o_scl: {n_x: 100, n_y: 100},
-            o_trn: {n_x: 100, n_y: 100}, 
-            o_scl_pd: {n_x: 0, n_y: 0},
-            o_trn_pd: {n_x: 0, n_y: 0},
-            s_style: 'border-radius: 3px', 
-            s_class: '',
-        }, 
-        o_state
-    )
+        b_render: true, 
+        b_scale: false, 
+        b_translate: false,
+        o_pd: {n_x: 0, n_y:0}, 
+        o_scl: {n_x: 100, n_y: 100},
+        o_trn: {n_x: 100, n_y: 100}, 
+        o_scl_pd: {n_x: 0, n_y: 0},
+        o_trn_pd: {n_x: 0, n_y: 0},
+        s_style: 'border-radius: 3px', 
+        s_class: '',
+    }
+    Object.keys(o1).map(s_prop=>{
+        if(!(s_prop in o_state)){
+            o_state[s_prop] = o1[s_prop]
+        }
+    })
 
     window.onpointerup = function(){
         o_state.b_scale = false;
