@@ -1,7 +1,7 @@
 let o_DOMParser = null; 
 if("Deno" in globalThis){
-    o_DOMParser = (await import("https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts")).DOMParser;
-}
+    o_DOMParser = (await import("https://deno.land/x/deno_dom@v0.1.48/deno-dom-wasm.ts")).DOMParser;
+}   
 let f_o_html_element__from_s_tag = function(s_tag){
     
     let o_doc;

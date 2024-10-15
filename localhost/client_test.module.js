@@ -8,7 +8,7 @@ import {
   }  from "./client.module.js"
   //md: ## most simple example 
   document.body.appendChild(
-    f_o_html__and_make_renderable(
+    await f_o_html__and_make_renderable(
       {
         s_tag: 'button', 
         innerHTML: `i am a rendered button: ${globalThis.performance.now()}`, 
@@ -20,7 +20,7 @@ import {
   );
   //md: ## we now can add child objects and render arrays like this
   document.body.appendChild(
-    f_o_html__and_make_renderable(
+    await f_o_html__and_make_renderable(
       {
         s_tag: 'div', 
         a_o:[

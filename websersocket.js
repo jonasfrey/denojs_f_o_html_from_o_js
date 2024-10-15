@@ -1,7 +1,7 @@
 import {
     f_websersocket_serve, 
     f_v_before_return_response__fileserver
-} from "https://deno.land/x/websersocket@2.0.0/mod.js"
+} from "https://deno.land/x/websersocket@6.0.1/mod.js"
 
 let s_path_file_current = new URL(import.meta.url).pathname;
 let s_path_folder_current = s_path_file_current.split('/').slice(0, -1).join('/'); 
