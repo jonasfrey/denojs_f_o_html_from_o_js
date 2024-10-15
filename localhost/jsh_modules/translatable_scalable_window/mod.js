@@ -49,11 +49,11 @@ let f_o_js = function(
         }
     })
 
-    window.onpointerup = function(){
+    globalThis.onpointerup = function(){
         o_state.b_scale = false;
         o_state.b_translate = false;
     }
-    window.onpointermove = async function(o_e){
+    globalThis.onpointermove = async function(o_e){
         
         let n_x_p_nor = (o_e.clientX - o_state.o_trn.n_x)/o_state.o_scl.n_x;
         let n_y_p_nor = (o_e.clientY - o_state.o_trn.n_y)/o_state.o_scl.n_y;

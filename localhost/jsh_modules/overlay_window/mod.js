@@ -32,7 +32,7 @@ let f_o_js = function(
             o_js__overlay_window : null
         }
     )
-    window.addEventListener('mousemove', (o_e)=>{
+    globalThis.addEventListener('mousemove', (o_e)=>{
 
         o.o_trn_mouse = new O_vec2(o_e.clientX, o_e.clientY);
         if(o?.b_mousedown_drag){
@@ -56,7 +56,7 @@ let f_o_js = function(
         }
         o.o_trn_mouse_last = o?.o_trn_mouse.clone()
     })
-    window.addEventListener('mouseup', ()=>{
+    globalThis.addEventListener('mouseup', ()=>{
         // enable select
         o.b_mousedown_drag = false
         o.b_mousedown_scale = false

@@ -30,17 +30,17 @@ class O_notification{
         this.o_js__bar = null
         this.n_id_raf = 0
         let o_self = this
-        this.n_wpf = window.performance.now();
-        this.n_wpf_last = window.performance.now();
+        this.n_wpf = globalThis.performance.now();
+        this.n_wpf_last = globalThis.performance.now();
         this.f_raf = async ()=>{
             // console.log(`${o_self.n_wpf} raf ${o_self.n_ms_left}`)
             if(o_self.n_ms_left < 0){
-                window.cancelAnimationFrame(o_self.n_id_raf)
+                globalThis.cancelAnimationFrame(o_self.n_id_raf)
                 o_self.n_id_raf = 0
                 await o_self.o_js?._f_render();
             }else{
-                o_self.n_id_raf = window.requestAnimationFrame(o_self.f_raf);
-                o_self.n_wpf = window.performance.now()
+                o_self.n_id_raf = globalThis.requestAnimationFrame(o_self.f_raf);
+                o_self.n_wpf = globalThis.performance.now()
                 o_self.n_ms_left -= Math.abs(o_self.n_wpf_last-o_self.n_wpf);
                 o_self.n_wpf_last = o_self.n_wpf
     
@@ -92,7 +92,7 @@ let f_o_js = function(
                                                                                         && o_notification.n_ms_left > 0
                                                                                         && o_notification.b_timeout
                                                                                     ){
-                                                                                        o_notification.n_id_raf = window.requestAnimationFrame(o_notification.f_raf);
+                                                                                        o_notification.n_id_raf = globalThis.requestAnimationFrame(o_notification.f_raf);
                                                                                     }
                                                                                     return {
                                                                                         class: [

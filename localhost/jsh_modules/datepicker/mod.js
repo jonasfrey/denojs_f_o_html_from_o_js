@@ -498,8 +498,8 @@ let f_o_js = function(
     }
     o_state.a_n_year.sort((n1, n2)=>n1-n2)
 
-    window.addEventListener("mouseup", function(){
-        let o = (window.event.target.closest("."+o_state.s_uuid_function_scope));
+    globalThis.addEventListener("mouseup", function(){
+        let o = (globalThis.event.target.closest("."+o_state.s_uuid_function_scope));
         if(!o){
             o_state.b_show_picker = false;
             o_state?.o_js__s_name_month_n_year._f_render();

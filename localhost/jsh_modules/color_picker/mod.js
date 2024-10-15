@@ -301,8 +301,8 @@ let f_o_js = function(
         `,
     )
 
-    window.addEventListener("pointerup", function(){
-        let o = (window.event.target.closest("."+o_state.s_uuid_function_scope));
+    globalThis.addEventListener("pointerup", function(){
+        let o = (globalThis.event.target.closest("."+o_state.s_uuid_function_scope));
         if(!o){
             o_state.b_render = false;
             o_state.o_js__overlay._f_render()
@@ -359,7 +359,7 @@ let f_o_js = function(
         // o_state?.o_js__canvas?._f_update()
         f_update_data_and_render_canvas_alpha()
     }
-    window.o_state = o_state
+    globalThis.o_state = o_state
     let f_update_data_and_render_canvas = function(){
         f_update_data_in_o_gpu_gateway(
             {

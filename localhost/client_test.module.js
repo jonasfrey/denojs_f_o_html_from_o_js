@@ -11,7 +11,7 @@ import {
     f_o_html__and_make_renderable(
       {
         s_tag: 'button', 
-        innerHTML: `i am a rendered button: ${window.performance.now()}`, 
+        innerHTML: `i am a rendered button: ${globalThis.performance.now()}`, 
         onclick: function(){
             alert("hey, you clicked me!")
         }

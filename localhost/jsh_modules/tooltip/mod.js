@@ -94,7 +94,7 @@ let f_o_js = function(
 				? o_state.s_css_class_uuid_function_scope
 				: s_css_class_uuid_function_scope,
 	});
-    window.addEventListener('pointermove', async (o_e)=>{
+    globalThis.addEventListener('pointermove', async (o_e)=>{
         let v_o = f_v_o_closest_tooltip(o_e.target);
         // console.log(v_o)
         o_state.b_display = v_o;
@@ -113,8 +113,8 @@ let f_o_js = function(
         let o_bounding_rect = o?.getBoundingClientRect();
         o_state.o_scl_px = new O_vec2(o_bounding_rect.width, o_bounding_rect?.height);
         o_state.o_scl_px_window = new O_vec2(
-            window.innerWidth, 
-            window.innerHeight
+            globalThis.innerWidth, 
+            globalThis.innerHeight
         );
         let o_delta_1 = o_trn_px_mouse.abs();
         let o_delta_2 = o_trn_px_mouse.sub(o_state.o_scl_px_window).abs()

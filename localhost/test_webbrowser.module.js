@@ -45,7 +45,7 @@ let a_o_test = [
                         a_o: [
                             {
                                 s_tag: 'button', // note: 's_tag' property name
-                                innerHTML: `i am a rendered button: ${window.performance.now()}`,
+                                innerHTML: `i am a rendered button: ${globalThis.performance.now()}`,
                                 onclick: function(){
                                     alert("hey, you clicked me!")
                                 }
@@ -182,7 +182,7 @@ let a_o_test = [
                         {
                             o_js__s_text: {
                                 f_o_jsh: ()=>{
-                                    let b_render = parseInt(window.performance.now())%2==0
+                                    let b_render = parseInt(globalThis.performance.now())%2==0
                                     console.log(
                                         b_render
                                     )
@@ -245,7 +245,7 @@ let a_o_test = [
                 }
             }
             let o_js__active = o_js__random_number;
-            window.onmousedown = function(o_e){
+            globalThis.onmousedown = function(o_e){
                 o_js__active = [
                     o_js__random_number, 
                     o_js__random_text
@@ -479,13 +479,13 @@ let a_o_test = [
                 }
             )
             // // the 
-            // window.setInterval(()=>{
-            //     o_state.o_dedicated_to_overlay.o_trn.n_x = (Math.random())*window.innerWidth
-            //     o_state.o_dedicated_to_overlay.o_trn.n_y = (Math.random())*window.innerHeight
-            //     console.log(o_state.o_dedicated_to_overlay.o_js__overlay_window._f_update());
+            // globalThis.setInterval(()=>{
+            //     o_state.o_dedicated_to_overlay.o_trn.n_x = (Math.random())*globalThis.innerWidth
+            //     o_state.o_dedicated_to_overlay.o_trn.n_y = (Math.random())*globalThis.innerHeight
+            //     console.log(o_state.o_dedicated_to_overlay.o_js__overlay_globalThis._f_update());
             // }, 1000)
             // console.log(o)
-            window.setTimeout(()=>{o_state.o_dedicated_to_overlay.o_scl = new O_vec2(500,500)}, 1000)
+            globalThis.setTimeout(()=>{o_state.o_dedicated_to_overlay.o_scl = new O_vec2(500,500)}, 1000)
             document.body.appendChild(o)
 
         }
@@ -549,12 +549,12 @@ let a_o_test = [
 
             // clear a single notification
             let o_notification = await o_mod_notifire.f_o_throw_notification(o_state.o_dedicated_to_mod,'Click to end this endless loading', 'loading')
-            window.addEventListener('pointerdown',async ()=>{
+            globalThis.addEventListener('pointerdown',async ()=>{
                 await o_mod_notifire.f_clear_o_notification(o_notification);
             })
             // // o2.o_js__everything?._f_render()
             // console.log('Loading notifiction should be displayed')
-            // // window.setInterval(()=>{
+            // // globalThis.setInterval(()=>{
 
             // //     console.log(o_state.o_dedicated_to_mod.a_o_notification)
             // // },10)
@@ -562,7 +562,7 @@ let a_o_test = [
             
             // f_clear_all_notifications()
 
-            // // window.setTimeout(function(){
+            // // globalThis.setTimeout(function(){
             // //     f_some();
             // // })
             // await o_mod_notifire.f_throw_notification(o_state.o_dedicated_to_mod,'Im living !', 'info')
@@ -604,7 +604,7 @@ let a_o_test = [
             // );
 
 
-            // window.onmousedown = (o_e)=>{
+            // globalThis.onmousedown = (o_e)=>{
             //     if(o_e.button == 2){
             //         o_mod_notifire.v_f_clear_notification();   
             //     }
@@ -703,8 +703,8 @@ let a_o_test = [
                 o_state__for_datepicker1: {},
                 o_state__for_datepicker2: {}
             };
-            window.addEventListener('mousedown', function(){
-                window.setTimeout(function(){
+            globalThis.addEventListener('mousedown', function(){
+                globalThis.setTimeout(function(){
                     Object.keys(o_state?.o_state__for_datepicker1).map(s=>{
                         if(s!='o_js'){
                             o_state.o_state__for_datepicker2[s] = o_state?.o_state__for_datepicker1?.[s]
@@ -715,7 +715,7 @@ let a_o_test = [
 
                 },400)
             })
-            // window.o_state = o_state
+            // globalThis.o_state = o_state
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
@@ -759,7 +759,7 @@ let a_o_test = [
                 o_state__color_picker: {}, 
             };
 
-            // window.o_state = o_state
+            // globalThis.o_state = o_state
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
@@ -783,7 +783,7 @@ let a_o_test = [
                 o_state__tooltip: {}, 
             };
 
-            // window.o_state = o_state
+            // globalThis.o_state = o_state
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
@@ -829,12 +829,12 @@ let a_o_test = [
                 o_state__tooltip: {}, 
                 a_s_rand: new Array(1000).fill(0).map(
                     n=>{
-                        return window.crypto.randomUUID()
+                        return globalThis.crypto.randomUUID()
                     }
                 )
             };
 
-            // window.o_state = o_state
+            // globalThis.o_state = o_state
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
@@ -888,8 +888,8 @@ let a_o_test = [
                 )
             };
 
-            // window.o_state = o_state
-            let n_ms = window.performance.now();
+            // globalThis.o_state = o_state
+            let n_ms = globalThis.performance.now();
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
@@ -918,14 +918,14 @@ let a_o_test = [
                     ]
                 }
             );
-            let n_ms2 = window.performance.now();
+            let n_ms2 = globalThis.performance.now();
             console.log({
                 s: `render delta: ${n_ms2-n_ms} ms`
             })
 
-            n_ms = window.performance.now();
+            n_ms = globalThis.performance.now();
             document.querySelector(`#rand42112`)
-            n_ms2 = window.performance.now();
+            n_ms2 = globalThis.performance.now();
             console.log({
                 s: `querySelector delta: ${n_ms2-n_ms} ms`
             })
@@ -939,7 +939,7 @@ let a_o_test = [
             //./readme.md:start
             //md: ## error test
             let o_state = {}
-            window.o_state = o_state
+            globalThis.o_state = o_state
             document.body.appendChild(
                 await f_o_html__and_make_renderable(
                 {
@@ -1052,7 +1052,7 @@ let a_o_test = [
                                     f_o_jsh: ()=>{
                                         return {
                                             f_before_f_o_html__and_make_renderable: (v_o_html)=>{
-                                                n_x_tmp = window.pageYOffset;
+                                                n_x_tmp = globalThis.pageYOffset;
                                                 console.log({v_o_html, n_x_tmp})
                                                 console.log(
                                                     {b_active: document.activeElement == v_o_html   }
@@ -1110,11 +1110,11 @@ let a_o_test = [
                     }
                 )[s]
             }
-            window.onpointerup = function(){
+            globalThis.onpointerup = function(){
                 o_state.b_scale = false;
                 o_state.b_translate = false;
             }
-            window.onpointermove = async function(o_e){
+            globalThis.onpointermove = async function(o_e){
                 
                 let o_diff_scl_x = o_state.o_pd.n_x - o_e.clientX;
                 let o_diff_scl_y = o_state.o_pd.n_y - o_e.clientY;
@@ -1130,12 +1130,12 @@ let a_o_test = [
                 if(o_state.b_scale){
                     o_state.o_scl.n_x = o_state.o_scl_pd.n_x-o_diff_scl_x;
                     o_state.o_scl.n_y = o_state.o_scl_pd.n_y-o_diff_scl_y;
-                    await o_state.o_js__translatable_scalable_window._f_update();
+                    await o_state.o_js__translatable_scalable_globalThis._f_update();
                 }
                 if(o_state.b_translate){
                     o_state.o_trn.n_x = o_state.o_trn_pd.n_x-o_diff_trn_x+o_diff_trn_x2;
                     o_state.o_trn.n_y = o_state.o_trn_pd.n_y-o_diff_trn_y+o_diff_trn_y2;
-                    await o_state.o_js__translatable_scalable_window._f_update();
+                    await o_state.o_js__translatable_scalable_globalThis._f_update();
                 }
             }
             let f_update_pointerdown = function(o_e){
@@ -1151,7 +1151,7 @@ let a_o_test = [
                 o_state.b_translate = true;
                 f_update_pointerdown(o_e);
             }
-            // window.o_state = o_state
+            // globalThis.o_state = o_state
             let o = await f_o_html__and_make_renderable(
                 {
                     a_o: [
